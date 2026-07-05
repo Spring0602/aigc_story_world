@@ -1,0 +1,2 @@
+"""StoryWorld schema dataclasses."""
+

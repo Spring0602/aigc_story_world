@@ -1,0 +1,2 @@
+根据 SceneCard 生成中文和英文图像 Prompt JSON。
+

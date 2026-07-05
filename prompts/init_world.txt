@@ -1,0 +1,2 @@
+根据 StorySetting 初始化 WorldState 和 CharacterCard JSON。
+

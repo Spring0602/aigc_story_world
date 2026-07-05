@@ -1,0 +1,2 @@
+把用户输入解析为 StorySetting JSON。
+

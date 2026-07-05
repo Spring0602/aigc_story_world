@@ -1,0 +1,2 @@
+根据当前 WorldState 生成下一个 EventCard JSON。
+
