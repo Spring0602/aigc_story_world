@@ -1,12 +1,8 @@
 from pathlib import Path
 
 
-DEFAULT_NUM_EVENTS = 1
-DEFAULT_VISUAL_STYLE = "像素风 RPG 游戏 CG，16:9"
+DEFAULT_NUM_STEPS = 3
 OUTPUT_DIR = Path("outputs")
-PROMPT_DIR = Path("prompts")
-
-MODEL_NAME = "mock-llm"
-TEMPERATURE = 0.7
-MAX_TOKENS = 2048
-
+MODEL_NAME = "mock-structured-v2"
+TEMPERATURE = 0.2
+MAX_TOKENS = 4096

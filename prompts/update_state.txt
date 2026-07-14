@@ -1,2 +1,0 @@
-根据旧 WorldState 和 EventCard 生成新的 WorldState JSON。
-

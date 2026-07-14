@@ -1,19 +1,21 @@
-import json
+from schemas import NarrativeEvent, ObjectiveWorldState, SceneCard
 
 
 class SceneGenerator:
-    def __init__(self, llm_client):
-        self.llm = llm_client
-
-    def generate_scene(self, world_state: dict, event_card: dict) -> dict:
-        return self.llm.generate_json(self.build_prompt(world_state, event_card))
-
-    def build_prompt(self, world_state: dict, event_card: dict) -> str:
-        state_payload = json.dumps(world_state, ensure_ascii=False)
-        event_payload = json.dumps(event_card, ensure_ascii=False)
-        return (
-            "TASK: generate_scene\n"
-            f"WORLD_STATE:\n{state_payload}\n"
-            f"EVENT_CARD:\n{event_payload}"
+    def generate(self, state: ObjectiveWorldState, event: NarrativeEvent) -> SceneCard:
+        location_id = state.agents.get(event.focal_agent, {}).get("location", "dorm")
+        location = state.locations.get(location_id)
+        return SceneCard(
+            scene_id=f"scene_{state.step:03d}",
+            narrative_event_id=event.narrative_event_id,
+            location=location.name if location else location_id,
+            time=state.timestamp,
+            focal_agent=event.focal_agent,
+            main_action="林夏在终端前保存异常流量记录，决定先秘密验证。",
+            characters=[{"agent_id": "lin_xia", "pose": "leaning toward the laptop", "expression": "alert and tense"}],
+            camera={"shot_type": "medium close-up", "angle": "slightly high angle", "focus": "terminal logs and Lin Xia"},
+            lighting="cold blue laptop light in a dark dorm room",
+            atmosphere="tense, investigative, uncertain",
+            key_objects=["laptop", "terminal logs", "campus network notice"],
+            negative_prompt_notes=["multiple protagonists", "daylight", "exaggerated sci-fi machinery"],
         )
-

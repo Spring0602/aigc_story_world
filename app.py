@@ -1,89 +1,114 @@
 import argparse
 import json
 
-from config import DEFAULT_NUM_EVENTS
+from config import DEFAULT_NUM_STEPS
+from core.cognition_engine import CognitionEngine
+from core.future_evaluator import FutureEvaluator
+from core.future_generator import FutureGenerator
 from core.image_prompt_generator import ImagePromptGenerator
-from core.input_parser import InputParser
-from core.llm_client import LLMClient
+from core.lens_router import LensRouter
+from core.model_utils import to_dict
+from core.narrative_engine import NarrativeEngine
+from core.observation_engine import ObservationEngine
 from core.output_exporter import OutputExporter
-from core.plot_engine import PlotEngine
 from core.scene_generator import SceneGenerator
-from core.state_updater import StateUpdater
 from core.world_initializer import WorldInitializer
-from core.world_state import WorldStateManager
+from core.world_transition import WorldTransition
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="StoryWorld 命令行原型")
-    parser.add_argument("--input", "-i", help="一句话故事设定")
-    parser.add_argument(
-        "--num-events",
-        "-n",
-        type=int,
-        default=DEFAULT_NUM_EVENTS,
-        help="生成事件数量，默认 1",
-    )
+    parser = argparse.ArgumentParser(description="StoryWorld V2 command line prototype")
+    parser.add_argument("--input", "-i", default="校园监控：学校部署不透明的网络异常流量检测系统。")
+    parser.add_argument("--steps", "-n", type=int, default=DEFAULT_NUM_STEPS)
+    parser.add_argument("--no-export", action="store_true")
     return parser
 
 
-def run_pipeline(user_input: str, num_events: int) -> dict:
-    llm = LLMClient()
-    input_parser = InputParser(llm)
-    initializer = WorldInitializer(llm)
-    plot_engine = PlotEngine(llm)
-    updater = StateUpdater(llm)
-    scene_generator = SceneGenerator(llm)
-    prompt_generator = ImagePromptGenerator(llm)
-    exporter = OutputExporter()
+def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool = True) -> dict:
+    initializer = WorldInitializer()
+    observation_engine = ObservationEngine()
+    cognition_engine = CognitionEngine()
+    lens_router = LensRouter()
+    future_generator = FutureGenerator()
+    future_evaluator = FutureEvaluator()
+    transition = WorldTransition()
+    narrative_engine = NarrativeEngine()
+    scene_generator = SceneGenerator()
+    image_prompt_generator = ImagePromptGenerator()
 
-    story_setting = input_parser.parse(user_input)
-    initial_world_state, characters = initializer.init(story_setting)
-    state_manager = WorldStateManager(initial_world_state)
+    objective_state, agents, subjective_models = initializer.initialize(user_input)
 
-    events = []
-    scenes = []
+    objective_states = [objective_state]
+    all_observations = []
+    all_interpretations = []
+    all_hypotheses = []
+    all_candidate_futures = []
+    selected_futures = []
+    narrative_events = []
+    scene_cards = []
     image_prompts = []
 
-    for step in range(1, num_events + 1):
-        current_state = state_manager.get_current_state()
-        event = plot_engine.generate_event(current_state, step)
-        updated_state = updater.update(current_state, event)
-        state_manager.update_state(updated_state)
-        scene = scene_generator.generate_scene(updated_state, event)
-        image_prompt = prompt_generator.generate(scene)
+    for _ in range(max(1, steps)):
+        observations = observation_engine.observe(objective_state, subjective_models)
+        subjective_models, interpretations = cognition_engine.interpret(observations, subjective_models)
+        hypotheses = lens_router.analyze(objective_state, subjective_models)
+        futures = future_generator.generate(objective_state, subjective_models, hypotheses)
+        selected_future = future_evaluator.select(futures, objective_state, subjective_models, hypotheses)
+        new_state = transition.apply(objective_state, selected_future)
+        narrative_event = narrative_engine.express(objective_state, new_state, selected_future, subjective_models)
+        scene_card = scene_generator.generate(new_state, narrative_event)
+        image_prompt = image_prompt_generator.generate(scene_card)
 
-        events.append(event)
-        scenes.append(scene)
+        all_observations.extend(observations)
+        all_interpretations.extend(interpretations)
+        all_hypotheses.extend(hypotheses)
+        all_candidate_futures.extend(futures)
+        selected_futures.append(selected_future)
+        objective_states.append(new_state)
+        narrative_events.append(narrative_event)
+        scene_cards.append(scene_card)
         image_prompts.append(image_prompt)
+        objective_state = new_state
 
-    run_dir = exporter.export_all(
-        story_setting=story_setting,
-        characters=characters,
-        world_states=state_manager.get_history(),
-        events=events,
-        scenes=scenes,
-        prompts=image_prompts,
-    )
+    run_dir = None
+    if export:
+        run_dir = OutputExporter().export_all(
+            objective_states=objective_states,
+            agents=agents,
+            observations=all_observations,
+            subjective_models=subjective_models,
+            interpretations=all_interpretations,
+            hypotheses=all_hypotheses,
+            candidate_futures=all_candidate_futures,
+            selected_futures=selected_futures,
+            narrative_events=narrative_events,
+            scene_cards=scene_cards,
+            image_prompts=image_prompts,
+        )
 
     return {
-        "run_dir": str(run_dir),
-        "story_setting": story_setting,
-        "world_states": state_manager.get_history(),
-        "events": events,
-        "scenes": scenes,
-        "image_prompts": image_prompts,
+        "run_dir": str(run_dir) if run_dir else None,
+        "objective_states": to_dict(objective_states),
+        "agent_profiles": to_dict(agents),
+        "observations": to_dict(all_observations),
+        "subjective_models": to_dict(subjective_models),
+        "interpretations": to_dict(all_interpretations),
+        "hypotheses": to_dict(all_hypotheses),
+        "candidate_futures": to_dict(all_candidate_futures),
+        "selected_futures": to_dict(selected_futures),
+        "narrative_events": to_dict(narrative_events),
+        "scene_cards": to_dict(scene_cards),
+        "image_prompts": to_dict(image_prompts),
     }
 
 
 def main() -> None:
     args = build_parser().parse_args()
-    user_input = args.input or input("请输入故事设定：").strip()
-    result = run_pipeline(user_input, max(1, args.num_events))
-
+    result = run_pipeline(args.input, args.steps, export=not args.no_export)
     print(json.dumps(result, ensure_ascii=False, indent=2))
-    print(f"\n结果已保存到：{result['run_dir']}")
+    if result["run_dir"]:
+        print(f"\n结果已保存到：{result['run_dir']}")
 
 
 if __name__ == "__main__":
     main()
-

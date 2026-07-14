@@ -1,18 +1,26 @@
-from dataclasses import dataclass, field
+from typing import Any
+
+from pydantic import BaseModel, Field
 
 
-@dataclass
-class SceneCard:
+class SceneCard(BaseModel):
     scene_id: str
-    event_id: str
+    narrative_event_id: str
     location: str
     time: str
+    focal_agent: str
     main_action: str
-    characters: list[dict] = field(default_factory=list)
-    camera: dict[str, str] = field(default_factory=dict)
+    characters: list[dict[str, Any]] = Field(default_factory=list)
+    camera: dict[str, str] = Field(default_factory=dict)
     lighting: str = ""
     atmosphere: str = ""
-    key_objects: list[str] = field(default_factory=list)
-    visual_style: str = ""
-    negative_prompt_notes: list[str] = field(default_factory=list)
+    key_objects: list[str] = Field(default_factory=list)
+    visual_style: str = "pixel art RPG visual novel CG, 16:9"
+    negative_prompt_notes: list[str] = Field(default_factory=list)
 
+
+class ImagePrompt(BaseModel):
+    prompt_cn: str
+    prompt_en: str
+    negative_prompt_cn: str = ""
+    negative_prompt_en: str = ""
