@@ -1,7 +1,9 @@
 from schemas import (
     ActiveProcess,
+    Agent,
     AgentProfile,
     InformationItem,
+    Institution,
     Location,
     ObjectiveWorldState,
     Relationship,
@@ -21,15 +23,31 @@ class WorldInitializer:
                 "computer_lab": Location(location_id="computer_lab", name="计算机学院机房"),
             },
             agents={
-                "lin_xia": {"location": "dorm", "status": "awake"},
-                "wang_chen": {"location": "dorm", "status": "awake"},
+                "lin_xia": Agent(
+                    agent_id="lin_xia",
+                    name="林夏",
+                    location_id="dorm",
+                    status="awake",
+                    roles=["student", "roommate"],
+                ),
+                "wang_chen": Agent(
+                    agent_id="wang_chen",
+                    name="王晨",
+                    location_id="dorm",
+                    status="awake",
+                    roles=["student", "roommate"],
+                ),
             },
             institutions={
-                "university_it_office": {
-                    "name": "学校网络中心",
-                    "authority_scope": ["campus_network"],
-                    "transparency": 0.35,
-                }
+                "university_it_office": Institution(
+                    institution_id="university_it_office",
+                    name="学校网络中心",
+                    institution_type="university_department",
+                    authority_scope=["campus_network"],
+                    transparency=0.35,
+                    rules=["校园网安全规则", "异常流量检测流程"],
+                    resources_controlled=["campus_network"],
+                )
             },
             norms={
                 "student_network_policy": {

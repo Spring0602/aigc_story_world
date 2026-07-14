@@ -21,8 +21,8 @@ class FutureGenerator:
                 agent_actions=[AgentAction(agent_id="lin_xia", action="secretly_collect_network_evidence")],
                 expected_state_changes=[
                     StateChange(
-                        path="agents.lin_xia.location",
-                        old_value=objective_state.agents["lin_xia"]["location"],
+                        path="agents.lin_xia.location_id",
+                        old_value=objective_state.agents["lin_xia"].location_id,
                         new_value="computer_lab",
                         reason="林夏需要更完整的网络环境来验证重定向。",
                         future_id=f"future_{step:03d}_secret",

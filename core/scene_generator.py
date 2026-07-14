@@ -3,7 +3,8 @@ from schemas import NarrativeEvent, ObjectiveWorldState, SceneCard
 
 class SceneGenerator:
     def generate(self, state: ObjectiveWorldState, event: NarrativeEvent) -> SceneCard:
-        location_id = state.agents.get(event.focal_agent, {}).get("location", "dorm")
+        agent = state.agents.get(event.focal_agent)
+        location_id = agent.location_id if agent else "dorm"
         location = state.locations.get(location_id)
         return SceneCard(
             scene_id=f"scene_{state.step:03d}",

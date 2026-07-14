@@ -16,10 +16,10 @@
 
 ## Day 1｜理解 V2 架构
 
-- [ ] 阅读 `01_project_definition.md`
-- [ ] 阅读 `02_core_architecture.md`
-- [ ] 手画 V2 数据流
-- [ ] 写 500 字：为什么 World Engine 和 Narrative Engine 要分开
+- [已完成] 阅读 `01_project_definition.md`
+- [已完成] 阅读 `02_core_architecture.md`
+- [已完成] 手画 V2 数据流
+- [已完成] 写 500 字：为什么 World Engine 和 Narrative Engine 要分开
 
 交付：`docs/my_understanding_v2.md`
 
@@ -34,11 +34,11 @@
 
 任务：
 
-- [ ] 创建 V2 项目
-- [ ] 配置虚拟环境
-- [ ] 初始化 Git
-- [ ] 安装 pydantic
-- [ ] 创建 schemas 目录
+- [已完成] 创建 V2 项目
+- [已完成] 配置虚拟环境
+- [已完成] 初始化 Git
+- [已完成] 安装 pydantic
+- [已完成] 创建 schemas 目录
 
 ## Day 3｜ObjectiveWorldState
 
@@ -50,11 +50,11 @@
 
 任务：
 
-- [ ] 定义 ObjectiveWorldState
-- [ ] 定义 Agent
-- [ ] 定义 Relationship
-- [ ] 定义 Institution
-- [ ] 定义 ActiveProcess
+- [已完成] 定义 ObjectiveWorldState
+- [已完成] 定义 Agent
+- [已完成] 定义 Relationship
+- [已完成] 定义 Institution
+- [已完成] 定义 ActiveProcess
 
 交付：`schemas/objective_world.py`
 

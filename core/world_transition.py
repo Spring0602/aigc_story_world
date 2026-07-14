@@ -1,6 +1,8 @@
 from copy import deepcopy
 from typing import Any
 
+from pydantic import BaseModel
+
 from schemas import CandidateFuture, ObjectiveWorldState
 
 
@@ -29,5 +31,11 @@ class WorldTransition:
         target = state.__dict__
         parts = path.split(".")
         for part in parts[:-1]:
-            target = target[part]
-        target[parts[-1]] = deepcopy(value)
+            target = target[part] if isinstance(target, dict) else getattr(target, part)
+
+        if isinstance(target, dict):
+            target[parts[-1]] = deepcopy(value)
+        elif isinstance(target, BaseModel):
+            setattr(target, parts[-1], deepcopy(value))
+        else:
+            raise TypeError(f"Cannot set path on unsupported target: {type(target)!r}")

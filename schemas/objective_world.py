@@ -19,6 +19,15 @@ class InformationItem(BaseModel):
     provenance: list[str] = Field(default_factory=list)
 
 
+class Agent(BaseModel):
+    agent_id: str
+    name: str
+    location_id: str
+    status: str = "active"
+    roles: list[str] = Field(default_factory=list)
+    public_attributes: dict[str, Any] = Field(default_factory=dict)
+
+
 class Relationship(BaseModel):
     source: str
     target: str
@@ -27,6 +36,16 @@ class Relationship(BaseModel):
     authority_asymmetry: float = Field(default=0.0, ge=0.0, le=1.0)
     emotional_attachment: float = Field(default=0.0, ge=0.0, le=1.0)
     conflict: float = Field(default=0.0, ge=0.0, le=1.0)
+
+
+class Institution(BaseModel):
+    institution_id: str
+    name: str
+    institution_type: str = ""
+    authority_scope: list[str] = Field(default_factory=list)
+    transparency: float = Field(default=0.5, ge=0.0, le=1.0)
+    rules: list[str] = Field(default_factory=list)
+    resources_controlled: list[str] = Field(default_factory=list)
 
 
 class ActiveProcess(BaseModel):
@@ -43,9 +62,9 @@ class ObjectiveWorldState(BaseModel):
     step: int
     timestamp: str
     locations: dict[str, Location] = Field(default_factory=dict)
-    agents: dict[str, dict[str, Any]] = Field(default_factory=dict)
+    agents: dict[str, Agent] = Field(default_factory=dict)
     resources: dict[str, Any] = Field(default_factory=dict)
-    institutions: dict[str, Any] = Field(default_factory=dict)
+    institutions: dict[str, Institution] = Field(default_factory=dict)
     norms: dict[str, Any] = Field(default_factory=dict)
     relationships: dict[str, Relationship] = Field(default_factory=dict)
     public_information: list[InformationItem] = Field(default_factory=list)

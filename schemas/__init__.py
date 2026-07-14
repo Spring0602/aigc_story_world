@@ -7,7 +7,9 @@ from schemas.interpretation import Interpretation
 from schemas.narrative_event import NarrativeEvent
 from schemas.objective_world import (
     ActiveProcess,
+    Agent,
     InformationItem,
+    Institution,
     Location,
     ObjectiveWorldState,
     Relationship,
@@ -18,6 +20,7 @@ from schemas.subjective_world import Belief, SubjectiveWorldModel
 
 __all__ = [
     "ActiveProcess",
+    "Agent",
     "AgentAction",
     "AgentProfile",
     "Belief",
@@ -25,6 +28,7 @@ __all__ = [
     "CausalHypothesis",
     "ImagePrompt",
     "InformationItem",
+    "Institution",
     "Interpretation",
     "Location",
     "NarrativeEvent",
