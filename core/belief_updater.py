@@ -11,7 +11,7 @@ class BeliefUpdater:
         updated = model.model_copy(deep=True)
         if observation.source == "terminal" and model.agent_id == "lin_xia":
             proposition = "学校可能正在监控学生网络。"
-        elif model.epistemology.get("trust_authority", 0.5) >= 0.7:
+        elif model.epistemology.trust_authority >= 0.7:
             proposition = "网络异常更可能是安全升级带来的正常现象。"
         else:
             proposition = "校园网升级存在尚未解释的异常。"

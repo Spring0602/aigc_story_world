@@ -69,11 +69,11 @@
 
 任务：
 
-- [ ] 定义 SubjectiveWorldModel
-- [ ] 定义 Belief
-- [ ] 定义 Epistemology
-- [ ] 定义 Value
-- [ ] 定义 EmotionState
+- [已完成] 定义 SubjectiveWorldModel
+- [已完成] 定义 Belief
+- [已完成] 定义 Epistemology
+- [已完成] 定义 Value
+- [已完成] 定义 EmotionState
 
 交付：`schemas/subjective_world.py`
 

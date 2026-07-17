@@ -16,7 +16,7 @@ from schemas.objective_world import (
 )
 from schemas.observation import Observation
 from schemas.scene_card import ImagePrompt, SceneCard
-from schemas.subjective_world import Belief, SubjectiveWorldModel
+from schemas.subjective_world import Belief, EmotionState, Epistemology, SubjectiveWorldModel, Value
 
 __all__ = [
     "ActiveProcess",
@@ -26,6 +26,8 @@ __all__ = [
     "Belief",
     "CandidateFuture",
     "CausalHypothesis",
+    "EmotionState",
+    "Epistemology",
     "ImagePrompt",
     "InformationItem",
     "Institution",
@@ -38,4 +40,5 @@ __all__ = [
     "SceneCard",
     "StateChange",
     "SubjectiveWorldModel",
+    "Value",
 ]
