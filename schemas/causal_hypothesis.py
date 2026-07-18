@@ -1,4 +1,9 @@
+from typing import Literal
+
 from pydantic import BaseModel, Field
+
+
+TimeScale = Literal["seconds", "minutes", "hours", "days", "weeks", "months", "years", "generations"]
 
 
 class CausalHypothesis(BaseModel):
@@ -9,5 +14,5 @@ class CausalHypothesis(BaseModel):
     mediators: list[str] = Field(default_factory=list)
     constraints: list[str] = Field(default_factory=list)
     affected_agents: list[str] = Field(default_factory=list)
-    time_scale: str
+    time_scale: TimeScale
     confidence: float = Field(ge=0.0, le=1.0)

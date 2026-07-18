@@ -5,13 +5,22 @@ from pydantic import ValidationError
 from schemas import (
     ActiveProcess,
     Agent,
+    AgentAction,
     Belief,
+    CameraSetup,
+    CandidateFuture,
     CausalHypothesis,
     EmotionState,
     Epistemology,
     Institution,
+    Interpretation,
+    NarrativeEvent,
     ObjectiveWorldState,
+    Observation,
     Relationship,
+    SceneCard,
+    SceneCharacter,
+    StateChange,
     SubjectiveWorldModel,
     Value,
 )
@@ -86,7 +95,7 @@ class SchemaTest(unittest.TestCase):
                     base_weight=0.85,
                     context_modifiers={"personal_surveillance": 0.15},
                 ),
-                "truth": 0.88,
+                "truth": Value.model_validate(0.88),
             },
             epistemology=Epistemology(trust_data=0.9, trust_authority=0.2),
             emotion=EmotionState(fear=0.72, curiosity=0.83, hope=0.31),
@@ -107,6 +116,114 @@ class SchemaTest(unittest.TestCase):
 
         with self.assertRaises(ValidationError):
             Value(base_weight=0.5, context_modifiers={"crisis": 1.1})
+
+    def test_day5_schemas_are_instantiable(self):
+        observation = Observation(
+            observation_id="obs_001",
+            agent_id="lin_xia",
+            step=1,
+            source="terminal",
+            content="部分 DNS 请求被重定向",
+            reliability=0.92,
+            visibility="private",
+        )
+        interpretation = Interpretation(
+            interpretation_id="int_001",
+            agent_id="lin_xia",
+            observation_ids=[observation.observation_id],
+            claim="学校可能在监控学生网络",
+            confidence=0.72,
+            reasoning_basis=["high_trust_data", "low_trust_authority"],
+        )
+        hypothesis = CausalHypothesis(
+            hypothesis_id="hyp_eco_001",
+            lens="economic",
+            claim="资源获取渠道受限会提高非正式合作网络形成概率",
+            drivers=["resource_scarcity"],
+            mediators=["opportunity_cost"],
+            constraints=["high_monitoring"],
+            affected_agents=["lin_xia"],
+            time_scale="days",
+            confidence=0.64,
+        )
+        state_change = StateChange(
+            path="agents.lin_xia.location_id",
+            old_value="dorm",
+            new_value="computer_lab",
+            reason="林夏秘密调查网络流量",
+            future_id="future_001",
+        )
+        future = CandidateFuture(
+            future_id="future_001",
+            summary="林夏先秘密验证监控机制",
+            estimated_plausibility=0.46,
+            time_horizon="hours",
+            trigger_conditions=["林夏确认网络流量异常"],
+            supporting_hypotheses=[hypothesis.hypothesis_id],
+            agent_actions=[AgentAction(agent_id="lin_xia", action="secretly_collect_network_evidence")],
+            expected_state_changes=[state_change],
+        )
+        event = NarrativeEvent(
+            narrative_event_id="nar_001",
+            source_future_id=future.future_id,
+            focal_agent="lin_xia",
+            summary="林夏决定秘密抓取网络数据",
+            narrative_importance=0.84,
+            revealed_information=["网络流量存在重定向"],
+            hidden_information=["监控系统真正目的"],
+            emotional_focus=["curiosity", "fear"],
+            visual_core="电脑终端中不断刷新的异常网络记录",
+        )
+        scene = SceneCard.model_validate(
+            {
+                "scene_id": "scene_001",
+                "narrative_event_id": event.narrative_event_id,
+                "location": "计算机学院机房",
+                "time": "day_1_23_50",
+                "focal_agent": "lin_xia",
+                "main_action": "林夏保存异常流量记录",
+                "characters": [{"agent_id": "lin_xia", "pose": "leaning forward"}],
+                "camera": {"shot_type": "medium close-up", "focus": "terminal logs"},
+            }
+        )
+
+        self.assertEqual(interpretation.observation_ids, ["obs_001"])
+        self.assertEqual(future.expected_state_changes[0].new_value, "computer_lab")
+        self.assertIsInstance(scene.characters[0], SceneCharacter)
+        self.assertIsInstance(scene.camera, CameraSetup)
+
+    def test_day5_schemas_reject_invalid_ranges_and_enums(self):
+        with self.assertRaises(ValidationError):
+            Observation.model_validate(
+                {
+                    "observation_id": "obs_bad",
+                    "agent_id": "lin_xia",
+                    "step": -1,
+                    "source": "terminal",
+                    "content": "invalid",
+                    "reliability": 1.2,
+                    "visibility": "hidden",
+                }
+            )
+
+        with self.assertRaises(ValidationError):
+            CandidateFuture.model_validate(
+                {
+                    "future_id": "future_bad",
+                    "summary": "invalid",
+                    "estimated_plausibility": 0.5,
+                    "time_horizon": "sometime",
+                }
+            )
+
+        with self.assertRaises(ValidationError):
+            NarrativeEvent(
+                narrative_event_id="nar_bad",
+                source_future_id="future_bad",
+                focal_agent="lin_xia",
+                summary="invalid",
+                narrative_importance=1.2,
+            )
 
 
 if __name__ == "__main__":

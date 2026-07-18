@@ -1,6 +1,16 @@
-from typing import Any
-
 from pydantic import BaseModel, Field
+
+
+class SceneCharacter(BaseModel):
+    agent_id: str
+    pose: str = ""
+    expression: str = ""
+
+
+class CameraSetup(BaseModel):
+    shot_type: str = ""
+    angle: str = ""
+    focus: str = ""
 
 
 class SceneCard(BaseModel):
@@ -10,8 +20,8 @@ class SceneCard(BaseModel):
     time: str
     focal_agent: str
     main_action: str
-    characters: list[dict[str, Any]] = Field(default_factory=list)
-    camera: dict[str, str] = Field(default_factory=dict)
+    characters: list[SceneCharacter] = Field(default_factory=list)
+    camera: CameraSetup = Field(default_factory=CameraSetup)
     lighting: str = ""
     atmosphere: str = ""
     key_objects: list[str] = Field(default_factory=list)

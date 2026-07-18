@@ -79,13 +79,13 @@
 
 ## Day 5｜其余 Schema
 
-- [ ] Observation
-- [ ] Interpretation
-- [ ] CausalHypothesis
-- [ ] CandidateFuture
-- [ ] StateChange
-- [ ] NarrativeEvent
-- [ ] SceneCard
+- [已完成] Observation
+- [已完成] Interpretation
+- [已完成] CausalHypothesis
+- [已完成] CandidateFuture
+- [已完成] StateChange
+- [已完成] NarrativeEvent
+- [已完成] SceneCard
 
 完成标准：所有 Pydantic Schema 可成功实例化。
 

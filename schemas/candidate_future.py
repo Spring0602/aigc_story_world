@@ -2,6 +2,8 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from schemas.causal_hypothesis import TimeScale
+
 
 class AgentAction(BaseModel):
     agent_id: str
@@ -20,7 +22,7 @@ class CandidateFuture(BaseModel):
     future_id: str
     summary: str
     estimated_plausibility: float = Field(ge=0.0, le=1.0)
-    time_horizon: str
+    time_horizon: TimeScale
     trigger_conditions: list[str] = Field(default_factory=list)
     supporting_hypotheses: list[str] = Field(default_factory=list)
     agent_actions: list[AgentAction] = Field(default_factory=list)
