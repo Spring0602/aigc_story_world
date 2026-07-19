@@ -68,6 +68,9 @@ Emotion
 Motivation
 Behavioral Science
 Bounded Rationality
+Theory of Mind
+First-order Belief
+Second-order Belief
 ```
 
 ## 社会系统
@@ -114,6 +117,22 @@ Reversal
 Climax
 ```
 
+## 研究与实验方法
+
+40 天内必须同步学习：
+
+```text
+Controlled Comparison
+Ablation Study
+Baseline Design
+Operational Definition
+Qualitative Coding
+Error Analysis
+Reproducibility
+```
+
+模型是否“看起来聪明”不是证据。每个核心主张都要对应可重复的输入、对照条件和输出指标。
+
 ## 40 天后研究方向
 
 ```text
@@ -121,7 +140,7 @@ World Models
 Model-based RL
 Dreamer
 Active Inference
-Theory of Mind
+Recursive / Learned Theory of Mind
 Multi-Agent Systems
 Agent-Based Modeling
 Causal Graphs
@@ -139,6 +158,8 @@ Pydantic
 LLM 结构化输出
 因果推理基础
 复杂系统直觉
+Theory of Mind 基础
+控制变量与消融实验
 认识论
 价值与信念建模
 认知心理
@@ -156,6 +177,8 @@ LLM 结构化输出
 历史路径依赖
 文化差异
 行为经济
+Baseline 设计
+人工评估量表
 ```
 
 ### C 级：40 天后
@@ -189,6 +212,15 @@ Large-scale Simulation
 
 开发 Subjective World Model
 → 学认识论、信念、价值
+
+开发 TheoryOfMindEngine
+→ 学一阶信念、二阶信念、错误他人模型
+
+开发 AgentActionModel
+→ 学有限理性、目标冲突、约束下选择
+
+设计 Lens Ablation
+→ 学控制变量、实验指标、误差分析
 
 开发 Narrative Engine
 → 学 focalization、information control

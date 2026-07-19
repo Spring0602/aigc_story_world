@@ -23,7 +23,7 @@ class CognitionEngine:
             models_by_agent[observation.agent_id] = updated_model
 
             claim = updated_model.beliefs[-1].proposition
-            basis = ["trust_data"] if observation.source == "terminal" else ["trust_authority"]
+            basis = [self.evidence_evaluator.trust_basis(observation)]
             interpretations.append(
                 Interpretation(
                     interpretation_id=f"int_{len(interpretations) + 1:03d}",

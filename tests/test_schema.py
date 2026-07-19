@@ -120,9 +120,11 @@ class SchemaTest(unittest.TestCase):
     def test_day5_schemas_are_instantiable(self):
         observation = Observation(
             observation_id="obs_001",
+            information_id="info_dns_redirect",
             agent_id="lin_xia",
             step=1,
             source="terminal",
+            evidence_type="data",
             content="部分 DNS 请求被重定向",
             reliability=0.92,
             visibility="private",
@@ -197,9 +199,11 @@ class SchemaTest(unittest.TestCase):
             Observation.model_validate(
                 {
                     "observation_id": "obs_bad",
+                    "information_id": "info_bad",
                     "agent_id": "lin_xia",
                     "step": -1,
                     "source": "terminal",
+                    "evidence_type": "data",
                     "content": "invalid",
                     "reliability": 1.2,
                     "visibility": "hidden",

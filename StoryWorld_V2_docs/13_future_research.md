@@ -33,7 +33,9 @@ Action
 
 > 不同主体拥有不同内部 world model 时，是否会自然产生稳定差异化行为？
 
-## Theory of Mind
+## 更深层 Theory of Mind
+
+一阶和二阶 Theory of Mind 已进入 40 天 MVP。后续研究递归层级、学习式他人模型与长期互动校准：
 
 扩展：
 
@@ -90,7 +92,9 @@ Domain Data
 → Specialized Causal Hypothesis Generator
 ```
 
-## Lens Debate
+## 更一般的 Lens Debate
+
+基础 `HypothesisConflictResolver` 已进入 40 天 MVP。后续研究冲突机制的学习、动态权重和跨场景校准：
 
 Lens 可能冲突：
 
@@ -102,7 +106,7 @@ PsychologyLens:
 羞辱触发强烈愤怒，冲动行动概率上升。
 ```
 
-未来设计：
+后续设计：
 
 ```text
 Hypothesis Conflict Resolver
@@ -136,4 +140,4 @@ Deontological Method
 
 ## 最终愿景
 
-> 构建一个能够显式表示世界事实、主体认知差异与领域因果机制，并在不确定条件下生成多种可解释未来路径的动态叙事世界推演系统。
+> 构建一个能够显式表示世界事实、主体认知差异、他人心智模型与领域因果机制，并在不确定条件下通过可解释行动生成多种未来路径的社会认知世界模型；动态叙事是其应用与观察接口之一。

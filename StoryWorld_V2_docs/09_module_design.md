@@ -10,7 +10,10 @@ core/
 ├── evidence_evaluator.py
 ├── belief_updater.py
 ├── cognition_engine.py
+├── theory_of_mind.py
 ├── lens_router.py
+├── hypothesis_conflict_resolver.py
+├── agent_action_model.py
 ├── future_generator.py
 ├── agent_consistency.py
 ├── future_evaluator.py
@@ -21,6 +24,8 @@ core/
 ├── image_prompt_generator.py
 └── output_exporter.py
 ```
+
+其中 `theory_of_mind.py`、`hypothesis_conflict_resolver.py` 与 `agent_action_model.py` 是 V2.2 新增目标；当前仓库尚未完成这些模块。
 
 ## lenses/
 
@@ -67,6 +72,27 @@ Observation
 
 第一版固定调用三个 Lens，并合并假设。
 
+## TheoryOfMindEngine
+
+输入主体自己的 `SubjectiveWorldModel`、可见 Observation 与他人公开行为，输出结构化 `BeliefAboutOther`。禁止读取目标角色私有主观状态作为推理捷径。
+
+## HypothesisConflictResolver
+
+标记跨 Lens 的支持、冲突和条件关系。Resolver 不直接修改世界，也不删除尚未解决的少数假设。
+
+## AgentActionModel
+
+输入：
+
+```text
+Subjective Model
+Beliefs About Others
+Causal Hypotheses
+Objective Constraints
+```
+
+输出多个带解释分解的 `AgentActionDecision`，供 Future Generator 组合为世界状态分支。
+
 ## FutureGenerator
 
 输入：
@@ -104,6 +130,7 @@ contradiction_penalty
 - 记录 provenance。
 - 保存旧状态。
 - 创建新 state_id。
+- 将 StateChange 关联到 action、future、hypothesis、observation 与 source state。
 
 ## NarrativeEngine
 
@@ -114,26 +141,31 @@ contradiction_penalty
 允许用于：
 
 ```text
-World Initialization
+World Initialization（结构化校验后）
 Belief Interpretation
+Theory of Mind 假设生成
 Lens Analysis
 Future Generation
-Future Evaluation
 Narrative Expression
-Scene Generation
 ```
 
-禁止一个 Prompt 一次性完成所有模块。
+行动评分、状态应用、provenance 记录和实验指标优先采用确定性代码。禁止一个 Prompt 一次性完成所有模块。
 
 ## 调试输出
 
 ```text
 observations.json
 subjective_models.json
+beliefs_about_others.json
 hypotheses.json
+hypothesis_relations.json
+agent_actions.json
 candidate_futures.json
 selected_future.json
 objective_states.json
+state_provenance.json
 narrative_events.json
 scene_cards.json
 ```
+
+当前 OutputExporter 尚未生成全部新增文件；该清单是 V2.2 目标契约。

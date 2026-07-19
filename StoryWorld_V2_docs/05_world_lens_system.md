@@ -151,3 +151,38 @@ Confidence
 ```text
 “从心理学角度看，主角可能感到焦虑。”
 ```
+
+## Hypothesis Conflict Resolver
+
+多个 Lens 不保证结论一致。例如：
+
+```text
+PsychologyLens: 愤怒提高立即对抗倾向
+EconomicLens: 高行动成本降低立即对抗倾向
+SocialStructureLens: 权力不对称进一步抑制公开对抗
+```
+
+Resolver 不负责选出“唯一正确理论”，而是输出结构化关系：
+
+```text
+supports
+contradicts
+conditions
+shared_drivers
+unresolved_tensions
+```
+
+Future Evaluator 必须能看到这些冲突，避免把三个假设简单计数后当作一致支持。
+
+## Lens Ablation
+
+每个 Lens 必须可独立关闭。实验比较：
+
+```text
+All Lenses
+- PsychologyLens
+- EconomicLens
+- SocialStructureLens
+```
+
+若移除 Lens 后候选未来、行动排序或解释链完全不变，说明 Lens 尚未真正参与世界模型。

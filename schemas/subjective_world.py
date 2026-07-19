@@ -1,3 +1,4 @@
+from hashlib import sha1
 from typing import Annotated, Any
 
 from pydantic import BaseModel, Field, model_validator
@@ -7,13 +8,48 @@ UnitScore = Annotated[float, Field(ge=0.0, le=1.0)]
 ContextModifier = Annotated[float, Field(ge=-1.0, le=1.0)]
 
 
+def _stable_text_id(prefix: str, text: str) -> str:
+    digest = sha1(text.encode("utf-8")).hexdigest()[:12]
+    return f"{prefix}_{digest}"
+
+
+class KnowledgeItem(BaseModel):
+    knowledge_id: str
+    content: str
+    source: str = ""
+    source_observation_ids: list[str] = Field(default_factory=list)
+    acquired_step: int = Field(default=0, ge=0)
+
+    @model_validator(mode="before")
+    @classmethod
+    def accept_content_shorthand(cls, value: Any) -> Any:
+        if isinstance(value, str):
+            return {"knowledge_id": _stable_text_id("knowledge", value), "content": value}
+        return value
+
+
 class Belief(BaseModel):
     belief_id: str
     proposition: str
-    confidence: float = Field(ge=0.0, le=1.0)
+    confidence: UnitScore
     evidence: list[str] = Field(default_factory=list)
     source: str = ""
-    last_updated_step: int = 0
+    last_updated_step: int = Field(default=0, ge=0)
+
+
+class Uncertainty(BaseModel):
+    uncertainty_id: str
+    question: str
+    related_belief_ids: list[str] = Field(default_factory=list)
+    importance: UnitScore = 0.5
+    last_updated_step: int = Field(default=0, ge=0)
+
+    @model_validator(mode="before")
+    @classmethod
+    def accept_question_shorthand(cls, value: Any) -> Any:
+        if isinstance(value, str):
+            return {"uncertainty_id": _stable_text_id("uncertainty", value), "question": value}
+        return value
 
 
 class Epistemology(BaseModel):
@@ -41,6 +77,24 @@ class Value(BaseModel):
         return min(1.0, max(0.0, self.base_weight + modifier))
 
 
+class HumanNatureModel(BaseModel):
+    self_interest: UnitScore = 0.5
+    altruism: UnitScore = 0.5
+    rationality: UnitScore = 0.5
+    malleability: UnitScore = 0.5
+    trust_default: UnitScore = 0.5
+
+
+class TheoryOfChange(BaseModel):
+    material_conditions: UnitScore = 0.5
+    institutions: UnitScore = 0.5
+    technology: UnitScore = 0.5
+    ideas: UnitScore = 0.5
+    individual_leaders: UnitScore = 0.5
+    social_networks: UnitScore = 0.5
+    contingency: UnitScore = 0.5
+
+
 class EmotionState(BaseModel):
     fear: UnitScore = 0.0
     anger: UnitScore = 0.0
@@ -51,18 +105,18 @@ class EmotionState(BaseModel):
 
 class SubjectiveWorldModel(BaseModel):
     agent_id: str
-    knowledge: list[str] = Field(default_factory=list)
+    knowledge: list[KnowledgeItem] = Field(default_factory=list)
     beliefs: list[Belief] = Field(default_factory=list)
     false_beliefs: list[Belief] = Field(default_factory=list)
-    uncertainties: list[str] = Field(default_factory=list)
+    uncertainties: list[Uncertainty] = Field(default_factory=list)
     values: dict[str, Value] = Field(default_factory=dict)
     goals: list[str] = Field(default_factory=list)
     fears: list[str] = Field(default_factory=list)
     identity: dict[str, Any] = Field(default_factory=dict)
     roles: list[str] = Field(default_factory=list)
     epistemology: Epistemology = Field(default_factory=Epistemology)
-    human_nature_model: dict[str, float] = Field(default_factory=dict)
-    theory_of_change: dict[str, float] = Field(default_factory=dict)
+    human_nature_model: HumanNatureModel = Field(default_factory=HumanNatureModel)
+    theory_of_change: TheoryOfChange = Field(default_factory=TheoryOfChange)
     methodology: list[str] = Field(default_factory=list)
     memory: list[str] = Field(default_factory=list)
     emotion: EmotionState = Field(default_factory=EmotionState)

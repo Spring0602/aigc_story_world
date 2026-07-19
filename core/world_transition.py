@@ -3,7 +3,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from schemas import CandidateFuture, ObjectiveWorldState
+from schemas import CandidateFuture, ObjectiveWorldState, StateProvenance
 
 
 class WorldTransition:
@@ -13,17 +13,25 @@ class WorldTransition:
         next_state.state_id = f"state_{next_state.step:03d}"
         next_state.timestamp = f"day_1_step_{next_state.step:02d}"
 
-        for change in future.expected_state_changes:
+        action_ids = [f"{action.agent_id}:{action.action}" for action in future.agent_actions]
+        for index, change in enumerate(future.expected_state_changes, start=1):
             self._set_path(next_state, change.path, change.new_value)
             next_state.history.append(
-                {
-                    "step": next_state.step,
-                    "path": change.path,
-                    "old_value": change.old_value,
-                    "new_value": change.new_value,
-                    "reason": change.reason,
-                    "future_id": future.future_id,
-                }
+                StateProvenance(
+                    provenance_id=f"prov_{next_state.step:03d}_{index:03d}",
+                    step=next_state.step,
+                    timestamp=next_state.timestamp,
+                    source="world_transition",
+                    source_state_id=state.state_id,
+                    target_state_id=next_state.state_id,
+                    path=change.path,
+                    old_value=change.old_value,
+                    new_value=change.new_value,
+                    cause=change.reason,
+                    future_id=future.future_id,
+                    action_ids=action_ids,
+                    supporting_hypothesis_ids=future.supporting_hypotheses,
+                )
             )
         return next_state
 

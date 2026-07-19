@@ -4,7 +4,7 @@
 
 系统必须先知道“世界中有什么”，才能稳定推演。
 
-第一版 Ontology 不追求完成人类知识本体，只定义叙事世界常见实体。
+第一版 Ontology 不追求完成人类知识本体，只定义社会认知实验和世界状态转移所需实体。
 
 ## 基础实体
 
@@ -88,7 +88,7 @@ HistoryRecord
 }
 ```
 
-## History Provenance
+## State Provenance
 
 重要状态应能回答：
 
@@ -96,13 +96,33 @@ HistoryRecord
 
 ```json
 {
-  "fact": "lin_xia_trust_prof_chen_low",
-  "value": 0.32,
-  "provenance": ["event_003", "event_014"]
+  "provenance_id": "prov_001",
+  "source_state_id": "state_000",
+  "target_state_id": "state_001",
+  "step": 1,
+  "path": "agents.lin_xia.location_id",
+  "old_value": "dorm",
+  "new_value": "computer_lab",
+  "cause": "林夏决定秘密验证网络重定向",
+  "agent_action_ids": ["action_lin_xia_001"],
+  "supporting_hypothesis_ids": ["hyp_psy_001", "hyp_social_001"],
+  "source_observation_ids": ["obs_dns_redirect"]
 }
 ```
 
-40 天 MVP 先实现：
+`history` 不是任意字典日志，而应由强类型 provenance 记录组成。初始事实也要记录 `source`，例如案例文件、用户输入或系统规则。当前代码只有 `reason` 与 `future_id` 的最小记录，完整模型按 V2.2 的 World Transition 阶段实现。
+
+## Event 与 Action 的边界
+
+```text
+AgentAction = 主体基于主观模型作出的选择
+WorldEvent = 行动与环境机制共同产生的客观结果
+NarrativeEvent = 对已发生 WorldEvent 的表达
+```
+
+三者不得混用。角色不能直接把主观意图写成客观事实。
+
+40 天 MVP 优先实现：
 
 ```text
 Agent
@@ -114,4 +134,5 @@ Norm
 Resource
 Event
 ActiveProcess
+StateProvenance
 ```

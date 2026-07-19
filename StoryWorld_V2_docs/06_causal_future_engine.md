@@ -13,6 +13,36 @@ ObjectiveWorldState
 SubjectiveWorldModels
 CausalHypotheses
 ActiveProcesses
+ResolvedHypothesisRelations
+CandidateAgentActions
+```
+
+## Agent Action Model
+
+Future Generator 之前先生成角色行动。行动评分至少包含：
+
+```text
+Belief Compatibility
+Goal Compatibility
+Value Compatibility
+Emotional Compatibility
+Theory-of-Mind Compatibility
+Environmental Constraint
+```
+
+输出应记录支持与抑制因素，而不是只有动作字符串：
+
+```json
+{
+  "action_id": "action_lin_xia_001",
+  "agent_id": "lin_xia",
+  "action": "secretly_collect_network_evidence",
+  "supporting_belief_ids": ["belief_monitoring_001"],
+  "supporting_goals": ["确认网络异常"],
+  "supporting_values": ["truth", "freedom"],
+  "constraints": ["authority_asymmetry", "risk_of_punishment"],
+  "score": 0.81
+}
 ```
 
 ## CandidateFuture
@@ -49,6 +79,8 @@ B：向室友求助
 C：直接质问老师
 D：暂时忽略
 ```
+
+这些是不同的世界状态分支，不是为了制造戏剧性的剧情选项。每个分支都必须绑定行动、机制、约束和预期 StateChange。
 
 ## 概率说明
 
@@ -120,5 +152,19 @@ Supporting Hypotheses
 Future ID
 Step
 ```
+
+完整 provenance 链应支持：
+
+```text
+StateChange
+→ Candidate Future
+→ Agent Action
+→ Belief / Goal / Value / Emotion
+→ Causal Hypothesis
+→ Lens
+→ Observation / Source Fact
+```
+
+当前最小实现只保存 `old_value`、`new_value`、`reason` 和 `future_id`，不视为新版 provenance 验收完成。
 
 40 天内可以由 LLM 实现 Lens、Future、Evaluation，但所有输出必须结构化。

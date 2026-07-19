@@ -1,0 +1,143 @@
+{
+  "state_id": "state_000",
+  "step": 0,
+  "timestamp": "day_1_23_50",
+  "locations": {
+    "dorm": {
+      "location_id": "dorm",
+      "name": "女生宿舍",
+      "description": "深夜里只有电脑屏幕亮着"
+    },
+    "campus_network": {
+      "location_id": "campus_network",
+      "name": "校园网络",
+      "description": "近期正在升级检测系统"
+    },
+    "computer_lab": {
+      "location_id": "computer_lab",
+      "name": "计算机学院机房"
+    }
+  },
+  "agents": {
+    "lin_xia": {
+      "agent_id": "lin_xia",
+      "name": "林夏",
+      "location_id": "dorm",
+      "status": "awake",
+      "roles": ["student", "roommate"]
+    },
+    "wang_chen": {
+      "agent_id": "wang_chen",
+      "name": "王晨",
+      "location_id": "dorm",
+      "status": "awake",
+      "roles": ["student", "roommate"]
+    }
+  },
+  "resources": {
+    "campus_network_access": {
+      "resource_id": "campus_network_access",
+      "name": "校园网络访问权限",
+      "resource_type": "digital_access",
+      "quantity": 1,
+      "owner_id": "university_it_office",
+      "location_id": "campus_network",
+      "access_rules": ["student_network_policy"]
+    }
+  },
+  "institutions": {
+    "university_it_office": {
+      "institution_id": "university_it_office",
+      "name": "学校网络中心",
+      "institution_type": "university",
+      "authority_scope": ["campus_network"],
+      "transparency": 0.35,
+      "rules": ["校园网安全规则", "异常流量检测流程"],
+      "resources_controlled": ["campus_network_access"]
+    }
+  },
+  "norms": {
+    "student_network_policy": {
+      "norm_id": "student_network_policy",
+      "content": "学生应遵守校园网安全规则，但升级细节不会完全公开。",
+      "clarity": 0.48,
+      "institution_id": "university_it_office",
+      "sanctions": ["warning", "network_access_suspension"]
+    }
+  },
+  "relationships": {
+    "lin_xia__wang_chen": {
+      "source": "lin_xia",
+      "target": "wang_chen",
+      "trust": 0.72,
+      "dependency": 0.35,
+      "emotional_attachment": 0.62,
+      "conflict": 0.18
+    }
+  },
+  "events": [
+    {
+      "event_id": "event_network_upgrade_notice",
+      "event_type": "institutional_announcement",
+      "timestamp": "day_1_18_00",
+      "description": "学校发布网络安全升级通知。",
+      "participant_ids": ["university_it_office"],
+      "effect_paths": ["public_information.info_public_network_upgrade"]
+    }
+  ],
+  "public_information": [
+    {
+      "info_id": "info_public_network_upgrade",
+      "content": "学校近期部署网络异常流量检测系统。",
+      "visibility": "public",
+      "source": "university_notice",
+      "evidence_type": "authority",
+      "reliability": 0.82,
+      "provenance": ["event_network_upgrade_notice"]
+    }
+  ],
+  "hidden_facts": [
+    {
+      "info_id": "info_hidden_scope_unclear",
+      "content": "检测系统的功能边界并不透明。",
+      "visibility": "hidden",
+      "source": "system_fact",
+      "evidence_type": "data",
+      "reliability": 0.95,
+      "provenance": ["campus_network_monitoring_rollout"]
+    },
+    {
+      "info_id": "info_private_dns_redirect",
+      "content": "部分 DNS 请求被重定向。",
+      "visibility": "private",
+      "location_id": "dorm",
+      "source": "terminal",
+      "evidence_type": "data",
+      "reliability": 0.92,
+      "allowed_agent_ids": ["lin_xia"],
+      "provenance": ["terminal_log_lin_xia_001"]
+    }
+  ],
+  "active_processes": [
+    {
+      "process_id": "campus_network_monitoring_rollout",
+      "type": "institutional_change",
+      "start_time": "day_1",
+      "time_scale": "days",
+      "drivers": ["security_policy", "network_risk_control"],
+      "current_stage": "pilot"
+    }
+  ],
+  "history": [
+    {
+      "provenance_id": "prov_initial_scenario",
+      "step": 0,
+      "timestamp": "day_1_23_50",
+      "source": "example_world.json",
+      "target_state_id": "state_000",
+      "fact": "scenario_seed",
+      "new_value": "校园监控：学校部署不透明的网络异常流量检测系统。",
+      "cause": "加载固定校园监控案例"
+    }
+  ]
+}

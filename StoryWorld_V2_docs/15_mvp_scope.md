@@ -8,11 +8,19 @@
 
 ### H2
 
-结构化 World Lens 可以生成比“直接问 LLM 下一步发生什么”更显式的因果机制。
+显式 Theory of Mind 能让角色基于对他人信念的估计产生更一致的互动行动，同时不读取他人私有状态。
 
 ### H3
 
-先生成 Candidate Future，再由 Narrative Engine 选择表达，可以减少纯剧情 Prompt 对世界演化的戏剧性污染。
+结构化 World Lens 及其冲突关系可以生成比“直接问 LLM 下一步发生什么”更显式的因果机制。
+
+### H4
+
+将 Belief、Goal、Value、Emotion 与 Constraint 显式接入 Agent Action Model 后，不同主观模型会产生不同的世界状态分支。
+
+### H5
+
+完整 provenance 和后置 Narrative Engine 可以解释事件为何发生，并减少纯剧情 Prompt 对世界演化的戏剧性污染。
 
 ## MVP 必须有
 
@@ -20,13 +28,19 @@
 1 个 Objective World
 2～3 个 Agent
 2 个以上明显不同的 Subjective World Model
+1 个结构化 Theory of Mind 模块
 3 个 Lens
+1 个 Hypothesis Conflict Resolver
+1 个 Agent Action Model
 3～5 个 Candidate Future / step
 3 个连续 world transition step
+完整 State Provenance
 1 个 Narrative Engine
-1 个 Scene Generator
 1 个 Gradio Demo
+3 个核心对比实验
 ```
+
+主案例保留林夏、王晨两名角色；Same World Different Minds 实验增加第三个对照认知配置，不要求扩展主剧情角色数量。
 
 ## 第一批 Lens
 
@@ -58,6 +72,8 @@ SocialStructureLens
 医学/法律事实判断
 现实政治预测
 精确概率校准
+图像生成质量优化
+复杂文学风格优化
 ```
 
 ## 推荐主案例：校园监控
@@ -93,6 +109,8 @@ SocialStructureLens
 校园网络流量重定向
 ```
 
+正式 H1 对照实验会向所有认知配置提供相同 Observation。主 Demo 中的私人信息边界用于测试 Partial Observability，两者分开报告。
+
 期望：
 
 ```text
@@ -115,9 +133,12 @@ StoryWorld V2：
 Objective State
 → Observation
 → Subjective Model
+→ Theory of Mind
 → Lens
 → Hypothesis
+→ Agent Action
 → Candidate Future
+→ World Transition / Provenance
 → Narrative
 ```
 
@@ -125,11 +146,23 @@ Objective State
 
 ```text
 角色差异
+互动行动一致性
 因果显式性
 未来多样性
 状态一致性
+provenance 完整性
 可解释性
 ```
+
+## 核心实验
+
+```text
+Experiment 1: Same World Different Minds
+Experiment 2: Lens Ablation
+Experiment 3: Prompt-to-Story Baseline Comparison
+```
+
+实验必须保存输入配置、中间结构化输出和评价结果，不能只展示最佳故事样例。
 
 ## 40 天结束标准
 
@@ -161,8 +194,14 @@ SocialStructureLens:
 Candidate Future:
 秘密收集证据
 
+Agent Action:
+由监控信念、真相/自由价值、验证目标与权力约束共同支持
+
+Provenance:
+Observation → Belief / Theory of Mind + Hypothesis → Action → Future → StateChange
+
 Estimated Plausibility:
 0.46
 ```
 
-能做到这一点，V2 MVP 就成功。
+同时能够展示王晨及第三个对照认知配置为何得出不同解释和行动，并通过三项核心实验复现差异，V2 MVP 才算成功。

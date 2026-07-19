@@ -1,17 +1,12 @@
-import json
 import unittest
-from pathlib import Path
 
-from core.world_initializer import DEFAULT_EXAMPLE_PATH, WorldInitializer
+from core.world_initializer import WorldInitializer
 from schemas import AgentProfile, ObjectiveWorldState, SubjectiveWorldModel
 
 
 class CampusMonitoringExampleTest(unittest.TestCase):
     def test_day6_example_has_required_world_elements(self):
-        payload = json.loads(Path(DEFAULT_EXAMPLE_PATH).read_text(encoding="utf-8"))
-        state = ObjectiveWorldState.model_validate(payload["objective_state"])
-        profiles = [AgentProfile.model_validate(item) for item in payload["agent_profiles"]]
-        subjective_models = [SubjectiveWorldModel.model_validate(item) for item in payload["subjective_models"]]
+        state, profiles, subjective_models = WorldInitializer().initialize("校园监控")
 
         self.assertEqual(len(state.institutions), 1)
         self.assertEqual(next(iter(state.institutions.values())).institution_type, "university")
@@ -25,10 +20,13 @@ class CampusMonitoringExampleTest(unittest.TestCase):
     def test_initializer_loads_example_and_preserves_input_seed(self):
         state, profiles, subjective_models = WorldInitializer().initialize("自定义校园监控设定")
 
-        seed = next(item for item in state.history if item.get("fact") == "scenario_seed")
-        self.assertEqual(seed["value"], "自定义校园监控设定")
+        seed = next(item for item in state.history if item.fact == "scenario_seed")
+        self.assertEqual(seed.new_value, "自定义校园监控设定")
         self.assertEqual(len(profiles), 2)
         self.assertEqual(len(subjective_models), 2)
+        self.assertTrue(all(isinstance(item, AgentProfile) for item in profiles))
+        self.assertTrue(all(isinstance(item, SubjectiveWorldModel) for item in subjective_models))
+        self.assertIsInstance(state, ObjectiveWorldState)
 
 
 if __name__ == "__main__":

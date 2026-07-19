@@ -1,0 +1,74 @@
+[
+  {
+    "agent_id": "lin_xia",
+    "name": "林夏",
+    "identity": {"age": 20, "occupation": "计算机专业学生"},
+    "roles": ["student", "roommate"],
+    "goals": ["确认网络异常是否意味着监控", "保护个人自由"],
+    "values": {
+      "freedom": {"base_weight": 0.9, "context_modifiers": {"personal_surveillance": 0.1}},
+      "truth": 0.88,
+      "safety": 0.45,
+      "order": 0.35
+    },
+    "epistemology": {
+      "trust_data": 0.92,
+      "trust_authority": 0.18,
+      "trust_personal_experience": 0.75,
+      "trust_social_consensus": 0.3,
+      "trust_intuition": 0.4,
+      "tolerance_for_uncertainty": 0.62
+    },
+    "human_nature_model": {
+      "self_interest": 0.66,
+      "altruism": 0.48,
+      "rationality": 0.72,
+      "malleability": 0.7,
+      "trust_default": 0.35
+    },
+    "theory_of_change": {
+      "material_conditions": 0.5,
+      "institutions": 0.62,
+      "technology": 0.75,
+      "ideas": 0.58,
+      "individual_leaders": 0.25,
+      "social_networks": 0.55,
+      "contingency": 0.5
+    },
+    "methodology": ["inspect_logs", "compare_network_traces"],
+    "visual_features": {"hair": "black medium-length hair", "clothes": "loose white hoodie"}
+  },
+  {
+    "agent_id": "wang_chen",
+    "name": "王晨",
+    "identity": {"age": 20, "occupation": "学生"},
+    "roles": ["student", "roommate"],
+    "goals": ["维持宿舍稳定", "避免惹上学校处分"],
+    "values": {"freedom": 0.42, "truth": 0.55, "safety": 0.86, "order": 0.82},
+    "epistemology": {
+      "trust_data": 0.45,
+      "trust_authority": 0.82,
+      "trust_personal_experience": 0.58,
+      "trust_social_consensus": 0.74,
+      "trust_intuition": 0.35,
+      "tolerance_for_uncertainty": 0.38
+    },
+    "human_nature_model": {
+      "self_interest": 0.52,
+      "altruism": 0.61,
+      "rationality": 0.58,
+      "malleability": 0.45,
+      "trust_default": 0.58
+    },
+    "theory_of_change": {
+      "material_conditions": 0.45,
+      "institutions": 0.78,
+      "technology": 0.52,
+      "ideas": 0.38,
+      "individual_leaders": 0.5,
+      "social_networks": 0.42,
+      "contingency": 0.35
+    },
+    "methodology": ["ask_authority", "follow_policy"]
+  }
+]
