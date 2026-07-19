@@ -68,6 +68,8 @@ Observation
 → Interpretation
 ```
 
+`CognitionEngine` 负责流程编排，`InterpretationEngine` 负责 Cognitive Interpretation Layer：将 Observation、更新后的 Belief、角色价值观、认识论与当前情绪组合为 `belief_basis`、`causal_frame`、`meaning`、`emotional_response` 和 `action_implication`。生成的情绪反应写回 `SubjectiveWorldModel`，供后续认知步骤使用。
+
 ## LensRouter
 
 第一版固定调用三个 Lens，并合并假设。

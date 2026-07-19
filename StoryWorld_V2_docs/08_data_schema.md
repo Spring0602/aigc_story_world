@@ -72,11 +72,22 @@ WorldEvent
   "interpretation_id": "int_001",
   "agent_id": "lin_xia",
   "observation_ids": ["obs_001"],
-  "claim": "学校可能在监控学生网络",
-  "confidence": 0.72,
-  "reasoning_basis": ["high_trust_data", "low_trust_authority"]
+  "belief_basis": ["学校可能在监控学生网络"],
+  "causal_frame": "institutional opacity enables surveillance",
+  "meaning": "institution threatens autonomy",
+  "emotional_response": {
+    "fear": 0.4,
+    "anger": 0.7,
+    "shame": 0.0,
+    "curiosity": 0.6,
+    "hope": 0.2
+  },
+  "action_implication": "collect evidence secretly",
+  "confidence": 0.72
 }
 ```
+
+`Interpretation` 是 Cognitive Interpretation Layer 的输出：`belief_basis` 说明解释依赖的信念，`causal_frame` 说明角色采用的因果框架，`meaning`、`emotional_response` 和 `action_implication` 分别表达主观意义、情绪反应和行动倾向。
 
 ## StateChange
 

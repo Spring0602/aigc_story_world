@@ -1,5 +1,6 @@
 from core.belief_updater import BeliefUpdater
 from core.evidence_evaluator import EvidenceEvaluator
+from core.interpretation_engine import InterpretationEngine
 from schemas import Interpretation, Observation, SubjectiveWorldModel
 
 
@@ -7,6 +8,7 @@ class CognitionEngine:
     def __init__(self) -> None:
         self.evidence_evaluator = EvidenceEvaluator()
         self.belief_updater = BeliefUpdater()
+        self.interpretation_engine = InterpretationEngine()
 
     def interpret(
         self,
@@ -22,17 +24,15 @@ class CognitionEngine:
             updated_model = self.belief_updater.update(model, observation, confidence)
             models_by_agent[observation.agent_id] = updated_model
 
-            claim = updated_model.beliefs[-1].proposition
-            basis = [self.evidence_evaluator.trust_basis(observation)]
-            interpretations.append(
-                Interpretation(
-                    interpretation_id=f"int_{len(interpretations) + 1:03d}",
-                    agent_id=observation.agent_id,
-                    observation_ids=[observation.observation_id],
-                    claim=claim,
-                    confidence=confidence,
-                    reasoning_basis=basis,
-                )
+            interpretation = self.interpretation_engine.interpret(
+                observation=observation,
+                model=updated_model,
+                belief=updated_model.beliefs[-1],
+                confidence=confidence,
+                interpretation_id=f"int_{len(interpretations) + 1:03d}",
             )
+            updated_model.emotion = interpretation.emotional_response.model_copy(deep=True)
+            models_by_agent[observation.agent_id] = updated_model
+            interpretations.append(interpretation)
 
         return list(models_by_agent.values()), interpretations

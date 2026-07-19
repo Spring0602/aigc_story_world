@@ -231,6 +231,8 @@ TheoryOfChange
 
 ## Day 7：Interpretation Engine
 
+> 状态：已完成（2026-07-19）。Cognitive Interpretation Layer 已将信念基础、因果框架、主观意义、情绪反应和行动倾向结构化，并验证同一世界中的角色差异。
+
 ### 学习
 
 -   Cognitive Bias
@@ -260,6 +262,8 @@ TheoryOfChange
 ### 交付
 
     core/cognition_engine.py
+    core/interpretation_engine.py
+    schemas/interpretation.py
 
 ------------------------------------------------------------------------
 

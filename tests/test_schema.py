@@ -133,9 +133,12 @@ class SchemaTest(unittest.TestCase):
             interpretation_id="int_001",
             agent_id="lin_xia",
             observation_ids=[observation.observation_id],
-            claim="学校可能在监控学生网络",
+            belief_basis=["学校可能在监控学生网络"],
+            causal_frame="institutional opacity enables surveillance",
+            meaning="institution threatens autonomy",
+            emotional_response=EmotionState(fear=0.4, anger=0.7),
+            action_implication="collect evidence secretly",
             confidence=0.72,
-            reasoning_basis=["high_trust_data", "low_trust_authority"],
         )
         hypothesis = CausalHypothesis(
             hypothesis_id="hyp_eco_001",
@@ -190,6 +193,7 @@ class SchemaTest(unittest.TestCase):
         )
 
         self.assertEqual(interpretation.observation_ids, ["obs_001"])
+        self.assertEqual(interpretation.emotional_response.anger, 0.7)
         self.assertEqual(future.expected_state_changes[0].new_value, "computer_lab")
         self.assertIsInstance(scene.characters[0], SceneCharacter)
         self.assertIsInstance(scene.camera, CameraSetup)
