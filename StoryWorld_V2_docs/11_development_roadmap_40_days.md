@@ -101,11 +101,11 @@
 校园网络监控系统
 ```
 
-- [ ] 1 个大学 Institution
-- [ ] 2 个角色
-- [ ] 1 个 ActiveProcess
-- [ ] 2 个隐藏事实
-- [ ] 1 个公开事实
+- [已完成] 1 个大学 Institution
+- [已完成] 2 个角色
+- [已完成] 1 个 ActiveProcess
+- [已完成] 2 个隐藏事实
+- [已完成] 1 个公开事实
 
 交付：`data/examples/campus_monitoring.json`
 
