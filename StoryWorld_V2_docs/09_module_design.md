@@ -65,10 +65,12 @@ class WorldLens(ABC):
 Observation
 → Evidence Evaluation
 → Belief Update
+→ Mental Model
+→ Bias Filter
 → Interpretation
 ```
 
-`CognitionEngine` 负责流程编排，`InterpretationEngine` 负责 Cognitive Interpretation Layer：将 Observation、更新后的 Belief、角色价值观、认识论与当前情绪组合为 `belief_basis`、`causal_frame`、`meaning`、`emotional_response` 和 `action_implication`。生成的情绪反应写回 `SubjectiveWorldModel`，供后续认知步骤使用。
+`CognitionEngine` 负责流程编排。`MentalModelEngine` 将 Observation 与更新后的 Belief 组织为因果假设、制度预期和相关价值权重；`BiasFilter` 根据认识论、价值与不确定性容忍度记录偏差类型、强度和显著性焦点；`InterpretationEngine` 只消费这两层的结构化输出，生成 `meaning`、`emotional_response` 和 `action_implication`。生成的情绪反应写回 `SubjectiveWorldModel`，供后续认知步骤使用。
 
 ## LensRouter
 

@@ -9,7 +9,10 @@ class BeliefTest(unittest.TestCase):
     def test_same_world_produces_different_interpretations(self):
         state, agents, models = WorldInitializer().initialize("校园监控")
         observations = ObservationEngine().observe(state, models)
-        models, interpretations = CognitionEngine().interpret(observations, models)
+        models, mental_models, bias_results, interpretations = CognitionEngine().interpret(
+            observations,
+            models,
+        )
 
         lin_beliefs = [claim for item in interpretations if item.agent_id == "lin_xia" for claim in item.belief_basis]
         wang_beliefs = [claim for item in interpretations if item.agent_id == "wang_chen" for claim in item.belief_basis]
@@ -23,6 +26,8 @@ class BeliefTest(unittest.TestCase):
         self.assertEqual(lin_monitoring.action_implication, "collect evidence secretly")
         self.assertGreater(lin_monitoring.emotional_response.anger, wang_authority.emotional_response.anger)
         self.assertEqual(wang_authority.action_implication, "follow institutional guidance")
+        self.assertEqual(len(mental_models), len(interpretations))
+        self.assertEqual(len(bias_results), len(interpretations))
 
 
 if __name__ == "__main__":

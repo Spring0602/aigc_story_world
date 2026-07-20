@@ -9,7 +9,15 @@ class BeliefUpdater:
         confidence: float,
     ) -> SubjectiveWorldModel:
         updated = model.model_copy(deep=True)
-        if observation.source == "terminal" and model.agent_id == "lin_xia":
+        freedom = model.values.get("freedom")
+        freedom_weight = freedom.base_weight if freedom else 0.5
+        direct_evidence_trust = {
+            "data": model.epistemology.trust_data,
+            "personal_experience": model.epistemology.trust_personal_experience,
+        }.get(observation.evidence_type, 0.0)
+        trusts_direct_evidence = direct_evidence_trust >= 0.7
+
+        if trusts_direct_evidence and freedom_weight >= 0.7:
             proposition = "学校可能正在监控学生网络。"
         elif model.epistemology.trust_authority >= 0.7:
             proposition = "网络异常更可能是安全升级带来的正常现象。"

@@ -55,6 +55,8 @@ objective_states.json
 agent_profiles.json
 observations.json
 subjective_models.json
+mental_models.json
+bias_filter_results.json
 interpretations.json
 hypotheses.json
 candidate_futures.json

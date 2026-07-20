@@ -56,6 +56,8 @@ Narrative Event / Scene Card
 State
 → Observation
 → Belief Update
+→ Mental Model
+→ Bias Filter
 → Interpretation
 → Theory of Mind
 → Causal Hypothesis

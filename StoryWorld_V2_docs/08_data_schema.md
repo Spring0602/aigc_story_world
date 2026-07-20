@@ -65,6 +65,38 @@ WorldEvent
 }
 ```
 
+## MentalModel
+
+```json
+{
+  "mental_model_id": "mm_001",
+  "agent_id": "lin_xia",
+  "source_belief_ids": ["belief_lin_xia_002"],
+  "source_observation_ids": ["obs_001"],
+  "causal_assumptions": ["technical anomalies may be caused by institutional surveillance"],
+  "institutional_expectation": "institutions strongly shape individual options",
+  "relevant_value_weights": {"freedom": 0.9, "truth": 0.88},
+  "uncertainty_tolerance": 0.62
+}
+```
+
+## BiasFilterResult
+
+```json
+{
+  "bias_filter_id": "bias_001",
+  "mental_model_id": "mm_001",
+  "applied_biases": [{
+    "bias_type": "autonomy_threat_sensitivity",
+    "strength": 0.74,
+    "rationale": "High autonomy value increases the salience of surveillance risk."
+  }],
+  "filtered_causal_frame": "institutional opacity enables surveillance",
+  "salience_focus": "autonomy",
+  "confidence_modifier": 0.037
+}
+```
+
 ## Interpretation
 
 ```json
@@ -73,6 +105,8 @@ WorldEvent
   "agent_id": "lin_xia",
   "observation_ids": ["obs_001"],
   "belief_basis": ["学校可能在监控学生网络"],
+  "mental_model_id": "mm_001",
+  "bias_filter_id": "bias_001",
   "causal_frame": "institutional opacity enables surveillance",
   "meaning": "institution threatens autonomy",
   "emotional_response": {
@@ -87,7 +121,7 @@ WorldEvent
 }
 ```
 
-`Interpretation` 是 Cognitive Interpretation Layer 的输出：`belief_basis` 说明解释依赖的信念，`causal_frame` 说明角色采用的因果框架，`meaning`、`emotional_response` 和 `action_implication` 分别表达主观意义、情绪反应和行动倾向。
+认知链路固定为 `Observation → Belief → MentalModel → BiasFilterResult → Interpretation`。`MentalModel` 保存尚未经过偏差过滤的因果假设，`BiasFilterResult` 记录偏差如何选择显著信息并调整因果框架，`Interpretation` 通过两类 ID 保留完整引用链。
 
 ## StateChange
 

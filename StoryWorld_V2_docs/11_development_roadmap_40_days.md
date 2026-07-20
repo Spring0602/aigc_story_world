@@ -131,7 +131,7 @@ Human Nature Model
 
 -   Value 与 Human Nature Model
 -   Partial Observability
--   Observation → Interpretation
+-   Observation → Belief → Mental Model → Bias Filter → Interpretation
 -   同一 Observation 的参数对照测试
 
 ------------------------------------------------------------------------

@@ -8,6 +8,8 @@ class Interpretation(BaseModel):
     agent_id: str
     observation_ids: list[str] = Field(default_factory=list)
     belief_basis: list[str] = Field(default_factory=list)
+    mental_model_id: str
+    bias_filter_id: str
     causal_frame: str
     meaning: str
     emotional_response: EmotionState = Field(default_factory=EmotionState)

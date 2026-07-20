@@ -15,6 +15,8 @@ class OutputExporter:
         agents,
         observations,
         subjective_models,
+        mental_models,
+        bias_filter_results,
         interpretations,
         hypotheses,
         candidate_futures,
@@ -30,6 +32,8 @@ class OutputExporter:
         self._write_json(run_dir / "agent_profiles.json", agents)
         self._write_json(run_dir / "observations.json", observations)
         self._write_json(run_dir / "subjective_models.json", subjective_models)
+        self._write_json(run_dir / "mental_models.json", mental_models)
+        self._write_json(run_dir / "bias_filter_results.json", bias_filter_results)
         self._write_json(run_dir / "interpretations.json", interpretations)
         self._write_json(run_dir / "hypotheses.json", hypotheses)
         self._write_json(run_dir / "candidate_futures.json", candidate_futures)

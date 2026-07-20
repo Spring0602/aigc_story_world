@@ -4,6 +4,7 @@ from schemas.agent import AgentProfile
 from schemas.common import EvidenceType, InformationVisibility, ObservationVisibility
 from schemas.causal_hypothesis import CausalHypothesis, TimeScale
 from schemas.candidate_future import AgentAction, CandidateFuture, StateChange
+from schemas.cognitive import BiasFilterResult, BiasSignal, BiasType, MentalModel, SalienceFocus
 from schemas.interpretation import Interpretation
 from schemas.narrative_event import NarrativeEvent
 from schemas.objective_world import (
@@ -39,6 +40,9 @@ __all__ = [
     "AgentAction",
     "AgentProfile",
     "Belief",
+    "BiasFilterResult",
+    "BiasSignal",
+    "BiasType",
     "CameraSetup",
     "CandidateFuture",
     "CausalHypothesis",
@@ -52,6 +56,7 @@ __all__ = [
     "Institution",
     "Interpretation",
     "Location",
+    "MentalModel",
     "NarrativeEvent",
     "ObjectiveWorldState",
     "Observation",
@@ -61,6 +66,7 @@ __all__ = [
     "Resource",
     "SceneCard",
     "SceneCharacter",
+    "SalienceFocus",
     "StateChange",
     "StateProvenance",
     "SubjectiveWorldModel",

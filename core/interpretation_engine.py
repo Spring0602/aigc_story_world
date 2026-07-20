@@ -1,4 +1,12 @@
-from schemas import Belief, EmotionState, Interpretation, Observation, SubjectiveWorldModel
+from schemas import (
+    Belief,
+    BiasFilterResult,
+    EmotionState,
+    Interpretation,
+    MentalModel,
+    Observation,
+    SubjectiveWorldModel,
+)
 
 
 class InterpretationEngine:
@@ -7,14 +15,15 @@ class InterpretationEngine:
         observation: Observation,
         model: SubjectiveWorldModel,
         belief: Belief,
+        mental_model: MentalModel,
+        bias_result: BiasFilterResult,
         confidence: float,
         interpretation_id: str,
     ) -> Interpretation:
-        threatens_autonomy = "监控" in belief.proposition and self._value_weight(model, "freedom") >= 0.7
-        trusts_authority = model.epistemology.trust_authority >= 0.7
+        threatens_autonomy = bias_result.salience_focus == "autonomy"
+        trusts_authority = bias_result.salience_focus == "collective_security"
 
         if threatens_autonomy:
-            causal_frame = "institutional opacity enables surveillance"
             meaning = "institution threatens autonomy"
             action_implication = (
                 "collect evidence secretly"
@@ -22,29 +31,31 @@ class InterpretationEngine:
                 else "seek independent evidence"
             )
         elif trusts_authority:
-            causal_frame = "institutional authority frames the change as protection"
             meaning = "institution protects collective security"
             action_implication = "follow institutional guidance"
         else:
-            causal_frame = "incomplete evidence leaves institutional intent uncertain"
             meaning = "the situation requires further verification"
             action_implication = "seek additional evidence"
+
+        interpretation_confidence = self._clamp(confidence + bias_result.confidence_modifier)
 
         return Interpretation(
             interpretation_id=interpretation_id,
             agent_id=observation.agent_id,
             observation_ids=[observation.observation_id],
             belief_basis=[belief.proposition],
-            causal_frame=causal_frame,
+            mental_model_id=mental_model.mental_model_id,
+            bias_filter_id=bias_result.bias_filter_id,
+            causal_frame=bias_result.filtered_causal_frame,
             meaning=meaning,
             emotional_response=self._emotional_response(
                 model,
-                confidence,
+                interpretation_confidence,
                 threatens_autonomy=threatens_autonomy,
                 trusts_authority=trusts_authority,
             ),
             action_implication=action_implication,
-            confidence=confidence,
+            confidence=interpretation_confidence,
         )
 
     def _emotional_response(

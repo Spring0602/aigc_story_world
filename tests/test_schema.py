@@ -134,6 +134,8 @@ class SchemaTest(unittest.TestCase):
             agent_id="lin_xia",
             observation_ids=[observation.observation_id],
             belief_basis=["学校可能在监控学生网络"],
+            mental_model_id="mm_001",
+            bias_filter_id="bias_001",
             causal_frame="institutional opacity enables surveillance",
             meaning="institution threatens autonomy",
             emotional_response=EmotionState(fear=0.4, anger=0.7),

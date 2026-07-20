@@ -40,6 +40,8 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
 
     objective_states = [objective_state]
     all_observations = []
+    all_mental_models = []
+    all_bias_filter_results = []
     all_interpretations = []
     all_hypotheses = []
     all_candidate_futures = []
@@ -50,7 +52,10 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
 
     for _ in range(max(1, steps)):
         observations = observation_engine.observe(objective_state, subjective_models)
-        subjective_models, interpretations = cognition_engine.interpret(observations, subjective_models)
+        subjective_models, mental_models, bias_filter_results, interpretations = cognition_engine.interpret(
+            observations,
+            subjective_models,
+        )
         hypotheses = lens_router.analyze(objective_state, subjective_models)
         futures = future_generator.generate(objective_state, subjective_models, hypotheses)
         selected_future = future_evaluator.select(futures, objective_state, subjective_models, hypotheses)
@@ -60,6 +65,8 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
         image_prompt = image_prompt_generator.generate(scene_card)
 
         all_observations.extend(observations)
+        all_mental_models.extend(mental_models)
+        all_bias_filter_results.extend(bias_filter_results)
         all_interpretations.extend(interpretations)
         all_hypotheses.extend(hypotheses)
         all_candidate_futures.extend(futures)
@@ -77,6 +84,8 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             agents=agents,
             observations=all_observations,
             subjective_models=subjective_models,
+            mental_models=all_mental_models,
+            bias_filter_results=all_bias_filter_results,
             interpretations=all_interpretations,
             hypotheses=all_hypotheses,
             candidate_futures=all_candidate_futures,
@@ -92,6 +101,8 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
         "agent_profiles": to_dict(agents),
         "observations": to_dict(all_observations),
         "subjective_models": to_dict(subjective_models),
+        "mental_models": to_dict(all_mental_models),
+        "bias_filter_results": to_dict(all_bias_filter_results),
         "interpretations": to_dict(all_interpretations),
         "hypotheses": to_dict(all_hypotheses),
         "candidate_futures": to_dict(all_candidate_futures),
