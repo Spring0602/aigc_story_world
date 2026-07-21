@@ -35,6 +35,7 @@ class Belief(BaseModel):
     evidence: list[str] = Field(default_factory=list)
     source: str = ""
     last_updated_step: int = Field(default=0, ge=0)
+    update_ids: list[str] = Field(default_factory=list)
 
 
 class Uncertainty(BaseModel):

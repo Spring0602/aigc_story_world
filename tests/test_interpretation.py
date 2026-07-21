@@ -56,10 +56,14 @@ class InterpretationEngineTest(unittest.TestCase):
             ),
         ]
 
-        updated_models, mental_models, bias_results, interpretations = CognitionEngine().interpret(
+        cognition = CognitionEngine().interpret(
             observations,
             models,
         )
+        updated_models = cognition.subjective_models
+        mental_models = cognition.mental_models
+        bias_results = cognition.bias_results
+        interpretations = cognition.interpretations
         by_agent = {item.agent_id: item for item in interpretations}
         mental_models_by_id = {item.mental_model_id: item for item in mental_models}
         bias_results_by_id = {item.bias_filter_id: item for item in bias_results}
@@ -73,6 +77,8 @@ class InterpretationEngineTest(unittest.TestCase):
         self.assertEqual(by_agent["dataist"].action_implication, "collect evidence secretly")
         self.assertEqual(by_agent["institutionalist"].meaning, "institution protects collective security")
         self.assertEqual(by_agent["institutionalist"].action_implication, "follow institutional guidance")
+        self.assertIn("安全升级", by_agent["institutionalist"].belief_basis[0])
+        self.assertGreater(by_agent["institutionalist"].confidence, 0.5)
         self.assertEqual(by_agent["skeptic"].meaning, "the situation requires further verification")
         self.assertEqual(by_agent["skeptic"].action_implication, "seek additional evidence")
         self.assertEqual({model.agent_id for model in updated_models}, set(by_agent))

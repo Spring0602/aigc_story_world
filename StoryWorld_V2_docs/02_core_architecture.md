@@ -55,10 +55,16 @@ Narrative Event / Scene Card
 ```text
 State
 → Observation
-→ Belief Update
+→ Evidence
+→ Bayesian Belief Update
+→ Belief State
 → Mental Model
 → Bias Filter
 → Interpretation
+→ Value System
+→ Decision
+→ Action
+→ World Event
 → Theory of Mind
 → Causal Hypothesis
 → Conflict Resolution

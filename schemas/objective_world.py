@@ -81,6 +81,10 @@ class Event(BaseModel):
     location_id: str | None = None
     cause_ids: list[str] = Field(default_factory=list)
     effect_paths: list[str] = Field(default_factory=list)
+    decision_ids: list[str] = Field(default_factory=list)
+    action_ids: list[str] = Field(default_factory=list)
+    source_belief_ids: list[str] = Field(default_factory=list)
+    source_observation_ids: list[str] = Field(default_factory=list)
 
 
 class ActiveProcess(BaseModel):

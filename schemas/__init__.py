@@ -1,10 +1,12 @@
 """StoryWorld V2 structured data models."""
 
 from schemas.agent import AgentProfile
+from schemas.agency import Action, ActionStatus, Decision, ValueAssessment
 from schemas.common import EvidenceType, InformationVisibility, ObservationVisibility
 from schemas.causal_hypothesis import CausalHypothesis, TimeScale
 from schemas.candidate_future import AgentAction, CandidateFuture, StateChange
 from schemas.cognitive import BiasFilterResult, BiasSignal, BiasType, MentalModel, SalienceFocus
+from schemas.evidence import BayesianBeliefUpdate, BeliefState, Evidence, EvidencePolarity
 from schemas.interpretation import Interpretation
 from schemas.narrative_event import NarrativeEvent
 from schemas.objective_world import (
@@ -36,19 +38,26 @@ from schemas.subjective_world import (
 
 __all__ = [
     "ActiveProcess",
+    "Action",
+    "ActionStatus",
     "Agent",
     "AgentAction",
     "AgentProfile",
     "Belief",
+    "BeliefState",
+    "BayesianBeliefUpdate",
     "BiasFilterResult",
     "BiasSignal",
     "BiasType",
     "CameraSetup",
     "CandidateFuture",
     "CausalHypothesis",
+    "Decision",
     "EmotionState",
     "Epistemology",
     "EvidenceType",
+    "Evidence",
+    "EvidencePolarity",
     "Event",
     "ImagePrompt",
     "InformationItem",
@@ -76,4 +85,5 @@ __all__ = [
     "TimeScale",
     "Uncertainty",
     "Value",
+    "ValueAssessment",
 ]

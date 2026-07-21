@@ -1,4 +1,4 @@
-from schemas import Observation, SubjectiveWorldModel
+from schemas import Evidence, Observation, SubjectiveWorldModel
 
 
 class EvidenceEvaluator:
@@ -11,8 +11,33 @@ class EvidenceEvaluator:
     }
 
     def score(self, observation: Observation, model: SubjectiveWorldModel) -> float:
-        source_weight = getattr(model.epistemology, self.trust_basis(observation))
+        source_weight = self.trust_weight(observation, model)
         return min(1.0, max(0.0, (observation.reliability * 0.65) + (source_weight * 0.35)))
+
+    def assess(
+        self,
+        observation: Observation,
+        model: SubjectiveWorldModel,
+        evidence_id: str,
+    ) -> Evidence:
+        trust_basis = self.trust_basis(observation)
+        return Evidence(
+            evidence_id=evidence_id,
+            observation_id=observation.observation_id,
+            agent_id=observation.agent_id,
+            step=observation.step,
+            source=observation.source,
+            evidence_type=observation.evidence_type,
+            content=observation.content,
+            reliability=observation.reliability,
+            trust_basis=trust_basis,
+            trust_weight=getattr(model.epistemology, trust_basis),
+            strength=self.score(observation, model),
+            provenance=observation.provenance,
+        )
 
     def trust_basis(self, observation: Observation) -> str:
         return self.TRUST_FIELD_BY_EVIDENCE[observation.evidence_type]
+
+    def trust_weight(self, observation: Observation, model: SubjectiveWorldModel) -> float:
+        return getattr(model.epistemology, self.trust_basis(observation))

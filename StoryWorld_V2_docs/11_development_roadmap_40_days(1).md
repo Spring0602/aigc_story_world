@@ -280,6 +280,8 @@ TheoryOfChange
 
 ## Day 8：Belief Update
 
+> 状态：已完成（2026-07-21）。已实现显式先验、似然与后验更新，支持支持性/反驳性证据、重复证据累积和错误但合理的信念；完整结果可追溯到 Decision、Action 与 World Event。
+
 ### 学习
 
 -   Bayesian intuition
@@ -304,6 +306,9 @@ TheoryOfChange
 ### 交付
 
     belief_updater.py
+    schemas/evidence.py
+    schemas/agency.py
+    core/decision_engine.py
 
 ------------------------------------------------------------------------
 

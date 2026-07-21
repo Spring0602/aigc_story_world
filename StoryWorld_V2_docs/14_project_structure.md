@@ -15,6 +15,10 @@ storyworld_v2/
 │   ├── evidence_evaluator.py
 │   ├── belief_updater.py
 │   ├── cognition_engine.py
+│   ├── mental_model_engine.py
+│   ├── bias_filter.py
+│   ├── interpretation_engine.py
+│   ├── decision_engine.py
 │   ├── theory_of_mind.py
 │   ├── lens_router.py
 │   ├── hypothesis_conflict_resolver.py
@@ -38,6 +42,9 @@ storyworld_v2/
 ├── schemas/
 │   ├── objective_world.py
 │   ├── subjective_world.py
+│   ├── evidence.py
+│   ├── cognitive.py
+│   ├── agency.py
 │   ├── theory_of_mind.py
 │   ├── agent.py
 │   ├── observation.py
@@ -107,12 +114,20 @@ frontend
 outputs/run_001/
 ├── objective_states.json
 ├── observations.json
+├── evidence.json
+├── belief_updates.json
+├── belief_states.json
 ├── subjective_models.json
+├── mental_models.json
+├── bias_filter_results.json
 ├── beliefs_about_others.json
 ├── interpretations.json
 ├── hypotheses.json
 ├── hypothesis_relations.json
-├── agent_actions.json
+├── value_assessments.json
+├── decisions.json
+├── actions.json
+├── world_events.json
 ├── candidate_futures.json
 ├── selected_futures.json
 ├── state_provenance.json

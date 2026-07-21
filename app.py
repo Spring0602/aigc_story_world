@@ -3,6 +3,7 @@ import json
 
 from config import DEFAULT_NUM_STEPS
 from core.cognition_engine import CognitionEngine
+from core.decision_engine import ActionExecutor, DecisionEngine
 from core.future_evaluator import FutureEvaluator
 from core.future_generator import FutureGenerator
 from core.image_prompt_generator import ImagePromptGenerator
@@ -31,6 +32,8 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
     lens_router = LensRouter()
     future_generator = FutureGenerator()
     future_evaluator = FutureEvaluator()
+    decision_engine = DecisionEngine()
+    action_executor = ActionExecutor()
     transition = WorldTransition()
     narrative_engine = NarrativeEngine()
     scene_generator = SceneGenerator()
@@ -40,37 +43,75 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
 
     objective_states = [objective_state]
     all_observations = []
+    all_evidence = []
+    all_belief_updates = []
+    all_belief_states = []
     all_mental_models = []
     all_bias_filter_results = []
     all_interpretations = []
     all_hypotheses = []
     all_candidate_futures = []
     selected_futures = []
+    all_value_assessments = []
+    all_decisions = []
+    all_actions = []
+    all_world_events = []
     narrative_events = []
     scene_cards = []
     image_prompts = []
 
     for _ in range(max(1, steps)):
         observations = observation_engine.observe(objective_state, subjective_models)
-        subjective_models, mental_models, bias_filter_results, interpretations = cognition_engine.interpret(
+        cognition = cognition_engine.interpret(
             observations,
             subjective_models,
         )
+        subjective_models = cognition.subjective_models
         hypotheses = lens_router.analyze(objective_state, subjective_models)
         futures = future_generator.generate(objective_state, subjective_models, hypotheses)
-        selected_future = future_evaluator.select(futures, objective_state, subjective_models, hypotheses)
-        new_state = transition.apply(objective_state, selected_future)
+        future_scores = {
+            future.future_id: future_evaluator.score(
+                future,
+                objective_state,
+                subjective_models,
+                hypotheses,
+            )
+            for future in futures
+        }
+        selected_future, value_assessments, decisions = decision_engine.decide(
+            candidate_futures=futures,
+            future_scores=future_scores,
+            subjective_models=subjective_models,
+            belief_states=cognition.belief_states,
+            interpretations=cognition.interpretations,
+            step=objective_state.step + 1,
+        )
+        actions = action_executor.execute(decisions)
+        new_state = transition.apply(
+            objective_state,
+            selected_future,
+            actions=actions,
+            decisions=decisions,
+        )
+        world_events = new_state.events[len(objective_state.events) :]
         narrative_event = narrative_engine.express(objective_state, new_state, selected_future, subjective_models)
         scene_card = scene_generator.generate(new_state, narrative_event)
         image_prompt = image_prompt_generator.generate(scene_card)
 
         all_observations.extend(observations)
-        all_mental_models.extend(mental_models)
-        all_bias_filter_results.extend(bias_filter_results)
-        all_interpretations.extend(interpretations)
+        all_evidence.extend(cognition.evidence)
+        all_belief_updates.extend(cognition.belief_updates)
+        all_belief_states.extend(cognition.belief_states)
+        all_mental_models.extend(cognition.mental_models)
+        all_bias_filter_results.extend(cognition.bias_results)
+        all_interpretations.extend(cognition.interpretations)
         all_hypotheses.extend(hypotheses)
         all_candidate_futures.extend(futures)
         selected_futures.append(selected_future)
+        all_value_assessments.extend(value_assessments)
+        all_decisions.extend(decisions)
+        all_actions.extend(actions)
+        all_world_events.extend(world_events)
         objective_states.append(new_state)
         narrative_events.append(narrative_event)
         scene_cards.append(scene_card)
@@ -83,6 +124,9 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             objective_states=objective_states,
             agents=agents,
             observations=all_observations,
+            evidence=all_evidence,
+            belief_updates=all_belief_updates,
+            belief_states=all_belief_states,
             subjective_models=subjective_models,
             mental_models=all_mental_models,
             bias_filter_results=all_bias_filter_results,
@@ -90,6 +134,10 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             hypotheses=all_hypotheses,
             candidate_futures=all_candidate_futures,
             selected_futures=selected_futures,
+            value_assessments=all_value_assessments,
+            decisions=all_decisions,
+            actions=all_actions,
+            world_events=all_world_events,
             narrative_events=narrative_events,
             scene_cards=scene_cards,
             image_prompts=image_prompts,
@@ -100,6 +148,9 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
         "objective_states": to_dict(objective_states),
         "agent_profiles": to_dict(agents),
         "observations": to_dict(all_observations),
+        "evidence": to_dict(all_evidence),
+        "belief_updates": to_dict(all_belief_updates),
+        "belief_states": to_dict(all_belief_states),
         "subjective_models": to_dict(subjective_models),
         "mental_models": to_dict(all_mental_models),
         "bias_filter_results": to_dict(all_bias_filter_results),
@@ -107,6 +158,10 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
         "hypotheses": to_dict(all_hypotheses),
         "candidate_futures": to_dict(all_candidate_futures),
         "selected_futures": to_dict(selected_futures),
+        "value_assessments": to_dict(all_value_assessments),
+        "decisions": to_dict(all_decisions),
+        "actions": to_dict(all_actions),
+        "world_events": to_dict(all_world_events),
         "narrative_events": to_dict(narrative_events),
         "scene_cards": to_dict(scene_cards),
         "image_prompts": to_dict(image_prompts),

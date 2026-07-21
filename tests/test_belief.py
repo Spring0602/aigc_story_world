@@ -9,10 +9,14 @@ class BeliefTest(unittest.TestCase):
     def test_same_world_produces_different_interpretations(self):
         state, agents, models = WorldInitializer().initialize("校园监控")
         observations = ObservationEngine().observe(state, models)
-        models, mental_models, bias_results, interpretations = CognitionEngine().interpret(
+        cognition = CognitionEngine().interpret(
             observations,
             models,
         )
+        models = cognition.subjective_models
+        mental_models = cognition.mental_models
+        bias_results = cognition.bias_results
+        interpretations = cognition.interpretations
 
         lin_beliefs = [claim for item in interpretations if item.agent_id == "lin_xia" for claim in item.belief_basis]
         wang_beliefs = [claim for item in interpretations if item.agent_id == "wang_chen" for claim in item.belief_basis]

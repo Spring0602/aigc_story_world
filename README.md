@@ -54,6 +54,9 @@ python app.py --no-export
 objective_states.json
 agent_profiles.json
 observations.json
+evidence.json
+belief_updates.json
+belief_states.json
 subjective_models.json
 mental_models.json
 bias_filter_results.json
@@ -61,6 +64,10 @@ interpretations.json
 hypotheses.json
 candidate_futures.json
 selected_futures.json
+value_assessments.json
+decisions.json
+actions.json
+world_events.json
 narrative_events.json
 scene_cards.json
 image_prompts.json

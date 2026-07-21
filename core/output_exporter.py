@@ -14,6 +14,9 @@ class OutputExporter:
         objective_states,
         agents,
         observations,
+        evidence,
+        belief_updates,
+        belief_states,
         subjective_models,
         mental_models,
         bias_filter_results,
@@ -21,6 +24,10 @@ class OutputExporter:
         hypotheses,
         candidate_futures,
         selected_futures,
+        value_assessments,
+        decisions,
+        actions,
+        world_events,
         narrative_events,
         scene_cards,
         image_prompts,
@@ -31,6 +38,9 @@ class OutputExporter:
         self._write_json(run_dir / "objective_states.json", objective_states)
         self._write_json(run_dir / "agent_profiles.json", agents)
         self._write_json(run_dir / "observations.json", observations)
+        self._write_json(run_dir / "evidence.json", evidence)
+        self._write_json(run_dir / "belief_updates.json", belief_updates)
+        self._write_json(run_dir / "belief_states.json", belief_states)
         self._write_json(run_dir / "subjective_models.json", subjective_models)
         self._write_json(run_dir / "mental_models.json", mental_models)
         self._write_json(run_dir / "bias_filter_results.json", bias_filter_results)
@@ -38,6 +48,10 @@ class OutputExporter:
         self._write_json(run_dir / "hypotheses.json", hypotheses)
         self._write_json(run_dir / "candidate_futures.json", candidate_futures)
         self._write_json(run_dir / "selected_futures.json", selected_futures)
+        self._write_json(run_dir / "value_assessments.json", value_assessments)
+        self._write_json(run_dir / "decisions.json", decisions)
+        self._write_json(run_dir / "actions.json", actions)
+        self._write_json(run_dir / "world_events.json", world_events)
         self._write_json(run_dir / "narrative_events.json", narrative_events)
         self._write_json(run_dir / "scene_cards.json", scene_cards)
         self._write_json(run_dir / "image_prompts.json", image_prompts)

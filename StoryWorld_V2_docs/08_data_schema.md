@@ -7,11 +7,18 @@ ObjectiveWorldState
 AgentProfile
 SubjectiveWorldModel
 Observation
+Evidence
+BayesianBeliefUpdate
+BeliefState
 Interpretation
 CausalHypothesis
 AgentAction
+ValueAssessment
+Decision
+Action
 CandidateFuture
 StateChange
+Event (WorldEvent)
 NarrativeEvent
 SceneCard
 ImagePrompt
@@ -21,13 +28,10 @@ V2.2 研究计划新增或强化：
 
 ```text
 BeliefAboutOther
-AgentActionDecision
 HypothesisRelation
-StateProvenance
-WorldEvent
 ```
 
-“字段存在”不等于“研究模型完成”：当前 `beliefs_about_others` 与 `history` 仍是宽松字典，后续必须升级为可验证、可追踪的结构化对象。
+“字段存在”不等于“研究模型完成”：当前 `beliefs_about_others` 仍是宽松字典，Day 9 必须升级为可验证、可追踪的结构化对象。
 
 ## AgentProfile
 
@@ -64,6 +68,43 @@ WorldEvent
   "visibility": "private"
 }
 ```
+
+## Evidence
+
+```json
+{
+  "evidence_id": "evidence_000_002",
+  "observation_id": "obs_000_lin_xia_info_private_dns_redirect",
+  "agent_id": "lin_xia",
+  "step": 0,
+  "evidence_type": "data",
+  "trust_basis": "trust_data",
+  "trust_weight": 0.92,
+  "strength": 0.92,
+  "polarity": "supports"
+}
+```
+
+## BayesianBeliefUpdate
+
+```json
+{
+  "update_id": "update_000_002",
+  "belief_id": "belief_lin_xia_002",
+  "evidence_id": "evidence_000_002",
+  "prior": 0.5,
+  "likelihood_e_given_true": 0.9508,
+  "likelihood_e_given_false": 0.0492,
+  "posterior": 0.9508,
+  "polarity": "supports"
+}
+```
+
+更新公式为：`P(H|E)=P(E|H)P(H)/(P(E|H)P(H)+P(E|~H)P(~H))`。后验会成为同一信念下一次更新的先验。
+
+## BeliefState
+
+`BeliefState` 保存某一步主体全部信念 ID、当前主导信念、来源更新和不确定性，是认知层进入价值决策层的稳定接口。
 
 ## MentalModel
 
@@ -150,20 +191,23 @@ WorldEvent
 }
 ```
 
-## AgentActionDecision（计划）
+## ValueAssessment / Decision / Action
 
 ```json
 {
-  "action_id": "action_lin_xia_001",
+  "decision_id": "decision_001_001",
   "agent_id": "lin_xia",
-  "action": "secretly_collect_network_evidence",
+  "belief_state_id": "belief_state_000_002",
+  "interpretation_id": "int_000_002",
+  "value_assessment_id": "value_001_001",
+  "selected_action": "secretly_collect_network_evidence",
   "supporting_belief_ids": ["belief_monitoring_001"],
-  "supporting_goals": ["确认网络异常"],
-  "supporting_values": ["truth", "freedom"],
-  "constraints": ["risk_of_punishment"],
-  "score": 0.81
+  "source_observation_ids": ["obs_000_lin_xia_info_private_dns_redirect"],
+  "confidence": 0.9
 }
 ```
+
+完整主干为 `World State → Observation → Evidence → Bayesian Belief Update → Belief State → Value System → Decision → Action → World Event`。解释子链 `Belief State → Mental Model → Bias Filter → Interpretation` 为 Decision 提供可检查的主观理由。
 
 ## StateProvenance（计划）
 
