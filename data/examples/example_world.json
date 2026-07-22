@@ -82,7 +82,18 @@
       "timestamp": "day_1_18_00",
       "description": "学校发布网络安全升级通知。",
       "participant_ids": ["university_it_office"],
+      "actor_ids": ["university_it_office"],
       "effect_paths": ["public_information.info_public_network_upgrade"]
+    },
+    {
+      "event_id": "event_wang_reassures_lin",
+      "event_type": "public_statement",
+      "timestamp": "day_1_22_30",
+      "description": "王晨公开表示网络变化可能只是学校的正常安全升级。",
+      "visibility": "public",
+      "participant_ids": ["wang_chen", "lin_xia"],
+      "actor_ids": ["wang_chen"],
+      "cause_ids": ["event_network_upgrade_notice"]
     }
   ],
   "public_information": [

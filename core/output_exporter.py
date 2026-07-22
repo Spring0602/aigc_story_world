@@ -21,6 +21,7 @@ class OutputExporter:
         mental_models,
         bias_filter_results,
         interpretations,
+        beliefs_about_others,
         hypotheses,
         candidate_futures,
         selected_futures,
@@ -45,6 +46,7 @@ class OutputExporter:
         self._write_json(run_dir / "mental_models.json", mental_models)
         self._write_json(run_dir / "bias_filter_results.json", bias_filter_results)
         self._write_json(run_dir / "interpretations.json", interpretations)
+        self._write_json(run_dir / "beliefs_about_others.json", beliefs_about_others)
         self._write_json(run_dir / "hypotheses.json", hypotheses)
         self._write_json(run_dir / "candidate_futures.json", candidate_futures)
         self._write_json(run_dir / "selected_futures.json", selected_futures)

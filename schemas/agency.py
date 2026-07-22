@@ -27,6 +27,8 @@ class Decision(BaseModel):
     alternative_actions: list[str] = Field(default_factory=list)
     supporting_belief_ids: list[str] = Field(default_factory=list)
     source_observation_ids: list[str] = Field(default_factory=list)
+    other_model_ids: list[str] = Field(default_factory=list)
+    other_model_adjustment: float = Field(default=0.0, ge=-1.0, le=1.0)
     rationale: str
     confidence: float = Field(ge=0.0, le=1.0)
 

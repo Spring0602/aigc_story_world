@@ -61,17 +61,34 @@ State
 → Mental Model
 → Bias Filter
 → Interpretation
+→ Theory of Mind
+→ Causal Hypothesis
+→ Conflict Resolution
+→ Candidate Future
 → Value System
 → Decision
 → Action
 → World Event
-→ Theory of Mind
-→ Causal Hypothesis
-→ Conflict Resolution
-→ Agent Action
-→ Candidate Future
 → Transition + Provenance
 ```
+
+主体决策阶段采用双输入：
+
+```text
+World → Observation
+             ├─→ My Belief ────┐
+             └─→ Other Model ──┤
+                               ↓
+                            Decision
+                               ↓
+                            Action
+                               ↓
+                         World Event
+                               ↓
+                         World Update
+```
+
+Other Model 只能由观察者可见的 Observation 与 Event 推断，不能读取目标主体的私有 Subjective World Model。
 
 ### 叙事表达流
 

@@ -3,6 +3,8 @@ from typing import Annotated, Any
 
 from pydantic import BaseModel, Field, model_validator
 
+from schemas.theory_of_mind import BeliefAboutOther
+
 
 UnitScore = Annotated[float, Field(ge=0.0, le=1.0)]
 ContextModifier = Annotated[float, Field(ge=-1.0, le=1.0)]
@@ -121,4 +123,4 @@ class SubjectiveWorldModel(BaseModel):
     methodology: list[str] = Field(default_factory=list)
     memory: list[str] = Field(default_factory=list)
     emotion: EmotionState = Field(default_factory=EmotionState)
-    beliefs_about_others: dict[str, Any] = Field(default_factory=dict)
+    beliefs_about_others: dict[str, BeliefAboutOther] = Field(default_factory=dict)

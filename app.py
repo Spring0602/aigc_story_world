@@ -13,6 +13,7 @@ from core.narrative_engine import NarrativeEngine
 from core.observation_engine import ObservationEngine
 from core.output_exporter import OutputExporter
 from core.scene_generator import SceneGenerator
+from core.theory_of_mind import TheoryOfMindEngine
 from core.world_initializer import WorldInitializer
 from core.world_transition import WorldTransition
 
@@ -29,6 +30,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
     initializer = WorldInitializer()
     observation_engine = ObservationEngine()
     cognition_engine = CognitionEngine()
+    theory_of_mind_engine = TheoryOfMindEngine()
     lens_router = LensRouter()
     future_generator = FutureGenerator()
     future_evaluator = FutureEvaluator()
@@ -49,6 +51,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
     all_mental_models = []
     all_bias_filter_results = []
     all_interpretations = []
+    all_other_models = []
     all_hypotheses = []
     all_candidate_futures = []
     selected_futures = []
@@ -67,6 +70,11 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             subjective_models,
         )
         subjective_models = cognition.subjective_models
+        subjective_models, other_models = theory_of_mind_engine.infer(
+            objective_state,
+            observations,
+            subjective_models,
+        )
         hypotheses = lens_router.analyze(objective_state, subjective_models)
         futures = future_generator.generate(objective_state, subjective_models, hypotheses)
         future_scores = {
@@ -84,6 +92,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             subjective_models=subjective_models,
             belief_states=cognition.belief_states,
             interpretations=cognition.interpretations,
+            other_models=other_models,
             step=objective_state.step + 1,
         )
         actions = action_executor.execute(decisions)
@@ -105,6 +114,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
         all_mental_models.extend(cognition.mental_models)
         all_bias_filter_results.extend(cognition.bias_results)
         all_interpretations.extend(cognition.interpretations)
+        all_other_models.extend(other_models)
         all_hypotheses.extend(hypotheses)
         all_candidate_futures.extend(futures)
         selected_futures.append(selected_future)
@@ -131,6 +141,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             mental_models=all_mental_models,
             bias_filter_results=all_bias_filter_results,
             interpretations=all_interpretations,
+            beliefs_about_others=all_other_models,
             hypotheses=all_hypotheses,
             candidate_futures=all_candidate_futures,
             selected_futures=selected_futures,
@@ -155,6 +166,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
         "mental_models": to_dict(all_mental_models),
         "bias_filter_results": to_dict(all_bias_filter_results),
         "interpretations": to_dict(all_interpretations),
+        "beliefs_about_others": to_dict(all_other_models),
         "hypotheses": to_dict(all_hypotheses),
         "candidate_futures": to_dict(all_candidate_futures),
         "selected_futures": to_dict(selected_futures),

@@ -314,6 +314,8 @@ TheoryOfChange
 
 ## Day 9：Theory of Mind
 
+> 状态：已完成（2026-07-22）。已实现一阶/二阶信念分离、可见证据约束的 Other Model、Decision 社会调整，以及 Other Model → Action → Event → World Update 的完整引用链。
+
 ### 学习
 
 -   一阶信念

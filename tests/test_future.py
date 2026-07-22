@@ -44,6 +44,9 @@ class FutureTest(unittest.TestCase):
         }
         decisions_by_id = {item["decision_id"]: item for item in result["decisions"]}
         actions_by_id = {item["action_id"]: item for item in result["actions"]}
+        other_models_by_id = {
+            item["other_model_id"]: item for item in result["beliefs_about_others"]
+        }
 
         self.assertEqual(len(result["value_assessments"]), len(result["candidate_futures"]))
         self.assertEqual(
@@ -68,12 +71,16 @@ class FutureTest(unittest.TestCase):
             assessment = assessments_by_id[decision["value_assessment_id"]]
             self.assertEqual(assessment["belief_state_id"], decision["belief_state_id"])
             self.assertIn(decision["belief_state_id"], belief_states_by_id)
+            self.assertTrue(decision["other_model_ids"])
+            self.assertTrue(all(item in other_models_by_id for item in decision["other_model_ids"]))
+            self.assertNotEqual(decision["other_model_adjustment"], 0.0)
 
         event = result["world_events"][0]
         self.assertTrue(event["decision_ids"])
         self.assertTrue(event["action_ids"])
         self.assertTrue(event["source_belief_ids"])
         self.assertTrue(event["source_observation_ids"])
+        self.assertEqual(event["source_other_model_ids"], result["decisions"][0]["other_model_ids"])
         self.assertTrue(all(item in decisions_by_id for item in event["decision_ids"]))
         self.assertTrue(all(item in actions_by_id for item in event["action_ids"]))
         for action_id in event["action_ids"]:
@@ -82,6 +89,26 @@ class FutureTest(unittest.TestCase):
         provenance = result["objective_states"][-1]["history"][-1]
         self.assertEqual(provenance["action_ids"], event["action_ids"])
         self.assertEqual(provenance["source_observation_ids"], event["source_observation_ids"])
+        self.assertEqual(
+            provenance["supporting_other_model_ids"],
+            event["source_other_model_ids"],
+        )
+
+    def test_hidden_action_event_is_not_used_for_another_agents_other_model(self):
+        result = run_pipeline("校园监控", steps=2, export=False)
+        secret_event_id = result["world_events"][0]["event_id"]
+        self.assertEqual(result["world_events"][0]["visibility"], "hidden")
+
+        wang_about_lin = [
+            item
+            for item in result["beliefs_about_others"]
+            if item["observer_agent_id"] == "wang_chen"
+            and item["target_agent_id"] == "lin_xia"
+        ]
+        self.assertTrue(wang_about_lin)
+        self.assertTrue(
+            all(secret_event_id not in item["evidence_event_ids"] for item in wang_about_lin)
+        )
 
 
 if __name__ == "__main__":

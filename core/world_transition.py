@@ -29,6 +29,9 @@ class WorldTransition:
         source_observation_ids = sorted(
             {item for decision in decisions for item in decision.source_observation_ids}
         )
+        other_model_ids = sorted(
+            {item for decision in decisions for item in decision.other_model_ids}
+        )
         for index, change in enumerate(future.expected_state_changes, start=1):
             self._set_path(next_state, change.path, change.new_value)
             next_state.history.append(
@@ -47,16 +50,27 @@ class WorldTransition:
                     action_ids=action_ids,
                     supporting_hypothesis_ids=future.supporting_hypotheses,
                     source_observation_ids=source_observation_ids,
+                    supporting_other_model_ids=other_model_ids,
                 )
             )
 
+        event_visibility = (
+            "hidden"
+            if any("secretly" in action.action for action in actions)
+            else "public"
+        )
         next_state.events.append(
             Event(
                 event_id=f"event_{next_state.step:03d}_{future.future_id}",
                 event_type="agent_action_outcome",
                 timestamp=next_state.timestamp,
                 description=future.summary,
+                visibility=event_visibility,
                 participant_ids=sorted(
+                    {action.agent_id for action in actions}
+                    or {action.agent_id for action in future.agent_actions}
+                ),
+                actor_ids=sorted(
                     {action.agent_id for action in actions}
                     or {action.agent_id for action in future.agent_actions}
                 ),
@@ -68,6 +82,7 @@ class WorldTransition:
                     {item for decision in decisions for item in decision.supporting_belief_ids}
                 ),
                 source_observation_ids=source_observation_ids,
+                source_other_model_ids=other_model_ids,
             )
         )
         return next_state

@@ -1,5 +1,6 @@
 from schemas import (
     Action,
+    BeliefAboutOther,
     BeliefState,
     CandidateFuture,
     Decision,
@@ -17,11 +18,15 @@ class DecisionEngine:
         subjective_models: list[SubjectiveWorldModel],
         belief_states: list[BeliefState],
         interpretations: list[Interpretation],
+        other_models: list[BeliefAboutOther],
         step: int,
     ) -> tuple[CandidateFuture, list[ValueAssessment], list[Decision]]:
         models = {model.agent_id: model for model in subjective_models}
         latest_belief_state = {item.agent_id: item for item in belief_states}
         latest_interpretation = {item.agent_id: item for item in interpretations}
+        other_models_by_observer: dict[str, list[BeliefAboutOther]] = {}
+        for item in other_models:
+            other_models_by_observer.setdefault(item.observer_agent_id, []).append(item)
         alternatives = sorted(
             {
                 action.action
@@ -56,7 +61,23 @@ class DecisionEngine:
                 if future_assessments
                 else 0.5
             )
-            return (future_scores[future.future_id] * 0.65) + (value_score * 0.35)
+            social_adjustments = [
+                self._other_model_adjustment(
+                    action.action,
+                    other_models_by_observer.get(action.agent_id, []),
+                )
+                for action in future.agent_actions
+            ]
+            social_adjustment = (
+                sum(social_adjustments) / len(social_adjustments)
+                if social_adjustments
+                else 0.0
+            )
+            return (
+                (future_scores[future.future_id] * 0.6)
+                + (value_score * 0.3)
+                + (social_adjustment * 0.1)
+            )
 
         selected_future = max(candidate_futures, key=decision_score)
         decisions: list[Decision] = []
@@ -68,6 +89,11 @@ class DecisionEngine:
             agent_id = proposed_action.agent_id
             belief_state = latest_belief_state[agent_id]
             interpretation = latest_interpretation[agent_id]
+            relevant_other_models = other_models_by_observer.get(agent_id, [])
+            other_model_adjustment = self._other_model_adjustment(
+                proposed_action.action,
+                relevant_other_models,
+            )
             decision = Decision(
                 decision_id=f"decision_{step:03d}_{decision_sequence:03d}",
                 agent_id=agent_id,
@@ -79,9 +105,12 @@ class DecisionEngine:
                 alternative_actions=[item for item in alternatives if item != proposed_action.action],
                 supporting_belief_ids=belief_state.belief_ids,
                 source_observation_ids=interpretation.observation_ids,
+                other_model_ids=[item.other_model_id for item in relevant_other_models],
+                other_model_adjustment=other_model_adjustment,
                 rationale=(
                     f"{interpretation.meaning}; action aligns with "
-                    f"{', '.join(assessment.dominant_values) or 'default values'}."
+                    f"{', '.join(assessment.dominant_values) or 'default values'}; "
+                    f"other-model adjustment={other_model_adjustment:.3f}."
                 ),
                 confidence=min(
                     1.0,
@@ -94,6 +123,29 @@ class DecisionEngine:
             )
             decisions.append(decision)
         return selected_future, assessments, decisions
+
+    def _other_model_adjustment(
+        self,
+        action: str,
+        other_models: list[BeliefAboutOther],
+    ) -> float:
+        adjustment = 0.0
+        for other_model in other_models:
+            prediction = other_model.predicted_action
+            confidence = other_model.confidence
+            if prediction == "discourage public confrontation":
+                if "confront" in action:
+                    adjustment -= 0.2 * confidence
+                elif "help" in action:
+                    adjustment -= 0.1 * confidence
+                elif "secretly" in action:
+                    adjustment += 0.08 * confidence
+            elif prediction == "support further investigation":
+                if "help" in action or "secretly" in action:
+                    adjustment += 0.12 * confidence
+            elif prediction == "withhold judgment" and "confront" in action:
+                adjustment -= 0.08 * confidence
+        return min(1.0, max(-1.0, adjustment))
 
     def _assess_values(
         self,

@@ -77,7 +77,10 @@ class Event(BaseModel):
     event_type: str
     timestamp: str
     description: str
+    visibility: InformationVisibility = "public"
+    allowed_agent_ids: list[str] = Field(default_factory=list)
     participant_ids: list[str] = Field(default_factory=list)
+    actor_ids: list[str] = Field(default_factory=list)
     location_id: str | None = None
     cause_ids: list[str] = Field(default_factory=list)
     effect_paths: list[str] = Field(default_factory=list)
@@ -85,6 +88,7 @@ class Event(BaseModel):
     action_ids: list[str] = Field(default_factory=list)
     source_belief_ids: list[str] = Field(default_factory=list)
     source_observation_ids: list[str] = Field(default_factory=list)
+    source_other_model_ids: list[str] = Field(default_factory=list)
 
 
 class ActiveProcess(BaseModel):
@@ -112,6 +116,7 @@ class StateProvenance(BaseModel):
     action_ids: list[str] = Field(default_factory=list)
     supporting_hypothesis_ids: list[str] = Field(default_factory=list)
     source_observation_ids: list[str] = Field(default_factory=list)
+    supporting_other_model_ids: list[str] = Field(default_factory=list)
 
 
 class ObjectiveWorldState(BaseModel):

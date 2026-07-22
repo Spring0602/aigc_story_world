@@ -182,6 +182,8 @@ Narrative Value 是次级展示指标；首要检查 NarrativeEvent 是否忠实
 
 ## 三个核心实验
 
+Theory of Mind 的基础回归必须包含隐私边界测试：任意修改目标角色私有 Belief 或添加隐藏 Event，在公开证据不变时，观察者生成的 `BeliefAboutOther` 必须保持不变。
+
 ### Experiment 1：Same World Different Minds
 
 同一个 Objective World，配置数据主义者、制度主义者、怀疑主义者三个认知模型，比较 Observation、Belief、Interpretation、Action 与 Future。

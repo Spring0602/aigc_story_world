@@ -43,7 +43,9 @@ Beliefs About Others
   "methodology": [],
   "memory": [],
   "emotion": {},
-  "beliefs_about_others": {}
+  "beliefs_about_others": {
+    "wang_chen": {}
+  }
 }
 ```
 
@@ -154,6 +156,10 @@ Beliefs About Others
   "last_updated_step": 1
 }
 ```
+
+实现类型为 `dict[target_agent_id, BeliefAboutOther]`。每个 Other Model 必须保存观察者、目标、二阶信念、预测目标、预测行动、置信度、不确定性，以及可见 Observation/Event 证据 ID。
+
+严格信息边界：Theory of Mind Engine 不得读取目标角色的 `beliefs`、`false_beliefs`、`goals`、`emotion` 或其他私有字段。目标私有状态发生变化时，只要公开证据不变，观察者的 Other Model 就必须保持不变。
 
 40 天 MVP 只实现两层：
 

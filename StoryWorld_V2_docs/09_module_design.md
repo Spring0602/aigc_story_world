@@ -89,6 +89,8 @@ Observation
 
 输入主体自己的 `SubjectiveWorldModel`、可见 Observation 与他人公开行为，输出结构化 `BeliefAboutOther`。禁止读取目标角色私有主观状态作为推理捷径。
 
+输出进入 `DecisionEngine`：每个 Decision 同时引用自己的 `belief_state_id` 和一个或多个 `other_model_ids`。Other Model 可以调整合作、对抗、秘密行动等候选项，但不能直接修改 World State。执行后的 Event 和 State Provenance 继续保存这些引用。
+
 ## HypothesisConflictResolver
 
 标记跨 Lens 的支持、冲突和条件关系。Resolver 不直接修改世界，也不删除尚未解决的少数假设。

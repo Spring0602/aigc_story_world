@@ -10,6 +10,7 @@ Observation
 Evidence
 BayesianBeliefUpdate
 BeliefState
+BeliefAboutOther
 Interpretation
 CausalHypothesis
 AgentAction
@@ -27,11 +28,10 @@ ImagePrompt
 V2.2 研究计划新增或强化：
 
 ```text
-BeliefAboutOther
 HypothesisRelation
 ```
 
-“字段存在”不等于“研究模型完成”：当前 `beliefs_about_others` 仍是宽松字典，Day 9 必须升级为可验证、可追踪的结构化对象。
+“字段存在”不等于“研究模型完成”：后续 Schema 仍必须通过可验证行为、信息边界和完整引用链验收。
 
 ## AgentProfile
 
@@ -178,18 +178,30 @@ HypothesisRelation
 
 `StateChange` 描述“改了什么”，`StateProvenance` 描述“为什么改、由谁推动、依据什么机制”。两者不能互相替代。
 
-## BeliefAboutOther（计划）
+## BeliefAboutOther
 
 ```json
 {
+  "other_model_id": "other_000_lin_xia_wang_chen",
   "observer_agent_id": "lin_xia",
   "target_agent_id": "wang_chen",
-  "proposition": "王晨认为网络升级是正常安全措施",
-  "confidence": 0.78,
-  "evidence": ["int_wang_chen_001"],
-  "last_updated_step": 1
+  "order": 2,
+  "attributed_beliefs": [{
+    "proposition": "目标角色认为学校的升级是正常安全措施",
+    "confidence": 0.655
+  }],
+  "predicted_goals": ["避免冲突", "维持稳定"],
+  "predicted_action": "discourage public confrontation",
+  "confidence": 0.655,
+  "uncertainty": 0.345,
+  "evidence_observation_ids": ["obs_000_lin_xia_info_public_network_upgrade"],
+  "evidence_event_ids": ["event_wang_reassures_lin"],
+  "inference_basis": ["observer-visible evidence only"],
+  "last_updated_step": 0
 }
 ```
+
+该结构表达二阶信念“A believes B believes X”。它允许推断错误，但禁止使用 B 的私有认知状态作为证据。
 
 ## ValueAssessment / Decision / Action
 
@@ -203,6 +215,8 @@ HypothesisRelation
   "selected_action": "secretly_collect_network_evidence",
   "supporting_belief_ids": ["belief_monitoring_001"],
   "source_observation_ids": ["obs_000_lin_xia_info_private_dns_redirect"],
+  "other_model_ids": ["other_000_lin_xia_wang_chen"],
+  "other_model_adjustment": 0.0524,
   "confidence": 0.9
 }
 ```

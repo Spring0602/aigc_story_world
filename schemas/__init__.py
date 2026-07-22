@@ -35,6 +35,7 @@ from schemas.subjective_world import (
     Uncertainty,
     Value,
 )
+from schemas.theory_of_mind import AttributedBelief, BeliefAboutOther
 
 __all__ = [
     "ActiveProcess",
@@ -43,8 +44,10 @@ __all__ = [
     "Agent",
     "AgentAction",
     "AgentProfile",
+    "AttributedBelief",
     "Belief",
     "BeliefState",
+    "BeliefAboutOther",
     "BayesianBeliefUpdate",
     "BiasFilterResult",
     "BiasSignal",
