@@ -345,7 +345,7 @@ A认为：
 
 ------------------------------------------------------------------------
 
-## Day 10：主体认知实验
+## Day 10：主体认知实验（已完成）
 
 ### 实验
 
@@ -372,7 +372,18 @@ Same World Different Minds
 
 ### 交付
 
-    experiment_01.md
+    experiments/same_world_different_minds.py
+    schemas/experiment.py
+    tests/test_experiment_01.py
+    experiments/results/experiment_01.json
+    experiments/results/experiment_01.md
+
+验收结果：
+
+- 主对照固定 Objective World、Observation、初始先验和确定性运行条件，只改变认知配置。
+- 数据主义者、制度主义者、怀疑主义者产生 3/3 不同 Belief、Interpretation 与 Action。
+- Epistemology 参数交换后解释和行动按预期改变。
+- Partial Observability 作为独立对照通过，未发生 hidden information 泄漏。
 
 ------------------------------------------------------------------------
 

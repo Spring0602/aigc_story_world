@@ -7,6 +7,15 @@ from schemas.causal_hypothesis import CausalHypothesis, TimeScale
 from schemas.candidate_future import AgentAction, CandidateFuture, StateChange
 from schemas.cognitive import BiasFilterResult, BiasSignal, BiasType, MentalModel, SalienceFocus
 from schemas.evidence import BayesianBeliefUpdate, BeliefState, Evidence, EvidencePolarity
+from schemas.experiment import (
+    CognitiveCondition,
+    CognitiveExperimentTrial,
+    EpistemologySwapResult,
+    ExperimentalAction,
+    ExperimentMetric,
+    PartialObservabilityControl,
+    SameWorldDifferentMindsResult,
+)
 from schemas.interpretation import Interpretation
 from schemas.narrative_event import NarrativeEvent
 from schemas.objective_world import (
@@ -55,12 +64,17 @@ __all__ = [
     "CameraSetup",
     "CandidateFuture",
     "CausalHypothesis",
+    "CognitiveCondition",
+    "CognitiveExperimentTrial",
     "Decision",
     "EmotionState",
     "Epistemology",
+    "EpistemologySwapResult",
     "EvidenceType",
     "Evidence",
     "EvidencePolarity",
+    "ExperimentalAction",
+    "ExperimentMetric",
     "Event",
     "ImagePrompt",
     "InformationItem",
@@ -73,12 +87,14 @@ __all__ = [
     "ObjectiveWorldState",
     "Observation",
     "ObservationVisibility",
+    "PartialObservabilityControl",
     "Norm",
     "Relationship",
     "Resource",
     "SceneCard",
     "SceneCharacter",
     "SalienceFocus",
+    "SameWorldDifferentMindsResult",
     "StateChange",
     "StateProvenance",
     "SubjectiveWorldModel",

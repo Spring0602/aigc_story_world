@@ -1,0 +1,598 @@
+{
+  "experiment_id": "experiment_01_same_world_different_minds",
+  "hypothesis": "在相同客观世界和相同观察下，仅改变主体认知配置，会产生可归因的不同信念、解释与行动。",
+  "controlled_variables": [
+    "objective_world",
+    "observation_content",
+    "observation_source",
+    "evidence_type",
+    "observation_reliability",
+    "initial_belief_prior",
+    "deterministic_runtime"
+  ],
+  "independent_variable": "cognitive_configuration",
+  "objective_state_id": "state_000",
+  "objective_world_fingerprint": "b604dc02745fed68ac8b1991e93e9efe022b723ae3c51d66ca368ca450bda411",
+  "shared_observation_signature": {
+    "information_id": "info_experiment_network_monitoring_increase",
+    "step": 0,
+    "source": "network_status_dashboard",
+    "evidence_type": "data",
+    "content": "Network monitoring increased.",
+    "reliability": 0.9,
+    "visibility": "public",
+    "location_id": null,
+    "provenance": [
+      "experiment_control",
+      "campus_network_monitoring_rollout"
+    ]
+  },
+  "trials": [
+    {
+      "condition": {
+        "condition_id": "dataist",
+        "label": "数据主义者",
+        "values": {
+          "freedom": {
+            "base_weight": 0.9,
+            "context_modifiers": {}
+          },
+          "truth": {
+            "base_weight": 0.92,
+            "context_modifiers": {}
+          },
+          "safety": {
+            "base_weight": 0.4,
+            "context_modifiers": {}
+          },
+          "order": {
+            "base_weight": 0.3,
+            "context_modifiers": {}
+          }
+        },
+        "epistemology": {
+          "trust_data": 0.95,
+          "trust_authority": 0.15,
+          "trust_personal_experience": 0.5,
+          "trust_social_consensus": 0.5,
+          "trust_intuition": 0.5,
+          "tolerance_for_uncertainty": 0.55
+        }
+      },
+      "objective_state_id": "state_000",
+      "objective_world_fingerprint": "b604dc02745fed68ac8b1991e93e9efe022b723ae3c51d66ca368ca450bda411",
+      "observation": {
+        "observation_id": "obs_experiment_01_dataist",
+        "information_id": "info_experiment_network_monitoring_increase",
+        "agent_id": "dataist",
+        "step": 0,
+        "source": "network_status_dashboard",
+        "evidence_type": "data",
+        "content": "Network monitoring increased.",
+        "reliability": 0.9,
+        "visibility": "public",
+        "location_id": null,
+        "provenance": [
+          "experiment_control",
+          "campus_network_monitoring_rollout"
+        ]
+      },
+      "evidence": {
+        "evidence_id": "evidence_000_001",
+        "observation_id": "obs_experiment_01_dataist",
+        "agent_id": "dataist",
+        "step": 0,
+        "source": "network_status_dashboard",
+        "evidence_type": "data",
+        "content": "Network monitoring increased.",
+        "reliability": 0.9,
+        "trust_basis": "trust_data",
+        "trust_weight": 0.95,
+        "strength": 0.9175,
+        "polarity": "supports",
+        "provenance": [
+          "experiment_control",
+          "campus_network_monitoring_rollout"
+        ]
+      },
+      "belief": {
+        "belief_id": "belief_dataist_001",
+        "proposition": "学校可能正在监控学生网络。",
+        "confidence": 0.9495750000000001,
+        "evidence": [
+          "obs_experiment_01_dataist"
+        ],
+        "source": "network_status_dashboard",
+        "last_updated_step": 0,
+        "update_ids": [
+          "update_000_001"
+        ]
+      },
+      "belief_update": {
+        "update_id": "update_000_001",
+        "agent_id": "dataist",
+        "belief_id": "belief_dataist_001",
+        "evidence_id": "evidence_000_001",
+        "prior": 0.5,
+        "likelihood_e_given_true": 0.9495750000000001,
+        "likelihood_e_given_false": 0.050425,
+        "posterior": 0.9495750000000001,
+        "polarity": "supports",
+        "formula": "P(H|E)=P(E|H)P(H)/(P(E|H)P(H)+P(E|~H)P(~H))"
+      },
+      "belief_state": {
+        "belief_state_id": "belief_state_000_001",
+        "agent_id": "dataist",
+        "step": 0,
+        "belief_ids": [
+          "belief_dataist_001"
+        ],
+        "dominant_belief_id": "belief_dataist_001",
+        "source_update_id": "update_000_001",
+        "uncertainty": 0.05042499999999994
+      },
+      "mental_model": {
+        "mental_model_id": "mm_000_001",
+        "agent_id": "dataist",
+        "source_belief_ids": [
+          "belief_dataist_001"
+        ],
+        "source_observation_ids": [
+          "obs_experiment_01_dataist"
+        ],
+        "causal_assumptions": [
+          "technical anomalies may be caused by institutional surveillance"
+        ],
+        "institutional_expectation": "institutional intent must be inferred from additional evidence",
+        "relevant_value_weights": {
+          "freedom": 0.9,
+          "truth": 0.92,
+          "safety": 0.4,
+          "order": 0.3
+        },
+        "uncertainty_tolerance": 0.55
+      },
+      "bias_filter_result": {
+        "bias_filter_id": "bias_000_001",
+        "mental_model_id": "mm_000_001",
+        "applied_biases": [
+          {
+            "bias_type": "autonomy_threat_sensitivity",
+            "strength": 0.765,
+            "rationale": "High autonomy value increases the salience of surveillance risk."
+          }
+        ],
+        "filtered_causal_frame": "institutional opacity enables surveillance",
+        "salience_focus": "autonomy",
+        "confidence_modifier": 0.038250000000000006
+      },
+      "interpretation": {
+        "interpretation_id": "int_000_001",
+        "agent_id": "dataist",
+        "observation_ids": [
+          "obs_experiment_01_dataist"
+        ],
+        "belief_basis": [
+          "学校可能正在监控学生网络。"
+        ],
+        "mental_model_id": "mm_000_001",
+        "bias_filter_id": "bias_000_001",
+        "causal_frame": "institutional opacity enables surveillance",
+        "meaning": "institution threatens autonomy",
+        "emotional_response": {
+          "fear": 0.14817375,
+          "anger": 0.6045489000000002,
+          "shame": 0.0,
+          "curiosity": 0.07902600000000001,
+          "hope": 0.0
+        },
+        "action_implication": "collect evidence secretly",
+        "confidence": 0.9878250000000001
+      },
+      "action": {
+        "action": "secretly_collect_network_evidence",
+        "source_interpretation_id": "int_000_001",
+        "rationale": "Policy mapping from action implication: collect evidence secretly"
+      }
+    },
+    {
+      "condition": {
+        "condition_id": "institutionalist",
+        "label": "制度主义者",
+        "values": {
+          "freedom": {
+            "base_weight": 0.4,
+            "context_modifiers": {}
+          },
+          "truth": {
+            "base_weight": 0.55,
+            "context_modifiers": {}
+          },
+          "safety": {
+            "base_weight": 0.9,
+            "context_modifiers": {}
+          },
+          "order": {
+            "base_weight": 0.85,
+            "context_modifiers": {}
+          }
+        },
+        "epistemology": {
+          "trust_data": 0.4,
+          "trust_authority": 0.9,
+          "trust_personal_experience": 0.5,
+          "trust_social_consensus": 0.5,
+          "trust_intuition": 0.5,
+          "tolerance_for_uncertainty": 0.35
+        }
+      },
+      "objective_state_id": "state_000",
+      "objective_world_fingerprint": "b604dc02745fed68ac8b1991e93e9efe022b723ae3c51d66ca368ca450bda411",
+      "observation": {
+        "observation_id": "obs_experiment_01_institutionalist",
+        "information_id": "info_experiment_network_monitoring_increase",
+        "agent_id": "institutionalist",
+        "step": 0,
+        "source": "network_status_dashboard",
+        "evidence_type": "data",
+        "content": "Network monitoring increased.",
+        "reliability": 0.9,
+        "visibility": "public",
+        "location_id": null,
+        "provenance": [
+          "experiment_control",
+          "campus_network_monitoring_rollout"
+        ]
+      },
+      "evidence": {
+        "evidence_id": "evidence_000_002",
+        "observation_id": "obs_experiment_01_institutionalist",
+        "agent_id": "institutionalist",
+        "step": 0,
+        "source": "network_status_dashboard",
+        "evidence_type": "data",
+        "content": "Network monitoring increased.",
+        "reliability": 0.9,
+        "trust_basis": "trust_data",
+        "trust_weight": 0.4,
+        "strength": 0.7250000000000001,
+        "polarity": "supports",
+        "provenance": [
+          "experiment_control",
+          "campus_network_monitoring_rollout"
+        ]
+      },
+      "belief": {
+        "belief_id": "belief_institutionalist_001",
+        "proposition": "网络异常更可能是安全升级带来的正常现象。",
+        "confidence": 0.8552500000000001,
+        "evidence": [
+          "obs_experiment_01_institutionalist"
+        ],
+        "source": "network_status_dashboard",
+        "last_updated_step": 0,
+        "update_ids": [
+          "update_000_002"
+        ]
+      },
+      "belief_update": {
+        "update_id": "update_000_002",
+        "agent_id": "institutionalist",
+        "belief_id": "belief_institutionalist_001",
+        "evidence_id": "evidence_000_002",
+        "prior": 0.5,
+        "likelihood_e_given_true": 0.8552500000000001,
+        "likelihood_e_given_false": 0.14475,
+        "posterior": 0.8552500000000001,
+        "polarity": "supports",
+        "formula": "P(H|E)=P(E|H)P(H)/(P(E|H)P(H)+P(E|~H)P(~H))"
+      },
+      "belief_state": {
+        "belief_state_id": "belief_state_000_002",
+        "agent_id": "institutionalist",
+        "step": 0,
+        "belief_ids": [
+          "belief_institutionalist_001"
+        ],
+        "dominant_belief_id": "belief_institutionalist_001",
+        "source_update_id": "update_000_002",
+        "uncertainty": 0.14474999999999993
+      },
+      "mental_model": {
+        "mental_model_id": "mm_000_002",
+        "agent_id": "institutionalist",
+        "source_belief_ids": [
+          "belief_institutionalist_001"
+        ],
+        "source_observation_ids": [
+          "obs_experiment_01_institutionalist"
+        ],
+        "causal_assumptions": [
+          "technical anomalies may be side effects of a security upgrade"
+        ],
+        "institutional_expectation": "institutional intent must be inferred from additional evidence",
+        "relevant_value_weights": {
+          "freedom": 0.4,
+          "truth": 0.55,
+          "safety": 0.9,
+          "order": 0.85
+        },
+        "uncertainty_tolerance": 0.35
+      },
+      "bias_filter_result": {
+        "bias_filter_id": "bias_000_002",
+        "mental_model_id": "mm_000_002",
+        "applied_biases": [
+          {
+            "bias_type": "authority_deference",
+            "strength": 0.9,
+            "rationale": "High authority trust favors the institution's protective explanation."
+          }
+        ],
+        "filtered_causal_frame": "institutional authority frames the change as protection",
+        "salience_focus": "collective_security",
+        "confidence_modifier": 0.027
+      },
+      "interpretation": {
+        "interpretation_id": "int_000_002",
+        "agent_id": "institutionalist",
+        "observation_ids": [
+          "obs_experiment_01_institutionalist"
+        ],
+        "belief_basis": [
+          "网络异常更可能是安全升级带来的正常现象。"
+        ],
+        "mental_model_id": "mm_000_002",
+        "bias_filter_id": "bias_000_002",
+        "causal_frame": "institutional authority frames the change as protection",
+        "meaning": "institution protects collective security",
+        "emotional_response": {
+          "fear": 0.0,
+          "anger": 0.0,
+          "shame": 0.0,
+          "curiosity": 0.0,
+          "hope": 0.11910375000000001
+        },
+        "action_implication": "follow institutional guidance",
+        "confidence": 0.8822500000000001
+      },
+      "action": {
+        "action": "follow_institutional_guidance",
+        "source_interpretation_id": "int_000_002",
+        "rationale": "Policy mapping from action implication: follow institutional guidance"
+      }
+    },
+    {
+      "condition": {
+        "condition_id": "skeptic",
+        "label": "怀疑主义者",
+        "values": {
+          "freedom": {
+            "base_weight": 0.55,
+            "context_modifiers": {}
+          },
+          "truth": {
+            "base_weight": 0.95,
+            "context_modifiers": {}
+          },
+          "safety": {
+            "base_weight": 0.5,
+            "context_modifiers": {}
+          },
+          "order": {
+            "base_weight": 0.45,
+            "context_modifiers": {}
+          }
+        },
+        "epistemology": {
+          "trust_data": 0.35,
+          "trust_authority": 0.2,
+          "trust_personal_experience": 0.5,
+          "trust_social_consensus": 0.5,
+          "trust_intuition": 0.5,
+          "tolerance_for_uncertainty": 0.85
+        }
+      },
+      "objective_state_id": "state_000",
+      "objective_world_fingerprint": "b604dc02745fed68ac8b1991e93e9efe022b723ae3c51d66ca368ca450bda411",
+      "observation": {
+        "observation_id": "obs_experiment_01_skeptic",
+        "information_id": "info_experiment_network_monitoring_increase",
+        "agent_id": "skeptic",
+        "step": 0,
+        "source": "network_status_dashboard",
+        "evidence_type": "data",
+        "content": "Network monitoring increased.",
+        "reliability": 0.9,
+        "visibility": "public",
+        "location_id": null,
+        "provenance": [
+          "experiment_control",
+          "campus_network_monitoring_rollout"
+        ]
+      },
+      "evidence": {
+        "evidence_id": "evidence_000_003",
+        "observation_id": "obs_experiment_01_skeptic",
+        "agent_id": "skeptic",
+        "step": 0,
+        "source": "network_status_dashboard",
+        "evidence_type": "data",
+        "content": "Network monitoring increased.",
+        "reliability": 0.9,
+        "trust_basis": "trust_data",
+        "trust_weight": 0.35,
+        "strength": 0.7075,
+        "polarity": "supports",
+        "provenance": [
+          "experiment_control",
+          "campus_network_monitoring_rollout"
+        ]
+      },
+      "belief": {
+        "belief_id": "belief_skeptic_001",
+        "proposition": "校园网升级存在尚未解释的异常。",
+        "confidence": 0.8466750000000001,
+        "evidence": [
+          "obs_experiment_01_skeptic"
+        ],
+        "source": "network_status_dashboard",
+        "last_updated_step": 0,
+        "update_ids": [
+          "update_000_003"
+        ]
+      },
+      "belief_update": {
+        "update_id": "update_000_003",
+        "agent_id": "skeptic",
+        "belief_id": "belief_skeptic_001",
+        "evidence_id": "evidence_000_003",
+        "prior": 0.5,
+        "likelihood_e_given_true": 0.8466750000000001,
+        "likelihood_e_given_false": 0.153325,
+        "posterior": 0.8466750000000001,
+        "polarity": "supports",
+        "formula": "P(H|E)=P(E|H)P(H)/(P(E|H)P(H)+P(E|~H)P(~H))"
+      },
+      "belief_state": {
+        "belief_state_id": "belief_state_000_003",
+        "agent_id": "skeptic",
+        "step": 0,
+        "belief_ids": [
+          "belief_skeptic_001"
+        ],
+        "dominant_belief_id": "belief_skeptic_001",
+        "source_update_id": "update_000_003",
+        "uncertainty": 0.15332499999999993
+      },
+      "mental_model": {
+        "mental_model_id": "mm_000_003",
+        "agent_id": "skeptic",
+        "source_belief_ids": [
+          "belief_skeptic_001"
+        ],
+        "source_observation_ids": [
+          "obs_experiment_01_skeptic"
+        ],
+        "causal_assumptions": [
+          "available evidence supports multiple institutional explanations"
+        ],
+        "institutional_expectation": "institutional intent must be inferred from additional evidence",
+        "relevant_value_weights": {
+          "freedom": 0.55,
+          "truth": 0.95,
+          "safety": 0.5,
+          "order": 0.45
+        },
+        "uncertainty_tolerance": 0.85
+      },
+      "bias_filter_result": {
+        "bias_filter_id": "bias_000_003",
+        "mental_model_id": "mm_000_003",
+        "applied_biases": [
+          {
+            "bias_type": "evidential_skepticism",
+            "strength": 0.85,
+            "rationale": "High uncertainty tolerance delays commitment to a single explanation."
+          }
+        ],
+        "filtered_causal_frame": "incomplete evidence leaves institutional intent uncertain",
+        "salience_focus": "epistemic_uncertainty",
+        "confidence_modifier": -0.085
+      },
+      "interpretation": {
+        "interpretation_id": "int_000_003",
+        "agent_id": "skeptic",
+        "observation_ids": [
+          "obs_experiment_01_skeptic"
+        ],
+        "belief_basis": [
+          "校园网升级存在尚未解释的异常。"
+        ],
+        "mental_model_id": "mm_000_003",
+        "bias_filter_id": "bias_000_003",
+        "causal_frame": "incomplete evidence leaves institutional intent uncertain",
+        "meaning": "the situation requires further verification",
+        "emotional_response": {
+          "fear": 0.009140100000000002,
+          "anger": 0.0,
+          "shame": 0.0,
+          "curiosity": 0.09711356250000001,
+          "hope": 0.0
+        },
+        "action_implication": "seek additional evidence",
+        "confidence": 0.7616750000000001
+      },
+      "action": {
+        "action": "seek_additional_evidence",
+        "source_interpretation_id": "int_000_003",
+        "rationale": "Policy mapping from action implication: seek additional evidence"
+      }
+    }
+  ],
+  "metrics": [
+    {
+      "metric": "observation_equivalence",
+      "value": 1.0,
+      "passed": true,
+      "detail": "Normalized observation signatures are identical."
+    },
+    {
+      "metric": "belief_diversity",
+      "value": 1.0,
+      "passed": true,
+      "detail": "3/3 unique belief propositions."
+    },
+    {
+      "metric": "interpretation_diversity",
+      "value": 1.0,
+      "passed": true,
+      "detail": "3/3 unique meanings."
+    },
+    {
+      "metric": "action_diversity",
+      "value": 1.0,
+      "passed": true,
+      "detail": "3/3 unique selected actions."
+    }
+  ],
+  "epistemology_swap": [
+    {
+      "condition_id": "dataist",
+      "borrowed_epistemology_from": "institutionalist",
+      "baseline_meaning": "institution threatens autonomy",
+      "swapped_meaning": "institution protects collective security",
+      "baseline_action": "secretly_collect_network_evidence",
+      "swapped_action": "follow_institutional_guidance",
+      "changed_as_predicted": true
+    },
+    {
+      "condition_id": "institutionalist",
+      "borrowed_epistemology_from": "dataist",
+      "baseline_meaning": "institution protects collective security",
+      "swapped_meaning": "the situation requires further verification",
+      "baseline_action": "follow_institutional_guidance",
+      "swapped_action": "seek_additional_evidence",
+      "changed_as_predicted": true
+    }
+  ],
+  "partial_observability_control": {
+    "public_information_ids_by_agent": {
+      "lin_xia": [
+        "info_public_network_upgrade"
+      ],
+      "wang_chen": [
+        "info_public_network_upgrade"
+      ]
+    },
+    "private_information_ids_by_agent": {
+      "lin_xia": [
+        "info_private_dns_redirect"
+      ],
+      "wang_chen": []
+    },
+    "hidden_information_ids_observed": [],
+    "boundary_preserved": true
+  },
+  "passed": true
+}

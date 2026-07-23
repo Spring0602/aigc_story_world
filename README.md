@@ -24,7 +24,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 
 ## 当前进度
 
-目前已完成 40 天计划的前 9 天，核心研究链路可以端到端运行。
+目前已完成 40 天计划的前 10 天，核心研究链路可以端到端运行，并已完成第一项正式主体认知实验。
 
 | 阶段 | 已完成能力 | 状态 |
 | --- | --- | :---: |
@@ -35,7 +35,8 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 | Day 7 | Mental Model、Bias Filter、Cognitive Interpretation Layer | 完成 |
 | Day 8 | Bayesian Belief Update、Value System、Decision、Action、Event | 完成 |
 | Day 9 | Theory of Mind、Other Model 与 World Update 闭环 | 完成 |
-| Day 10 | Same World, Different Minds 正式实验 | 下一步 |
+| Day 10 | Same World, Different Minds 正式实验 | 完成 |
+| Day 11 | 因果推理基础与 Causal Notes | 下一步 |
 
 当前基线包含 1 个共享客观世界、2 个角色、3 种认知 Lens，以及每个时间步 4 条候选未来。测试集还覆盖 Dataist、Institutionalist 和 Skeptic 三类认知配置，用于验证同一事实如何产生差异化判断。
 
@@ -201,9 +202,9 @@ print(result["run_dir"])
 ├── app.py                    # CLI 与端到端运行入口
 ├── config.py                 # 默认步数、输出目录和模型配置
 ├── schemas/                  # Pydantic 数据契约
-├── core/                     # 认知、推演、决策和世界更新逻辑
-├── narrative/                # NarrativeEvent、SceneCard 与 ImagePrompt 生成
-├── examples/                 # 校园监控示例世界与角色配置
+├── core/                     # 认知、推演、决策、叙事和世界更新逻辑
+├── data/examples/            # 校园监控示例世界与角色配置
+├── experiments/              # 可重复实验运行器与结构化实验结果
 ├── tests/                    # Schema、认知链路与端到端测试
 ├── outputs/                  # 本地实验导出目录
 └── StoryWorld_V2_docs/       # 研究设计、架构说明与 40 天计划
@@ -217,7 +218,7 @@ print(result["run_dir"])
 python -m unittest discover -v
 ```
 
-当前共有 30 项自动化测试，覆盖：
+当前共有 36 项自动化测试，覆盖：
 
 - Pydantic Schema 校验与跨对象引用。
 - Observation、Evidence、Belief Update 和 Interpretation 链路。
@@ -225,6 +226,15 @@ python -m unittest discover -v
 - Theory of Mind 对决策评分的实际影响。
 - Action、World Event、World Update 与 State Provenance。
 - NarrativeEvent、SceneCard、ImagePrompt 和完整导出结果。
+- Same World Different Minds、参数交换和 Partial Observability 对照。
+
+运行 Day 10 正式实验：
+
+```bash
+python -m experiments.same_world_different_minds
+```
+
+实验会生成机器可读的 [`experiment_01.json`](experiments/results/experiment_01.json) 和人工可读的 [`experiment_01.md`](experiments/results/experiment_01.md)。当前结果中 Observation 等价率、Belief 差异率、Interpretation 差异率和 Action 差异率均为 `1.000`。
 
 ## 研究原则
 
@@ -248,7 +258,7 @@ python -m unittest discover -v
 
 ## 当前边界
 
-StoryWorld V2 仍是研究原型，而不是完整的生产级叙事平台。当前版本使用确定性规则和 mock structured model 保证实验可复现；校园场景的 Candidate Future 生成器仍包含领域特定逻辑；Theory of Mind 暂不支持递归心智推理；Hypothesis Conflict Resolver、正式对照实验和通用机制语言仍在后续计划中。
+StoryWorld V2 仍是研究原型，而不是完整的生产级叙事平台。当前版本使用确定性规则和 mock structured model 保证实验可复现；校园场景的 Candidate Future 生成器仍包含领域特定逻辑；Theory of Mind 暂不支持递归心智推理；Hypothesis Conflict Resolver、Lens Ablation、Prompt-to-Story Baseline Comparison 和通用机制语言仍在后续计划中。
 
 这些限制是当前实验边界，也构成下一阶段最重要的验证方向。
 
