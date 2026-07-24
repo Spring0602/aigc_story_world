@@ -58,6 +58,7 @@ Scene / Story Expression
 | `13_future_research.md` | 后续研究方向 |
 | `14_project_structure.md` | 推荐目录结构 |
 | `15_mvp_scope.md` | 40 天 MVP 范围 |
+| `causal_notes.md` | Day 11 因果推理基础笔记与建模约定 |
 
 ## V2 核心研究对象
 

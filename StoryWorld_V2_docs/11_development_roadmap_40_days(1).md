@@ -389,7 +389,7 @@ Same World Different Minds
 
 # Phase 2：因果机制建模（Day 11-20）
 
-## Day 11：因果推理基础
+## Day 11：因果推理基础（已完成）
 
 学习：
 
@@ -403,7 +403,14 @@ Same World Different Minds
 
 整理：
 
-    causal_notes.md
+    StoryWorld_V2_docs/causal_notes.md
+
+笔记覆盖：
+
+- Cause、Correlation、Driver、Mediator、Constraint 的定义与边界。
+- 反事实、混杂因素、必要/充分/促成原因和反馈回路。
+- 校园监控案例的完整因果图、时间尺度与 Confidence 解释。
+- 面向 Day 12 `CausalHypothesis` Schema 的字段约定和审查清单。
 
 ------------------------------------------------------------------------
 

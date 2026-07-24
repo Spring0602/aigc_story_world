@@ -24,7 +24,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 
 ## 当前进度
 
-目前已完成 40 天计划的前 10 天，核心研究链路可以端到端运行，并已完成第一项正式主体认知实验。
+目前已完成 40 天计划的前 11 天，核心研究链路可以端到端运行，并已完成第一项正式主体认知实验。
 
 | 阶段 | 已完成能力 | 状态 |
 | --- | --- | :---: |
@@ -36,7 +36,8 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 | Day 8 | Bayesian Belief Update、Value System、Decision、Action、Event | 完成 |
 | Day 9 | Theory of Mind、Other Model 与 World Update 闭环 | 完成 |
 | Day 10 | Same World, Different Minds 正式实验 | 完成 |
-| Day 11 | 因果推理基础与 Causal Notes | 下一步 |
+| Day 11 | 因果推理基础与 Causal Notes | 完成 |
+| Day 12 | CausalHypothesis Schema 强化 | 下一步 |
 
 当前基线包含 1 个共享客观世界、2 个角色、3 种认知 Lens，以及每个时间步 4 条候选未来。测试集还覆盖 Dataist、Institutionalist 和 Skeptic 三类认知配置，用于验证同一事实如何产生差异化判断。
 
@@ -255,6 +256,7 @@ python -m experiments.same_world_different_minds
 - [`StoryWorld_V2_docs/08_data_schema.md`](StoryWorld_V2_docs/08_data_schema.md)：主要 Schema、字段语义与数据契约。
 - [`StoryWorld_V2_docs/09_module_design.md`](StoryWorld_V2_docs/09_module_design.md)：Python 模块职责和代码组织。
 - [`StoryWorld_V2_docs/10_testing_and_evaluation.md`](StoryWorld_V2_docs/10_testing_and_evaluation.md)：差异化认知、消融与基线评估方法。
+- [`StoryWorld_V2_docs/causal_notes.md`](StoryWorld_V2_docs/causal_notes.md)：Cause、Driver、Mediator、Constraint 与反事实建模笔记。
 
 ## 当前边界
 
