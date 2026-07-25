@@ -1,18 +1,54 @@
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, StringConstraints, field_validator, model_validator
 
 
-TimeScale = Literal["seconds", "minutes", "hours", "days", "weeks", "months", "years", "generations"]
+TimeScale = Literal[
+    "seconds",
+    "minutes",
+    "hours",
+    "days",
+    "weeks",
+    "months",
+    "years",
+    "generations",
+]
+NonEmptyText = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 
 
 class CausalHypothesis(BaseModel):
-    hypothesis_id: str
-    lens: str
-    claim: str
-    drivers: list[str] = Field(default_factory=list)
-    mediators: list[str] = Field(default_factory=list)
-    constraints: list[str] = Field(default_factory=list)
-    affected_agents: list[str] = Field(default_factory=list)
+    hypothesis_id: NonEmptyText
+    lens: NonEmptyText
+    claim: NonEmptyText
+    drivers: list[NonEmptyText] = Field(min_length=1)
+    mediators: list[NonEmptyText] = Field(min_length=1)
+    constraints: list[NonEmptyText] = Field(min_length=1)
+    affected_agents: list[NonEmptyText] = Field(default_factory=list)
     time_scale: TimeScale
     confidence: float = Field(ge=0.0, le=1.0)
+
+    @field_validator("drivers", "mediators", "constraints", "affected_agents")
+    @classmethod
+    def reject_duplicates(cls, values: list[str]) -> list[str]:
+        if len(values) != len(set(values)):
+            raise ValueError("causal hypothesis lists cannot contain duplicate values")
+        return values
+
+    @model_validator(mode="after")
+    def require_distinct_causal_roles(self) -> "CausalHypothesis":
+        role_sets = {
+            "drivers": set(self.drivers),
+            "mediators": set(self.mediators),
+            "constraints": set(self.constraints),
+        }
+        overlaps = (
+            role_sets["drivers"].intersection(role_sets["mediators"])
+            | role_sets["drivers"].intersection(role_sets["constraints"])
+            | role_sets["mediators"].intersection(role_sets["constraints"])
+        )
+        if overlaps:
+            repeated = ", ".join(sorted(overlaps))
+            raise ValueError(
+                f"drivers, mediators, and constraints must have distinct roles: {repeated}"
+            )
+        return self

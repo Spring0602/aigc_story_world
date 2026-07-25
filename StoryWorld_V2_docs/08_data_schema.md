@@ -237,19 +237,34 @@ supporting_hypothesis_ids / source_observation_ids
 ## Pydantic 建议
 
 ```python
+from typing import Literal
+
 from pydantic import BaseModel, Field
+
+TimeScale = Literal[
+    "seconds", "minutes", "hours", "days",
+    "weeks", "months", "years", "generations",
+]
 
 class CausalHypothesis(BaseModel):
     hypothesis_id: str
     lens: str
     claim: str
-    drivers: list[str] = Field(default_factory=list)
-    mediators: list[str] = Field(default_factory=list)
-    constraints: list[str] = Field(default_factory=list)
+    drivers: list[str] = Field(min_length=1)
+    mediators: list[str] = Field(min_length=1)
+    constraints: list[str] = Field(min_length=1)
     affected_agents: list[str] = Field(default_factory=list)
-    time_scale: str
+    time_scale: TimeScale
     confidence: float = Field(ge=0.0, le=1.0)
 ```
+
+Day 12 数据契约：
+
+- `claim`、`drivers`、`mediators`、`constraints`、`time_scale`、`confidence` 均为必填。
+- Claim、Lens 和各列表元素必须是非空文本，输入时去除首尾空格。
+- Driver、Mediator、Constraint 各自不得重复，三类角色之间不得使用同一机制变量。
+- `time_scale` 只能使用系统规定的八种时间尺度。
+- `confidence` 是当前证据下的相对可信度，限制在 0～1，不表示真实世界精确概率。
 
 数据原则：
 

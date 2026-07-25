@@ -24,7 +24,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 
 ## 当前进度
 
-目前已完成 40 天计划的前 11 天，核心研究链路可以端到端运行，并已完成第一项正式主体认知实验。
+目前已完成 40 天计划的前 12 天，核心研究链路可以端到端运行，并已完成第一项正式主体认知实验。
 
 | 阶段 | 已完成能力 | 状态 |
 | --- | --- | :---: |
@@ -37,7 +37,8 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 | Day 9 | Theory of Mind、Other Model 与 World Update 闭环 | 完成 |
 | Day 10 | Same World, Different Minds 正式实验 | 完成 |
 | Day 11 | 因果推理基础与 Causal Notes | 完成 |
-| Day 12 | CausalHypothesis Schema 强化 | 下一步 |
+| Day 12 | CausalHypothesis Schema 强化 | 完成 |
+| Day 13-14 | Psychology Lens | 下一步 |
 
 当前基线包含 1 个共享客观世界、2 个角色、3 种认知 Lens，以及每个时间步 4 条候选未来。测试集还覆盖 Dataist、Institutionalist 和 Skeptic 三类认知配置，用于验证同一事实如何产生差异化判断。
 
@@ -219,7 +220,7 @@ print(result["run_dir"])
 python -m unittest discover -v
 ```
 
-当前共有 36 项自动化测试，覆盖：
+当前共有 40 项自动化测试，覆盖：
 
 - Pydantic Schema 校验与跨对象引用。
 - Observation、Evidence、Belief Update 和 Interpretation 链路。

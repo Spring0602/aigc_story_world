@@ -414,7 +414,7 @@ Same World Different Minds
 
 ------------------------------------------------------------------------
 
-## Day 12：CausalHypothesis Schema
+## Day 12：CausalHypothesis Schema（已完成）
 
 开发：
 
@@ -431,7 +431,15 @@ Confidence
 
 交付：
 
-    causal_hypothesis.py
+    schemas/causal_hypothesis.py
+    tests/test_hypothesis.py
+
+验收结果：
+
+- Claim、Drivers、Mediators、Constraints、TimeScale、Confidence 已形成强类型 Pydantic 契约。
+- 三类机制列表必须非空、元素唯一且角色之间不得重叠。
+- 非空文本、时间尺度枚举和 Confidence 范围均有自动校验。
+- Psychology、Economic、SocialStructure 三个现有 Lens 输出全部通过新版 Schema。
 
 ------------------------------------------------------------------------
 

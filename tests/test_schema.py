@@ -32,6 +32,9 @@ class SchemaTest(unittest.TestCase):
             hypothesis_id="hyp_001",
             lens="psychology",
             claim="不透明威胁会提高验证动机。",
+            drivers=["unclear_monitoring_scope"],
+            mediators=["need_for_control"],
+            constraints=["limited_evidence"],
             time_scale="hours",
             confidence=0.7,
         )
@@ -44,6 +47,9 @@ class SchemaTest(unittest.TestCase):
                 hypothesis_id="hyp_bad",
                 lens="psychology",
                 claim="invalid",
+                drivers=["unclear_monitoring_scope"],
+                mediators=["need_for_control"],
+                constraints=["limited_evidence"],
                 time_scale="hours",
                 confidence=1.7,
             )
