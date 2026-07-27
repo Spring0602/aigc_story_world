@@ -136,6 +136,24 @@ Epistemic Compatibility
 
 行动输出必须附带分项依据。消融 Belief、Value、Emotion 或 Constraint 后，行动排序应产生可解释变化。
 
+## Psychology Chain Test
+
+逐跳验证：
+
+```text
+World Event
+→ Perception
+→ Belief
+→ Emotional Appraisal
+→ Stress
+→ Motivation
+→ Value Assessment
+→ Decision
+→ Action
+```
+
+每一层必须引用前一层 ID。相同公开事件下，不同主体应因 Value、Epistemology、Belief 和 Emotion 形成不同 threat、stress 与 motivation；隐藏 Event 不得进入非行动者的 Perception。Motivation 或 Stress 变化后，至少一项候选行动评分必须产生可解释变化。
+
 ## Lens Ablation Test
 
 在同一世界状态下分别运行：

@@ -66,6 +66,24 @@ Defense Mechanism
 Social Perception
 ```
 
+当前实现链路：
+
+```text
+World Event
+→ Perception
+→ Belief
+→ Emotional Appraisal
+→ Stress
+→ Motivation
+→ Value Evaluation
+→ Decision
+→ Action
+```
+
+`PsychologyEngine` 负责生成逐主体的 Perception、EmotionalAppraisal、StressState 和 MotivationState。`PsychologyLens` 消费这些结构化状态，为每个主体输出动态 `CausalHypothesis`，并保存 supporting event、perception、belief、emotion、stress 与 motivation IDs。
+
+心理状态必须实际参与行为：Motivation alignment 和 Stress adjustment 进入 `ValueAssessment.score`。若移除或改变 Motivation 后行动评分完全不变，则 Psychology Lens 尚未有效接入。
+
 ### EconomicLens
 
 关注：

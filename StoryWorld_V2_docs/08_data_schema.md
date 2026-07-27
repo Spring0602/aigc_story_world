@@ -12,6 +12,10 @@ BayesianBeliefUpdate
 BeliefState
 BeliefAboutOther
 Interpretation
+Perception
+EmotionalAppraisal
+StressState
+MotivationState
 CausalHypothesis
 AgentAction
 ValueAssessment
@@ -162,7 +166,27 @@ HypothesisRelation
 }
 ```
 
-认知链路固定为 `Observation → Belief → MentalModel → BiasFilterResult → Interpretation`。`MentalModel` 保存尚未经过偏差过滤的因果假设，`BiasFilterResult` 记录偏差如何选择显著信息并调整因果框架，`Interpretation` 通过两类 ID 保留完整引用链。
+认知解释子链固定为 `Observation → Belief → MentalModel → BiasFilterResult → Interpretation`。`MentalModel` 保存尚未经过偏差过滤的因果假设，`BiasFilterResult` 记录偏差如何选择显著信息并调整因果框架，`Interpretation` 通过两类 ID 保留完整引用链。
+
+## Psychology Chain
+
+```text
+World Event
+→ Perception
+→ Belief
+→ EmotionalAppraisal
+→ StressState
+→ MotivationState
+→ ValueAssessment
+→ Decision
+→ Action
+```
+
+- `Perception` 引用可见 `source_event_id` 与相关 `observation_ids`，记录 goal relevance、threat、controllability、ambiguity 和 salience。
+- `EmotionalAppraisal` 引用 Perception、BeliefState、Belief 与 Interpretation，保存多维 Emotion 和 dominant emotion。
+- `StressState` 引用 EmotionalAppraisal，保存 stressors、level、band 与 coping capacity。
+- `MotivationState` 引用 Stress、Emotion 和 BeliefState，保存 motive、target、orientation、intensity 与 preferred action。
+- `ValueAssessment` 保存 Motivation alignment 与 Stress adjustment；`Decision` 引用整条心理状态链。
 
 ## StateChange
 
@@ -221,7 +245,7 @@ HypothesisRelation
 }
 ```
 
-完整主干为 `World State → Observation → Evidence → Bayesian Belief Update → Belief State → Value System → Decision → Action → World Event`。解释子链 `Belief State → Mental Model → Bias Filter → Interpretation` 为 Decision 提供可检查的主观理由。
+完整主干为 `World Event → Perception → Observation / Evidence → Bayesian Belief Update → Belief State → Emotion → Stress → Motivation → Value System → Decision → Action → World Event`。解释子链 `Belief State → Mental Model → Bias Filter → Interpretation` 为 Emotion 与 Decision 提供可检查的主观理由。
 
 ## StateProvenance（计划）
 

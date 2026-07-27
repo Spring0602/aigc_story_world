@@ -13,6 +13,7 @@ from schemas import (
     Interpretation,
     MentalModel,
     Observation,
+    Perception,
     SubjectiveWorldModel,
 )
 
@@ -40,8 +41,12 @@ class CognitionEngine:
         self,
         observations: list[Observation],
         subjective_models: list[SubjectiveWorldModel],
+        perceptions: list[Perception] | None = None,
     ) -> CognitionResult:
         models_by_agent = {model.agent_id: model for model in subjective_models}
+        perceptions_by_agent = {
+            perception.agent_id: perception for perception in perceptions or []
+        }
         evidence_records: list[Evidence] = []
         belief_updates: list[BayesianBeliefUpdate] = []
         belief_states: list[BeliefState] = []
@@ -56,6 +61,11 @@ class CognitionEngine:
                 observation,
                 model,
                 evidence_id=f"evidence_{cognitive_id}",
+                perception_id=(
+                    perceptions_by_agent[observation.agent_id].perception_id
+                    if observation.agent_id in perceptions_by_agent
+                    else None
+                ),
             )
             updated_model, belief, belief_update, belief_state = self.belief_updater.update(
                 model,

@@ -32,6 +32,16 @@ from schemas.objective_world import (
     StateProvenance,
 )
 from schemas.observation import Observation
+from schemas.psychology import (
+    ActionOrientation,
+    EmotionalAppraisal,
+    MotivationState,
+    MotivationType,
+    Perception,
+    PsychologyContext,
+    StressBand,
+    StressState,
+)
 from schemas.scene_card import CameraSetup, ImagePrompt, SceneCard, SceneCharacter
 from schemas.subjective_world import (
     Belief,
@@ -50,6 +60,7 @@ __all__ = [
     "ActiveProcess",
     "Action",
     "ActionStatus",
+    "ActionOrientation",
     "Agent",
     "AgentAction",
     "AgentProfile",
@@ -68,6 +79,7 @@ __all__ = [
     "CognitiveExperimentTrial",
     "Decision",
     "EmotionState",
+    "EmotionalAppraisal",
     "Epistemology",
     "EpistemologySwapResult",
     "EvidenceType",
@@ -83,10 +95,14 @@ __all__ = [
     "Interpretation",
     "Location",
     "MentalModel",
+    "MotivationState",
+    "MotivationType",
     "NarrativeEvent",
     "ObjectiveWorldState",
     "Observation",
     "ObservationVisibility",
+    "Perception",
+    "PsychologyContext",
     "PartialObservabilityControl",
     "Norm",
     "Relationship",
@@ -97,6 +113,8 @@ __all__ = [
     "SameWorldDifferentMindsResult",
     "StateChange",
     "StateProvenance",
+    "StressBand",
+    "StressState",
     "SubjectiveWorldModel",
     "HumanNatureModel",
     "KnowledgeItem",

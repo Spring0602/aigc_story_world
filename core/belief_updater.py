@@ -36,6 +36,9 @@ class BeliefUpdater:
                 proposition=proposition,
                 confidence=posterior,
                 evidence=[evidence.observation_id],
+                source_perception_ids=(
+                    [evidence.perception_id] if evidence.perception_id else []
+                ),
                 source=evidence.source,
                 last_updated_step=evidence.step,
                 update_ids=[update_id],
@@ -45,6 +48,11 @@ class BeliefUpdater:
             existing.confidence = posterior
             if evidence.observation_id not in existing.evidence:
                 existing.evidence.append(evidence.observation_id)
+            if (
+                evidence.perception_id
+                and evidence.perception_id not in existing.source_perception_ids
+            ):
+                existing.source_perception_ids.append(evidence.perception_id)
             existing.source = evidence.source
             existing.last_updated_step = evidence.step
             existing.update_ids.append(update_id)

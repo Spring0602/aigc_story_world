@@ -73,13 +73,29 @@ Observation
 
 `CognitionEngine` 负责流程编排。`MentalModelEngine` 将 Observation 与更新后的 Belief 组织为因果假设、制度预期和相关价值权重；`BiasFilter` 根据认识论、价值与不确定性容忍度记录偏差类型、强度和显著性焦点；`InterpretationEngine` 只消费这两层的结构化输出，生成 `meaning`、`emotional_response` 和 `action_implication`。生成的情绪反应写回 `SubjectiveWorldModel`，供后续认知步骤使用。
 
+## PsychologyEngine
+
+```text
+World Event
+→ Perception
+→ Belief
+→ Emotional Appraisal
+→ Stress State
+→ Motivation State
+→ Value Assessment
+→ Decision
+→ Action
+```
+
+`perceive()` 按 Event visibility 和行动者身份执行信息边界过滤，并结合主体 Value、Epistemology 与 Observation 计算 threat、controllability、ambiguity 和 salience。`appraise()` 将更新后的 Belief 与 Interpretation 转换为 Emotion、Stress 和 Motivation。DecisionEngine 使用 Motivation alignment 与 Stress adjustment 调整 ValueAssessment，并在 Decision 中保留整条心理状态引用。
+
 ## BeliefUpdater
 
 输入旧 Belief 与结构化 Evidence，使用显式先验、`P(E|H)` 和 `P(E|~H)` 计算后验。支持性证据提高后验，反驳性证据降低后验；每次更新输出 `BayesianBeliefUpdate` 与 `BeliefState`，不以新对象覆盖历史原因链。
 
 ## DecisionEngine
 
-`ValueAssessment` 对选中行动与角色价值系统的匹配程度评分；`Decision` 引用 Belief State、Interpretation 和 Value Assessment；`ActionExecutor` 生成已执行 Action；`WorldTransition` 根据 Action 与环境变化生成客观 World Event。
+`ValueAssessment` 对行动与角色价值、Motivation 和 Stress 的匹配程度评分；`Decision` 引用 Perception、Belief State、Interpretation、Emotional Appraisal、Stress State、Motivation State 和 Value Assessment；`ActionExecutor` 生成已执行 Action；`WorldTransition` 根据 Action 与环境变化生成客观 World Event。
 
 ## LensRouter
 

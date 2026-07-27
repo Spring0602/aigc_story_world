@@ -1,5 +1,10 @@
 from lenses.base import WorldLens
-from schemas import CausalHypothesis, ObjectiveWorldState, SubjectiveWorldModel
+from schemas import (
+    CausalHypothesis,
+    ObjectiveWorldState,
+    PsychologyContext,
+    SubjectiveWorldModel,
+)
 
 
 class EconomicLens(WorldLens):
@@ -9,6 +14,7 @@ class EconomicLens(WorldLens):
         self,
         objective_state: ObjectiveWorldState,
         subjective_models: list[SubjectiveWorldModel],
+        psychology: PsychologyContext | None = None,
     ) -> list[CausalHypothesis]:
         step = objective_state.step + 1
         return [

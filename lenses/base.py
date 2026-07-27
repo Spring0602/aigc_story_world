@@ -1,6 +1,11 @@
 from abc import ABC, abstractmethod
 
-from schemas import CausalHypothesis, ObjectiveWorldState, SubjectiveWorldModel
+from schemas import (
+    CausalHypothesis,
+    ObjectiveWorldState,
+    PsychologyContext,
+    SubjectiveWorldModel,
+)
 
 
 class WorldLens(ABC):
@@ -11,5 +16,6 @@ class WorldLens(ABC):
         self,
         objective_state: ObjectiveWorldState,
         subjective_models: list[SubjectiveWorldModel],
+        psychology: PsychologyContext | None = None,
     ) -> list[CausalHypothesis]:
         raise NotImplementedError

@@ -24,7 +24,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 
 ## 当前进度
 
-目前已完成 40 天计划的前 12 天，核心研究链路可以端到端运行，并已完成第一项正式主体认知实验。
+目前已完成 40 天计划的前 14 天，核心研究链路可以端到端运行，并已完成第一项正式主体认知实验。
 
 | 阶段 | 已完成能力 | 状态 |
 | --- | --- | :---: |
@@ -38,7 +38,8 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 | Day 10 | Same World, Different Minds 正式实验 | 完成 |
 | Day 11 | 因果推理基础与 Causal Notes | 完成 |
 | Day 12 | CausalHypothesis Schema 强化 | 完成 |
-| Day 13-14 | Psychology Lens | 下一步 |
+| Day 13-14 | Psychology Lens 与心理行动链 | 完成 |
+| Day 15-16 | Economic Lens | 下一步 |
 
 当前基线包含 1 个共享客观世界、2 个角色、3 种认知 Lens，以及每个时间步 4 条候选未来。测试集还覆盖 Dataist、Institutionalist 和 Skeptic 三类认知配置，用于验证同一事实如何产生差异化判断。
 
@@ -113,6 +114,24 @@ Observation -> Belief -> Mental Model -> Bias Filter -> Interpretation
 
 系统从多种 Lens 生成 Candidate Futures，结合 Value System、Belief State、Interpretation 和 Other Model 进行评分，选择 Decision 并执行 Action。Action 生成 World Event，随后由 World Transition 更新客观状态并写入 Provenance，形成真正闭合的演化循环。
 
+### 7. Psychology Lens
+
+心理机制链已经接入真实决策：
+
+```text
+World Event
+→ Perception
+→ Belief
+→ Emotional Appraisal
+→ Stress
+→ Motivation
+→ Value Evaluation
+→ Decision
+→ Action
+```
+
+`PsychologyLens` 不再返回固定观点，而是针对每个主体读取实际 Perception、Emotion、Stress 和 Motivation，生成带完整来源 ID 的 `CausalHypothesis`。Motivation alignment 与 Stress adjustment 同时进入 `ValueAssessment`，因此心理状态会改变候选行动评分。
+
 ## 差异化效果示例
 
 面对相同的校园网络监控事实，不同认知配置会形成不同输出：
@@ -180,7 +199,7 @@ print(result["run_dir"])
 
 ## 输出说明
 
-每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 22 个 JSON 文件和 1 份 Markdown 报告。
+每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 25 个 JSON 文件和 1 份 Markdown 报告。
 
 | 分组 | 文件 | 用途 |
 | --- | --- | --- |
@@ -188,6 +207,7 @@ print(result["run_dir"])
 | 观察与证据 | `observations.json`、`evidence.json` | 记录主体看到什么，以及证据如何支持判断 |
 | 信念更新 | `belief_updates.json`、`belief_states.json` | 保存先验、后验及每步信念状态 |
 | 主观认知 | `subjective_models.json`、`mental_models.json`、`bias_filter_results.json`、`interpretations.json` | 展示从认知框架到解释的完整过程 |
+| 心理机制 | `perceptions.json`、`emotional_appraisals.json`、`stress_states.json`、`motivation_states.json` | 展示事件如何通过心理状态进入价值评估和决策 |
 | 他心模型 | `beliefs_about_others.json` | 保存主体对其他主体信念、目标与动作的预测 |
 | 未来推演 | `hypotheses.json`、`candidate_futures.json`、`selected_futures.json` | 保存机制假设和候选世界走向 |
 | 决策与行动 | `value_assessments.json`、`decisions.json`、`actions.json` | 解释为何选择某项行动以及如何执行 |
@@ -220,7 +240,7 @@ print(result["run_dir"])
 python -m unittest discover -v
 ```
 
-当前共有 40 项自动化测试，覆盖：
+当前共有 46 项自动化测试，覆盖：
 
 - Pydantic Schema 校验与跨对象引用。
 - Observation、Evidence、Belief Update 和 Interpretation 链路。
@@ -229,6 +249,7 @@ python -m unittest discover -v
 - Action、World Event、World Update 与 State Provenance。
 - NarrativeEvent、SceneCard、ImagePrompt 和完整导出结果。
 - Same World Different Minds、参数交换和 Partial Observability 对照。
+- World Event 到 Action 的心理链路、主体差异和隐藏事件边界。
 
 运行 Day 10 正式实验：
 

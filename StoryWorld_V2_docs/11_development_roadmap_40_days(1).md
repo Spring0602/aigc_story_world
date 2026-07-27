@@ -443,7 +443,7 @@ Confidence
 
 ------------------------------------------------------------------------
 
-## Day 13-14：Psychology Lens
+## Day 13-14：Psychology Lens（已完成）
 
 学习：
 
@@ -456,11 +456,35 @@ Confidence
 
 实现：
 
-    PsychologyLens
+    schemas/psychology.py
+    core/psychology_engine.py
+    lenses/psychology.py
+    tests/test_psychology_lens.py
 
 输出：
 
 CausalHypothesis。
+
+完整链路：
+
+    World Event
+    → Perception
+    → Belief
+    → Emotional Appraisal
+    → Stress
+    → Motivation
+    → Value Evaluation
+    → Decision
+    → Action
+
+验收结果：
+
+- Perception 只读取主体可见的 World Event 与 Observation。
+- Belief、Emotion、Stress、Motivation、ValueAssessment、Decision 和 Action 保留闭合 ID 引用。
+- Motivation alignment 与 Stress adjustment 实际进入行动评分。
+- PsychologyLens 按主体输出动态 CausalHypothesis，并引用完整心理 provenance。
+- 林夏与王晨面对同一公开事件形成不同威胁评估、压力水平和行动动机。
+- 隐藏行动事件只进入行动者自身的下一步 Perception。
 
 ------------------------------------------------------------------------
 

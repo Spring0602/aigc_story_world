@@ -19,11 +19,13 @@ class EvidenceEvaluator:
         observation: Observation,
         model: SubjectiveWorldModel,
         evidence_id: str,
+        perception_id: str | None = None,
     ) -> Evidence:
         trust_basis = self.trust_basis(observation)
         return Evidence(
             evidence_id=evidence_id,
             observation_id=observation.observation_id,
+            perception_id=perception_id,
             agent_id=observation.agent_id,
             step=observation.step,
             source=observation.source,

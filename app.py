@@ -12,6 +12,7 @@ from core.model_utils import to_dict
 from core.narrative_engine import NarrativeEngine
 from core.observation_engine import ObservationEngine
 from core.output_exporter import OutputExporter
+from core.psychology_engine import PsychologyEngine
 from core.scene_generator import SceneGenerator
 from core.theory_of_mind import TheoryOfMindEngine
 from core.world_initializer import WorldInitializer
@@ -30,6 +31,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
     initializer = WorldInitializer()
     observation_engine = ObservationEngine()
     cognition_engine = CognitionEngine()
+    psychology_engine = PsychologyEngine()
     theory_of_mind_engine = TheoryOfMindEngine()
     lens_router = LensRouter()
     future_generator = FutureGenerator()
@@ -51,6 +53,10 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
     all_mental_models = []
     all_bias_filter_results = []
     all_interpretations = []
+    all_perceptions = []
+    all_emotional_appraisals = []
+    all_stress_states = []
+    all_motivation_states = []
     all_other_models = []
     all_hypotheses = []
     all_candidate_futures = []
@@ -65,17 +71,33 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
 
     for _ in range(max(1, steps)):
         observations = observation_engine.observe(objective_state, subjective_models)
-        cognition = cognition_engine.interpret(
+        perceptions = psychology_engine.perceive(
+            objective_state,
             observations,
             subjective_models,
         )
+        cognition = cognition_engine.interpret(
+            observations,
+            subjective_models,
+            perceptions=perceptions,
+        )
         subjective_models = cognition.subjective_models
+        psychology = psychology_engine.appraise(
+            perceptions,
+            subjective_models,
+            cognition.belief_states,
+            cognition.interpretations,
+        )
         subjective_models, other_models = theory_of_mind_engine.infer(
             objective_state,
             observations,
             subjective_models,
         )
-        hypotheses = lens_router.analyze(objective_state, subjective_models)
+        hypotheses = lens_router.analyze(
+            objective_state,
+            subjective_models,
+            psychology=psychology,
+        )
         futures = future_generator.generate(objective_state, subjective_models, hypotheses)
         future_scores = {
             future.future_id: future_evaluator.score(
@@ -94,6 +116,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             interpretations=cognition.interpretations,
             other_models=other_models,
             step=objective_state.step + 1,
+            psychology=psychology,
         )
         actions = action_executor.execute(decisions)
         new_state = transition.apply(
@@ -114,6 +137,10 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
         all_mental_models.extend(cognition.mental_models)
         all_bias_filter_results.extend(cognition.bias_results)
         all_interpretations.extend(cognition.interpretations)
+        all_perceptions.extend(psychology.perceptions)
+        all_emotional_appraisals.extend(psychology.emotional_appraisals)
+        all_stress_states.extend(psychology.stress_states)
+        all_motivation_states.extend(psychology.motivation_states)
         all_other_models.extend(other_models)
         all_hypotheses.extend(hypotheses)
         all_candidate_futures.extend(futures)
@@ -141,6 +168,10 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             mental_models=all_mental_models,
             bias_filter_results=all_bias_filter_results,
             interpretations=all_interpretations,
+            perceptions=all_perceptions,
+            emotional_appraisals=all_emotional_appraisals,
+            stress_states=all_stress_states,
+            motivation_states=all_motivation_states,
             beliefs_about_others=all_other_models,
             hypotheses=all_hypotheses,
             candidate_futures=all_candidate_futures,
@@ -166,6 +197,10 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
         "mental_models": to_dict(all_mental_models),
         "bias_filter_results": to_dict(all_bias_filter_results),
         "interpretations": to_dict(all_interpretations),
+        "perceptions": to_dict(all_perceptions),
+        "emotional_appraisals": to_dict(all_emotional_appraisals),
+        "stress_states": to_dict(all_stress_states),
+        "motivation_states": to_dict(all_motivation_states),
         "beliefs_about_others": to_dict(all_other_models),
         "hypotheses": to_dict(all_hypotheses),
         "candidate_futures": to_dict(all_candidate_futures),

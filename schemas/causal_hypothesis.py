@@ -24,10 +24,27 @@ class CausalHypothesis(BaseModel):
     mediators: list[NonEmptyText] = Field(min_length=1)
     constraints: list[NonEmptyText] = Field(min_length=1)
     affected_agents: list[NonEmptyText] = Field(default_factory=list)
+    supporting_event_ids: list[NonEmptyText] = Field(default_factory=list)
+    supporting_perception_ids: list[NonEmptyText] = Field(default_factory=list)
+    supporting_belief_ids: list[NonEmptyText] = Field(default_factory=list)
+    supporting_emotional_appraisal_ids: list[NonEmptyText] = Field(default_factory=list)
+    supporting_stress_state_ids: list[NonEmptyText] = Field(default_factory=list)
+    supporting_motivation_state_ids: list[NonEmptyText] = Field(default_factory=list)
     time_scale: TimeScale
     confidence: float = Field(ge=0.0, le=1.0)
 
-    @field_validator("drivers", "mediators", "constraints", "affected_agents")
+    @field_validator(
+        "drivers",
+        "mediators",
+        "constraints",
+        "affected_agents",
+        "supporting_event_ids",
+        "supporting_perception_ids",
+        "supporting_belief_ids",
+        "supporting_emotional_appraisal_ids",
+        "supporting_stress_state_ids",
+        "supporting_motivation_state_ids",
+    )
     @classmethod
     def reject_duplicates(cls, values: list[str]) -> list[str]:
         if len(values) != len(set(values)):

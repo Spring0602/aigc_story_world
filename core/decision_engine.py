@@ -5,6 +5,9 @@ from schemas import (
     CandidateFuture,
     Decision,
     Interpretation,
+    MotivationState,
+    PsychologyContext,
+    StressState,
     SubjectiveWorldModel,
     ValueAssessment,
 )
@@ -20,10 +23,27 @@ class DecisionEngine:
         interpretations: list[Interpretation],
         other_models: list[BeliefAboutOther],
         step: int,
+        psychology: PsychologyContext | None = None,
     ) -> tuple[CandidateFuture, list[ValueAssessment], list[Decision]]:
         models = {model.agent_id: model for model in subjective_models}
         latest_belief_state = {item.agent_id: item for item in belief_states}
         latest_interpretation = {item.agent_id: item for item in interpretations}
+        motivations = {
+            item.agent_id: item
+            for item in (psychology.motivation_states if psychology else [])
+        }
+        stress_states = {
+            item.agent_id: item
+            for item in (psychology.stress_states if psychology else [])
+        }
+        emotional_appraisals = {
+            item.agent_id: item
+            for item in (psychology.emotional_appraisals if psychology else [])
+        }
+        perceptions = {
+            item.agent_id: item
+            for item in (psychology.perceptions if psychology else [])
+        }
         other_models_by_observer: dict[str, list[BeliefAboutOther]] = {}
         for item in other_models:
             other_models_by_observer.setdefault(item.observer_agent_id, []).append(item)
@@ -49,6 +69,8 @@ class DecisionEngine:
                     belief_state,
                     proposed_action.action,
                     value_assessment_id=f"value_{step:03d}_{sequence:03d}",
+                    motivation=motivations.get(proposed_action.agent_id),
+                    stress=stress_states.get(proposed_action.agent_id),
                 )
                 assessments.append(assessment)
                 future_assessments.append(assessment)
@@ -101,6 +123,26 @@ class DecisionEngine:
                 belief_state_id=belief_state.belief_state_id,
                 interpretation_id=interpretation.interpretation_id,
                 value_assessment_id=assessment.value_assessment_id,
+                perception_id=(
+                    perceptions[agent_id].perception_id
+                    if agent_id in perceptions
+                    else None
+                ),
+                emotional_appraisal_id=(
+                    emotional_appraisals[agent_id].emotional_appraisal_id
+                    if agent_id in emotional_appraisals
+                    else None
+                ),
+                stress_state_id=(
+                    stress_states[agent_id].stress_state_id
+                    if agent_id in stress_states
+                    else None
+                ),
+                motivation_state_id=(
+                    motivations[agent_id].motivation_state_id
+                    if agent_id in motivations
+                    else None
+                ),
                 selected_action=proposed_action.action,
                 alternative_actions=[item for item in alternatives if item != proposed_action.action],
                 supporting_belief_ids=belief_state.belief_ids,
@@ -110,6 +152,8 @@ class DecisionEngine:
                 rationale=(
                     f"{interpretation.meaning}; action aligns with "
                     f"{', '.join(assessment.dominant_values) or 'default values'}; "
+                    f"motivation-alignment={assessment.motivation_alignment:.3f}; "
+                    f"stress-adjustment={assessment.stress_adjustment:.3f}; "
                     f"other-model adjustment={other_model_adjustment:.3f}."
                 ),
                 confidence=min(
@@ -153,6 +197,8 @@ class DecisionEngine:
         belief_state: BeliefState,
         action: str,
         value_assessment_id: str,
+        motivation: MotivationState | None = None,
+        stress: StressState | None = None,
     ) -> ValueAssessment:
         relevant_names = self._relevant_values(action)
         contributions = {
@@ -160,7 +206,30 @@ class DecisionEngine:
             for name in relevant_names
             if name in model.values
         }
-        score = sum(contributions.values()) / len(contributions) if contributions else 0.5
+        value_score = (
+            sum(contributions.values()) / len(contributions)
+            if contributions
+            else 0.5
+        )
+        motivation_alignment = (
+            self._motivation_alignment(action, motivation)
+            if motivation
+            else 0.5
+        )
+        stress_adjustment = (
+            self._stress_adjustment(action, motivation, stress)
+            if stress
+            else 0.0
+        )
+        score = (
+            self._clamp(
+                (value_score * 0.7)
+                + (motivation_alignment * 0.3)
+                + stress_adjustment
+            )
+            if motivation
+            else value_score
+        )
         dominant = [
             name
             for name, weight in sorted(contributions.items(), key=lambda item: item[1], reverse=True)
@@ -170,11 +239,66 @@ class DecisionEngine:
             value_assessment_id=value_assessment_id,
             agent_id=model.agent_id,
             belief_state_id=belief_state.belief_state_id,
+            motivation_state_id=(
+                motivation.motivation_state_id if motivation else None
+            ),
+            stress_state_id=stress.stress_state_id if stress else None,
             action=action,
             value_contributions=contributions,
             dominant_values=dominant,
+            motivation_alignment=motivation_alignment,
+            stress_adjustment=stress_adjustment,
             score=score,
         )
+
+    def _motivation_alignment(
+        self,
+        action: str,
+        motivation: MotivationState,
+    ) -> float:
+        if action == motivation.preferred_action:
+            return 1.0
+        scores = {
+            "verify_threat": {
+                "secretly": 1.0,
+                "help": 0.7,
+                "confront": 0.6,
+                "delay": 0.2,
+            },
+            "preserve_stability": {
+                "delay": 1.0,
+                "help": 0.7,
+                "secretly": 0.35,
+                "confront": 0.1,
+            },
+            "reduce_uncertainty": {
+                "help": 1.0,
+                "secretly": 0.75,
+                "delay": 0.55,
+                "confront": 0.15,
+            },
+        }[motivation.motive]
+        return next(
+            (score for token, score in scores.items() if token in action),
+            0.5,
+        )
+
+    def _stress_adjustment(
+        self,
+        action: str,
+        motivation: MotivationState | None,
+        stress: StressState,
+    ) -> float:
+        if "confront" in action:
+            return -0.2 * stress.level
+        if motivation and motivation.motive == "verify_threat" and "secretly" in action:
+            return 0.08 * stress.level
+        if motivation and motivation.motive == "preserve_stability" and "delay" in action:
+            return 0.06 * stress.level
+        return 0.0
+
+    def _clamp(self, value: float) -> float:
+        return min(1.0, max(0.0, value))
 
     def _relevant_values(self, action: str) -> tuple[str, ...]:
         if "secretly" in action:

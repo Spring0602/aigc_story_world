@@ -11,6 +11,7 @@ EvidencePolarity = Literal["supports", "contradicts"]
 class Evidence(BaseModel):
     evidence_id: str
     observation_id: str
+    perception_id: str | None = None
     agent_id: str
     step: int = Field(ge=0)
     source: str
