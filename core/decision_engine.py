@@ -4,6 +4,8 @@ from schemas import (
     BeliefState,
     CandidateFuture,
     Decision,
+    EconomicActionEvaluation,
+    EconomicContext,
     Interpretation,
     MotivationState,
     PsychologyContext,
@@ -24,6 +26,7 @@ class DecisionEngine:
         other_models: list[BeliefAboutOther],
         step: int,
         psychology: PsychologyContext | None = None,
+        economics: EconomicContext | None = None,
     ) -> tuple[CandidateFuture, list[ValueAssessment], list[Decision]]:
         models = {model.agent_id: model for model in subjective_models}
         latest_belief_state = {item.agent_id: item for item in belief_states}
@@ -43,6 +46,14 @@ class DecisionEngine:
         perceptions = {
             item.agent_id: item
             for item in (psychology.perceptions if psychology else [])
+        }
+        economic_evaluations = {
+            (item.agent_id, item.action): item
+            for item in (economics.action_evaluations if economics else [])
+        }
+        opportunity_costs = {
+            item.opportunity_cost_id: item
+            for item in (economics.opportunity_costs if economics else [])
         }
         other_models_by_observer: dict[str, list[BeliefAboutOther]] = {}
         for item in other_models:
@@ -71,6 +82,10 @@ class DecisionEngine:
                     value_assessment_id=f"value_{step:03d}_{sequence:03d}",
                     motivation=motivations.get(proposed_action.agent_id),
                     stress=stress_states.get(proposed_action.agent_id),
+                    economic_evaluation=economic_evaluations.get(
+                        (proposed_action.agent_id, proposed_action.action)
+                    ),
+                    opportunity_costs=opportunity_costs,
                 )
                 assessments.append(assessment)
                 future_assessments.append(assessment)
@@ -154,6 +169,8 @@ class DecisionEngine:
                     f"{', '.join(assessment.dominant_values) or 'default values'}; "
                     f"motivation-alignment={assessment.motivation_alignment:.3f}; "
                     f"stress-adjustment={assessment.stress_adjustment:.3f}; "
+                    f"economic-utility="
+                    f"{assessment.economic_utility if assessment.economic_utility is not None else 0.5:.3f}; "
                     f"other-model adjustment={other_model_adjustment:.3f}."
                 ),
                 confidence=min(
@@ -199,6 +216,8 @@ class DecisionEngine:
         value_assessment_id: str,
         motivation: MotivationState | None = None,
         stress: StressState | None = None,
+        economic_evaluation: EconomicActionEvaluation | None = None,
+        opportunity_costs: dict | None = None,
     ) -> ValueAssessment:
         relevant_names = self._relevant_values(action)
         contributions = {
@@ -230,6 +249,17 @@ class DecisionEngine:
             if motivation
             else value_score
         )
+        opportunity_cost = None
+        if economic_evaluation is not None:
+            opportunity = (opportunity_costs or {}).get(
+                economic_evaluation.opportunity_cost_id
+            )
+            opportunity_cost = (
+                opportunity.opportunity_cost if opportunity is not None else 0.0
+            )
+            score = self._clamp(
+                (score * 0.75) + (economic_evaluation.utility * 0.25)
+            )
         dominant = [
             name
             for name, weight in sorted(contributions.items(), key=lambda item: item[1], reverse=True)
@@ -243,11 +273,20 @@ class DecisionEngine:
                 motivation.motivation_state_id if motivation else None
             ),
             stress_state_id=stress.stress_state_id if stress else None,
+            economic_evaluation_id=(
+                economic_evaluation.economic_evaluation_id
+                if economic_evaluation
+                else None
+            ),
             action=action,
             value_contributions=contributions,
             dominant_values=dominant,
             motivation_alignment=motivation_alignment,
             stress_adjustment=stress_adjustment,
+            economic_utility=(
+                economic_evaluation.utility if economic_evaluation else None
+            ),
+            opportunity_cost=opportunity_cost,
             score=score,
         )
 

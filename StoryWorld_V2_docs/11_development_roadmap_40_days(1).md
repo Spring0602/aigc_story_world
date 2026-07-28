@@ -488,7 +488,7 @@ CausalHypothesis。
 
 ------------------------------------------------------------------------
 
-## Day 15-16：Economic Lens
+## Day 15-16：Economic Lens（已完成）
 
 学习：
 
@@ -499,7 +499,30 @@ CausalHypothesis。
 
 开发：
 
-    EconomicLens
+    schemas/economics.py
+    core/economic_engine.py
+    lenses/economics.py
+    tests/test_economic_lens.py
+
+完整链路：
+
+    World
+    → Information Boundary
+    → Belief
+    → Motivation + Value
+    → Decision
+    → Action
+
+验收结果：
+
+- Scarcity 同时表示物理数量不足与访问规则造成的 access scarcity。
+- InformationBoundary 明确记录角色可见信息、不可访问信息与 Observation 来源，角色不能直接使用隐藏事实内容。
+- Information Asymmetry 由边界覆盖率、Institution transparency 与 Belief uncertainty 共同计算。
+- 每项 Candidate Action 结合 Belief、Motivation 与 Value 生成收益、成本、净激励和机会成本。
+- Economic Utility 实际进入 ValueAssessment，并影响行动排序。
+- InformationBoundary、BeliefState、MotivationState、ValueAssessment、Decision 与 Action 保留闭合 ID 引用。
+- EconomicLens 按主体输出动态 CausalHypothesis，保留经济评估 provenance。
+- “资源充足且制度透明”反事实会降低约束，并提高公开行动效用。
 
 ------------------------------------------------------------------------
 

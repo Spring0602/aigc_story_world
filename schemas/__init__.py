@@ -7,6 +7,15 @@ from schemas.causal_hypothesis import CausalHypothesis, TimeScale
 from schemas.candidate_future import AgentAction, CandidateFuture, StateChange
 from schemas.cognitive import BiasFilterResult, BiasSignal, BiasType, MentalModel, SalienceFocus
 from schemas.evidence import BayesianBeliefUpdate, BeliefState, Evidence, EvidencePolarity
+from schemas.economics import (
+    EconomicActionEvaluation,
+    EconomicContext,
+    IncentiveAssessment,
+    InformationAsymmetryAssessment,
+    InformationBoundary,
+    OpportunityCostAssessment,
+    ScarcityAssessment,
+)
 from schemas.experiment import (
     CognitiveCondition,
     CognitiveExperimentTrial,
@@ -80,6 +89,8 @@ __all__ = [
     "Decision",
     "EmotionState",
     "EmotionalAppraisal",
+    "EconomicActionEvaluation",
+    "EconomicContext",
     "Epistemology",
     "EpistemologySwapResult",
     "EvidenceType",
@@ -91,6 +102,9 @@ __all__ = [
     "ImagePrompt",
     "InformationItem",
     "InformationVisibility",
+    "InformationAsymmetryAssessment",
+    "InformationBoundary",
+    "IncentiveAssessment",
     "Institution",
     "Interpretation",
     "Location",
@@ -101,6 +115,7 @@ __all__ = [
     "ObjectiveWorldState",
     "Observation",
     "ObservationVisibility",
+    "OpportunityCostAssessment",
     "Perception",
     "PsychologyContext",
     "PartialObservabilityControl",
@@ -111,6 +126,7 @@ __all__ = [
     "SceneCharacter",
     "SalienceFocus",
     "SameWorldDifferentMindsResult",
+    "ScarcityAssessment",
     "StateChange",
     "StateProvenance",
     "StressBand",

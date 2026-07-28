@@ -1,6 +1,7 @@
 from lenses.base import WorldLens
 from schemas import (
     CausalHypothesis,
+    EconomicContext,
     ObjectiveWorldState,
     PsychologyContext,
     SubjectiveWorldModel,
@@ -15,6 +16,7 @@ class SocialStructureLens(WorldLens):
         objective_state: ObjectiveWorldState,
         subjective_models: list[SubjectiveWorldModel],
         psychology: PsychologyContext | None = None,
+        economics: EconomicContext | None = None,
     ) -> list[CausalHypothesis]:
         step = objective_state.step + 1
         return [

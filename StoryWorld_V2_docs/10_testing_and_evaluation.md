@@ -154,6 +154,26 @@ World Event
 
 每一层必须引用前一层 ID。相同公开事件下，不同主体应因 Value、Epistemology、Belief 和 Emotion 形成不同 threat、stress 与 motivation；隐藏 Event 不得进入非行动者的 Perception。Motivation 或 Stress 变化后，至少一项候选行动评分必须产生可解释变化。
 
+## Economic Lens Test
+
+逐项检查：
+
+```text
+World
+Information Boundary
+Belief
+Motivation / Value
+Scarcity
+Information Asymmetry
+Incentive
+Opportunity Cost
+Economic Utility
+Decision
+Action
+```
+
+角色不得直接读取 World 中的隐藏信息内容。InformationBoundary 必须记录可见与不可访问信息及 Observation 来源；Scarcity 必须引用 Resource、Boundary 与 BeliefState，Information Asymmetry 必须由 boundary coverage、Institution transparency 和 belief uncertainty 共同形成。每项 Candidate Action 应有结构化收益与成本，并闭合引用 Boundary、Belief、Motivation、Value、Decision 与 Action。改变角色信息边界或 belief uncertainty 后，经济判断应产生差异；反事实将资源改为充足、公开访问且制度完全透明后，约束型行动成本应下降。
+
 ## Lens Ablation Test
 
 在同一世界状态下分别运行：

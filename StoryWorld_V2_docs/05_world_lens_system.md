@@ -97,6 +97,21 @@ Resource Dependence
 Strategic Exchange
 ```
 
+当前实现链路：
+
+```text
+World
+→ Information Boundary
+→ Belief
+→ Motivation + Value
+→ Decision
+→ Action
+```
+
+`EconomicEngine` 先按 Observation visibility 建立逐角色 `InformationBoundary`，禁止角色直接使用边界外隐藏事实。数量不足与访问规则分别形成 physical scarcity 和 access scarcity；Information Asymmetry 由可见信息覆盖率、Institution transparency 与 Belief uncertainty 共同决定。每个 Candidate Action 都会结合 Motivation 和 Value 生成收益、成本、净激励、放弃的最佳替代和 Economic Utility。
+
+`EconomicLens` 按主体的 Value、资源约束和信息位置生成动态 `CausalHypothesis`，并保存 supporting scarcity assessment 与 information asymmetry IDs。Economic Utility 必须进入 `ValueAssessment.score`，只生成经济学描述不算完成。
+
 ### SocialStructureLens
 
 第一版合并社会学与基础政治机制。

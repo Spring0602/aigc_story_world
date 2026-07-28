@@ -16,6 +16,12 @@ Perception
 EmotionalAppraisal
 StressState
 MotivationState
+InformationBoundary
+ScarcityAssessment
+InformationAsymmetryAssessment
+IncentiveAssessment
+OpportunityCostAssessment
+EconomicActionEvaluation
 CausalHypothesis
 AgentAction
 ValueAssessment
@@ -187,6 +193,24 @@ World Event
 - `StressState` 引用 EmotionalAppraisal，保存 stressors、level、band 与 coping capacity。
 - `MotivationState` 引用 Stress、Emotion 和 BeliefState，保存 motive、target、orientation、intensity 与 preferred action。
 - `ValueAssessment` 保存 Motivation alignment 与 Stress adjustment；`Decision` 引用整条心理状态链。
+
+## Economic Chain
+
+```text
+World
+→ InformationBoundary
+→ BeliefState
+→ MotivationState + ValueAssessment
+→ Decision
+→ Action
+```
+
+- `InformationBoundary` 保存 Observation 来源、visible / inaccessible information IDs、可见资源、访问规则与 coverage。
+- `ScarcityAssessment` 分离 physical scarcity 与 access scarcity，并引用 InformationBoundary、BeliefState、Resource 和 access-rule constraints。
+- `InformationAsymmetryAssessment` 由角色边界内可见覆盖率、transparency 与 belief uncertainty 计算，同时保留边界外信息 ID 供系统审计，但不得把其内容写入主体 Belief。
+- `IncentiveAssessment` 引用 InformationBoundary、BeliefState 与 MotivationState，对 Candidate Action 分解 benefits、costs、expected benefit、expected cost 与 net incentive。
+- `OpportunityCostAssessment` 记录选择当前行动所放弃的最佳替代。
+- `EconomicActionEvaluation` 闭合上述四类引用并给出相对 utility；`ValueAssessment` 保存该 utility 和 opportunity cost。
 
 ## StateChange
 

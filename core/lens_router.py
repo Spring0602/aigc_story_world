@@ -3,6 +3,7 @@ from lenses.psychology import PsychologyLens
 from lenses.social_structure import SocialStructureLens
 from schemas import (
     CausalHypothesis,
+    EconomicContext,
     ObjectiveWorldState,
     PsychologyContext,
     SubjectiveWorldModel,
@@ -18,10 +19,16 @@ class LensRouter:
         objective_state: ObjectiveWorldState,
         subjective_models: list[SubjectiveWorldModel],
         psychology: PsychologyContext | None = None,
+        economics: EconomicContext | None = None,
     ) -> list[CausalHypothesis]:
         hypotheses: list[CausalHypothesis] = []
         for lens in self.lenses:
             hypotheses.extend(
-                lens.analyze(objective_state, subjective_models, psychology)
+                lens.analyze(
+                    objective_state,
+                    subjective_models,
+                    psychology,
+                    economics,
+                )
             )
         return hypotheses

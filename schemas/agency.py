@@ -12,11 +12,14 @@ class ValueAssessment(BaseModel):
     belief_state_id: str
     motivation_state_id: str | None = None
     stress_state_id: str | None = None
+    economic_evaluation_id: str | None = None
     action: str
     value_contributions: dict[str, float] = Field(default_factory=dict)
     dominant_values: list[str] = Field(default_factory=list)
     motivation_alignment: float = Field(default=0.5, ge=0.0, le=1.0)
     stress_adjustment: float = Field(default=0.0, ge=-1.0, le=1.0)
+    economic_utility: float | None = Field(default=None, ge=0.0, le=1.0)
+    opportunity_cost: float | None = Field(default=None, ge=0.0, le=1.0)
     score: float = Field(ge=0.0, le=1.0)
 
 

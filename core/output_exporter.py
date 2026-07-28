@@ -25,6 +25,12 @@ class OutputExporter:
         emotional_appraisals,
         stress_states,
         motivation_states,
+        information_boundaries,
+        scarcity_assessments,
+        information_asymmetries,
+        incentive_assessments,
+        opportunity_costs,
+        economic_action_evaluations,
         beliefs_about_others,
         hypotheses,
         candidate_futures,
@@ -57,6 +63,27 @@ class OutputExporter:
         )
         self._write_json(run_dir / "stress_states.json", stress_states)
         self._write_json(run_dir / "motivation_states.json", motivation_states)
+        self._write_json(
+            run_dir / "information_boundaries.json",
+            information_boundaries,
+        )
+        self._write_json(
+            run_dir / "scarcity_assessments.json",
+            scarcity_assessments,
+        )
+        self._write_json(
+            run_dir / "information_asymmetries.json",
+            information_asymmetries,
+        )
+        self._write_json(
+            run_dir / "incentive_assessments.json",
+            incentive_assessments,
+        )
+        self._write_json(run_dir / "opportunity_costs.json", opportunity_costs)
+        self._write_json(
+            run_dir / "economic_action_evaluations.json",
+            economic_action_evaluations,
+        )
         self._write_json(run_dir / "beliefs_about_others.json", beliefs_about_others)
         self._write_json(run_dir / "hypotheses.json", hypotheses)
         self._write_json(run_dir / "candidate_futures.json", candidate_futures)

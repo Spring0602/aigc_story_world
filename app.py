@@ -4,6 +4,7 @@ import json
 from config import DEFAULT_NUM_STEPS
 from core.cognition_engine import CognitionEngine
 from core.decision_engine import ActionExecutor, DecisionEngine
+from core.economic_engine import EconomicEngine
 from core.future_evaluator import FutureEvaluator
 from core.future_generator import FutureGenerator
 from core.image_prompt_generator import ImagePromptGenerator
@@ -37,6 +38,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
     future_generator = FutureGenerator()
     future_evaluator = FutureEvaluator()
     decision_engine = DecisionEngine()
+    economic_engine = EconomicEngine()
     action_executor = ActionExecutor()
     transition = WorldTransition()
     narrative_engine = NarrativeEngine()
@@ -57,6 +59,12 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
     all_emotional_appraisals = []
     all_stress_states = []
     all_motivation_states = []
+    all_information_boundaries = []
+    all_scarcity_assessments = []
+    all_information_asymmetries = []
+    all_incentive_assessments = []
+    all_opportunity_costs = []
+    all_economic_action_evaluations = []
     all_other_models = []
     all_hypotheses = []
     all_candidate_futures = []
@@ -93,12 +101,26 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             observations,
             subjective_models,
         )
+        economics = economic_engine.assess_context(
+            objective_state,
+            subjective_models,
+            observations,
+            cognition.belief_states,
+        )
         hypotheses = lens_router.analyze(
             objective_state,
             subjective_models,
             psychology=psychology,
+            economics=economics,
         )
         futures = future_generator.generate(objective_state, subjective_models, hypotheses)
+        economics = economic_engine.evaluate_actions(
+            economics,
+            futures,
+            subjective_models,
+            step=objective_state.step + 1,
+            motivation_states=psychology.motivation_states,
+        )
         future_scores = {
             future.future_id: future_evaluator.score(
                 future,
@@ -117,6 +139,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             other_models=other_models,
             step=objective_state.step + 1,
             psychology=psychology,
+            economics=economics,
         )
         actions = action_executor.execute(decisions)
         new_state = transition.apply(
@@ -141,6 +164,12 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
         all_emotional_appraisals.extend(psychology.emotional_appraisals)
         all_stress_states.extend(psychology.stress_states)
         all_motivation_states.extend(psychology.motivation_states)
+        all_information_boundaries.extend(economics.information_boundaries)
+        all_scarcity_assessments.extend(economics.scarcity_assessments)
+        all_information_asymmetries.extend(economics.information_asymmetries)
+        all_incentive_assessments.extend(economics.incentive_assessments)
+        all_opportunity_costs.extend(economics.opportunity_costs)
+        all_economic_action_evaluations.extend(economics.action_evaluations)
         all_other_models.extend(other_models)
         all_hypotheses.extend(hypotheses)
         all_candidate_futures.extend(futures)
@@ -172,6 +201,12 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             emotional_appraisals=all_emotional_appraisals,
             stress_states=all_stress_states,
             motivation_states=all_motivation_states,
+            information_boundaries=all_information_boundaries,
+            scarcity_assessments=all_scarcity_assessments,
+            information_asymmetries=all_information_asymmetries,
+            incentive_assessments=all_incentive_assessments,
+            opportunity_costs=all_opportunity_costs,
+            economic_action_evaluations=all_economic_action_evaluations,
             beliefs_about_others=all_other_models,
             hypotheses=all_hypotheses,
             candidate_futures=all_candidate_futures,
@@ -201,6 +236,14 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
         "emotional_appraisals": to_dict(all_emotional_appraisals),
         "stress_states": to_dict(all_stress_states),
         "motivation_states": to_dict(all_motivation_states),
+        "information_boundaries": to_dict(all_information_boundaries),
+        "scarcity_assessments": to_dict(all_scarcity_assessments),
+        "information_asymmetries": to_dict(all_information_asymmetries),
+        "incentive_assessments": to_dict(all_incentive_assessments),
+        "opportunity_costs": to_dict(all_opportunity_costs),
+        "economic_action_evaluations": to_dict(
+            all_economic_action_evaluations
+        ),
         "beliefs_about_others": to_dict(all_other_models),
         "hypotheses": to_dict(all_hypotheses),
         "candidate_futures": to_dict(all_candidate_futures),

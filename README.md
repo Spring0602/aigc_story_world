@@ -24,7 +24,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 
 ## 当前进度
 
-目前已完成 40 天计划的前 14 天，核心研究链路可以端到端运行，并已完成第一项正式主体认知实验。
+目前已完成 40 天计划的前 16 天，核心研究链路可以端到端运行，并已完成第一项正式主体认知实验。
 
 | 阶段 | 已完成能力 | 状态 |
 | --- | --- | :---: |
@@ -39,7 +39,8 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 | Day 11 | 因果推理基础与 Causal Notes | 完成 |
 | Day 12 | CausalHypothesis Schema 强化 | 完成 |
 | Day 13-14 | Psychology Lens 与心理行动链 | 完成 |
-| Day 15-16 | Economic Lens | 下一步 |
+| Day 15-16 | Economic Lens 与约束下行动评估 | 完成 |
+| Day 17-18 | Social Structure Lens | 下一步 |
 
 当前基线包含 1 个共享客观世界、2 个角色、3 种认知 Lens，以及每个时间步 4 条候选未来。测试集还覆盖 Dataist、Institutionalist 和 Skeptic 三类认知配置，用于验证同一事实如何产生差异化判断。
 
@@ -132,6 +133,21 @@ World Event
 
 `PsychologyLens` 不再返回固定观点，而是针对每个主体读取实际 Perception、Emotion、Stress 和 Motivation，生成带完整来源 ID 的 `CausalHypothesis`。Motivation alignment 与 Stress adjustment 同时进入 `ValueAssessment`，因此心理状态会改变候选行动评分。
 
+### 8. Economic Lens
+
+经济机制遵循角色的有限信息边界，而不是直接把客观世界的隐藏事实交给角色：
+
+```text
+World
+→ Information Boundary
+→ Belief
+→ Motivation + Value Evaluation
+→ Decision
+→ Action
+```
+
+`InformationBoundary` 记录每个角色可见与不可访问的信息、Observation 来源、资源和访问规则。`EconomicEngine` 在该边界内结合 Belief uncertainty、Motivation 与 Value，对每项 Candidate Action 分解 Scarcity、Information Asymmetry、收益、成本和机会成本。最终 Economic Utility 进入 `ValueAssessment.score`，所有结果可沿 ID 追溯至 Decision 与 Action。
+
 ## 差异化效果示例
 
 面对相同的校园网络监控事实，不同认知配置会形成不同输出：
@@ -199,7 +215,7 @@ print(result["run_dir"])
 
 ## 输出说明
 
-每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 25 个 JSON 文件和 1 份 Markdown 报告。
+每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 31 个 JSON 文件和 1 份 Markdown 报告。
 
 | 分组 | 文件 | 用途 |
 | --- | --- | --- |
@@ -208,6 +224,7 @@ print(result["run_dir"])
 | 信念更新 | `belief_updates.json`、`belief_states.json` | 保存先验、后验及每步信念状态 |
 | 主观认知 | `subjective_models.json`、`mental_models.json`、`bias_filter_results.json`、`interpretations.json` | 展示从认知框架到解释的完整过程 |
 | 心理机制 | `perceptions.json`、`emotional_appraisals.json`、`stress_states.json`、`motivation_states.json` | 展示事件如何通过心理状态进入价值评估和决策 |
+| 经济机制 | `information_boundaries.json`、`scarcity_assessments.json`、`information_asymmetries.json`、`incentive_assessments.json`、`opportunity_costs.json`、`economic_action_evaluations.json` | 展示角色的信息边界、信念和动机如何改变行动的收益、成本及相对效用 |
 | 他心模型 | `beliefs_about_others.json` | 保存主体对其他主体信念、目标与动作的预测 |
 | 未来推演 | `hypotheses.json`、`candidate_futures.json`、`selected_futures.json` | 保存机制假设和候选世界走向 |
 | 决策与行动 | `value_assessments.json`、`decisions.json`、`actions.json` | 解释为何选择某项行动以及如何执行 |
@@ -240,7 +257,7 @@ print(result["run_dir"])
 python -m unittest discover -v
 ```
 
-当前共有 46 项自动化测试，覆盖：
+当前共有 54 项自动化测试，覆盖：
 
 - Pydantic Schema 校验与跨对象引用。
 - Observation、Evidence、Belief Update 和 Interpretation 链路。
@@ -250,6 +267,7 @@ python -m unittest discover -v
 - NarrativeEvent、SceneCard、ImagePrompt 和完整导出结果。
 - Same World Different Minds、参数交换和 Partial Observability 对照。
 - World Event 到 Action 的心理链路、主体差异和隐藏事件边界。
+- Information Boundary、Belief、Motivation、Value 到 Action 的角色经济链及经济反事实。
 
 运行 Day 10 正式实验：
 
