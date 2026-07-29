@@ -102,6 +102,18 @@ World
 
 `assess_context()` 先根据 Observation visibility 生成逐主体 InformationBoundary，再结合 Belief uncertainty、Resource quantity、owner、access rules 和 Institution transparency 形成角色可知的经济约束。`evaluate_actions()` 结合 Motivation 与 Value，对 Candidate Actions 计算 expected benefit、expected cost、net incentive、forgone alternative 和 opportunity cost。DecisionEngine 将 Economic Utility 作为 `ValueAssessment` 的独立评分分量，并保留 Boundary、Belief、Motivation、Decision 与 Action 的闭合引用。
 
+## SocialStructureEngine
+
+```text
+World → Observation → Belief
+                    ├→ Psychology: Motivation / Emotion / Bias
+                    └→ Society: Role / Norm / Institution
+                                      ↓
+                              Decision → Action
+```
+
+`assess_context()` 从 Agent roles、Norm clarity / sanctions、Institution authority / resource control 生成逐主体 RoleAssessment、NormPressureAssessment 和 InstitutionPowerAssessment。`evaluate_actions()` 将这些社会状态与 PsychologyContext、BiasFilterResult 汇合，对 Candidate Action 计算社会适配度。DecisionEngine 将 Social compatibility 作为 `ValueAssessment` 的独立评分分量，并在 Decision 中保留 `social_evaluation_id`。
+
 ## BeliefUpdater
 
 输入旧 Belief 与结构化 Evidence，使用显式先验、`P(E|H)` 和 `P(E|~H)` 计算后验。支持性证据提高后验，反驳性证据降低后验；每次更新输出 `BayesianBeliefUpdate` 与 `BeliefState`，不以新对象覆盖历史原因链。

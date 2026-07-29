@@ -128,6 +128,20 @@ Power Asymmetry
 Collective Pressure
 ```
 
+当前实现链路：
+
+```text
+World → Observation → Belief
+                    ├→ Psychology: Motivation / Emotion / Bias
+                    └→ Society: Role / Norm / Institution
+                                      ↓
+                              Decision → Action
+```
+
+`SocialStructureEngine` 将角色期待、规范清晰度、制裁、制度权限、资源控制和权力不对称转换为逐主体社会状态。每项 Candidate Action 均产生 role alignment、norm compliance、institutional risk、social support 和 compatibility。
+
+`SocialStructureLens` 按主体生成动态 `CausalHypothesis`，引用 RoleAssessment、NormPressureAssessment 和 InstitutionPowerAssessment。Social compatibility 必须进入 `ValueAssessment.score`；若改变制度权力后行动评分不变，则社会 Lens 尚未有效接入。
+
 ## 后续 Lens
 
 ```text

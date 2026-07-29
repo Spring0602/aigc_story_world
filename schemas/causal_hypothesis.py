@@ -36,6 +36,15 @@ class CausalHypothesis(BaseModel):
     supporting_information_asymmetry_ids: list[NonEmptyText] = Field(
         default_factory=list
     )
+    supporting_role_assessment_ids: list[NonEmptyText] = Field(
+        default_factory=list
+    )
+    supporting_norm_pressure_ids: list[NonEmptyText] = Field(
+        default_factory=list
+    )
+    supporting_institution_power_ids: list[NonEmptyText] = Field(
+        default_factory=list
+    )
     time_scale: TimeScale
     confidence: float = Field(ge=0.0, le=1.0)
 
@@ -52,6 +61,9 @@ class CausalHypothesis(BaseModel):
         "supporting_motivation_state_ids",
         "supporting_scarcity_assessment_ids",
         "supporting_information_asymmetry_ids",
+        "supporting_role_assessment_ids",
+        "supporting_norm_pressure_ids",
+        "supporting_institution_power_ids",
     )
     @classmethod
     def reject_duplicates(cls, values: list[str]) -> list[str]:

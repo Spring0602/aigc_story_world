@@ -6,6 +6,7 @@ from schemas import (
     EconomicContext,
     ObjectiveWorldState,
     PsychologyContext,
+    SocialContext,
     SubjectiveWorldModel,
 )
 
@@ -20,6 +21,7 @@ class LensRouter:
         subjective_models: list[SubjectiveWorldModel],
         psychology: PsychologyContext | None = None,
         economics: EconomicContext | None = None,
+        social: SocialContext | None = None,
     ) -> list[CausalHypothesis]:
         hypotheses: list[CausalHypothesis] = []
         for lens in self.lenses:
@@ -29,6 +31,7 @@ class LensRouter:
                     subjective_models,
                     psychology,
                     economics,
+                    social,
                 )
             )
         return hypotheses

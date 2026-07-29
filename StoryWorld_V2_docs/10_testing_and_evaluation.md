@@ -174,6 +174,20 @@ Action
 
 角色不得直接读取 World 中的隐藏信息内容。InformationBoundary 必须记录可见与不可访问信息及 Observation 来源；Scarcity 必须引用 Resource、Boundary 与 BeliefState，Information Asymmetry 必须由 boundary coverage、Institution transparency 和 belief uncertainty 共同形成。每项 Candidate Action 应有结构化收益与成本，并闭合引用 Boundary、Belief、Motivation、Value、Decision 与 Action。改变角色信息边界或 belief uncertainty 后，经济判断应产生差异；反事实将资源改为充足、公开访问且制度完全透明后，约束型行动成本应下降。
 
+## Social Structure Lens Test
+
+验证完整社会智能体链：
+
+```text
+World → Observation → Belief
+                    ├→ Motivation / Emotion / Bias
+                    └→ Role / Norm / Institution
+                                      ↓
+                              Decision → Action
+```
+
+RoleAssessment、NormPressureAssessment 与 InstitutionPowerAssessment 必须引用角色 Observation 和 BeliefState。SocialActionEvaluation 必须同时引用 Motivation、EmotionalAppraisal、BiasFilterResult 与社会状态，并实际进入 ValueAssessment。降低 Institution authority、resource control 和 Norm sanctions 后，公开对抗的 institutional risk 应下降、social compatibility 应上升。
+
 ## Lens Ablation Test
 
 在同一世界状态下分别运行：

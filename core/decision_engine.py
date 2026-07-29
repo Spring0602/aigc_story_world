@@ -9,6 +9,8 @@ from schemas import (
     Interpretation,
     MotivationState,
     PsychologyContext,
+    SocialActionEvaluation,
+    SocialContext,
     StressState,
     SubjectiveWorldModel,
     ValueAssessment,
@@ -27,6 +29,7 @@ class DecisionEngine:
         step: int,
         psychology: PsychologyContext | None = None,
         economics: EconomicContext | None = None,
+        social: SocialContext | None = None,
     ) -> tuple[CandidateFuture, list[ValueAssessment], list[Decision]]:
         models = {model.agent_id: model for model in subjective_models}
         latest_belief_state = {item.agent_id: item for item in belief_states}
@@ -54,6 +57,10 @@ class DecisionEngine:
         opportunity_costs = {
             item.opportunity_cost_id: item
             for item in (economics.opportunity_costs if economics else [])
+        }
+        social_evaluations = {
+            (item.agent_id, item.action): item
+            for item in (social.action_evaluations if social else [])
         }
         other_models_by_observer: dict[str, list[BeliefAboutOther]] = {}
         for item in other_models:
@@ -86,6 +93,9 @@ class DecisionEngine:
                         (proposed_action.agent_id, proposed_action.action)
                     ),
                     opportunity_costs=opportunity_costs,
+                    social_evaluation=social_evaluations.get(
+                        (proposed_action.agent_id, proposed_action.action)
+                    ),
                 )
                 assessments.append(assessment)
                 future_assessments.append(assessment)
@@ -158,6 +168,7 @@ class DecisionEngine:
                     if agent_id in motivations
                     else None
                 ),
+                social_evaluation_id=assessment.social_evaluation_id,
                 selected_action=proposed_action.action,
                 alternative_actions=[item for item in alternatives if item != proposed_action.action],
                 supporting_belief_ids=belief_state.belief_ids,
@@ -171,6 +182,8 @@ class DecisionEngine:
                     f"stress-adjustment={assessment.stress_adjustment:.3f}; "
                     f"economic-utility="
                     f"{assessment.economic_utility if assessment.economic_utility is not None else 0.5:.3f}; "
+                    f"social-compatibility="
+                    f"{assessment.social_compatibility if assessment.social_compatibility is not None else 0.5:.3f}; "
                     f"other-model adjustment={other_model_adjustment:.3f}."
                 ),
                 confidence=min(
@@ -218,6 +231,7 @@ class DecisionEngine:
         stress: StressState | None = None,
         economic_evaluation: EconomicActionEvaluation | None = None,
         opportunity_costs: dict | None = None,
+        social_evaluation: SocialActionEvaluation | None = None,
     ) -> ValueAssessment:
         relevant_names = self._relevant_values(action)
         contributions = {
@@ -260,6 +274,10 @@ class DecisionEngine:
             score = self._clamp(
                 (score * 0.75) + (economic_evaluation.utility * 0.25)
             )
+        if social_evaluation is not None:
+            score = self._clamp(
+                (score * 0.8) + (social_evaluation.compatibility * 0.2)
+            )
         dominant = [
             name
             for name, weight in sorted(contributions.items(), key=lambda item: item[1], reverse=True)
@@ -278,6 +296,11 @@ class DecisionEngine:
                 if economic_evaluation
                 else None
             ),
+            social_evaluation_id=(
+                social_evaluation.social_evaluation_id
+                if social_evaluation
+                else None
+            ),
             action=action,
             value_contributions=contributions,
             dominant_values=dominant,
@@ -287,6 +310,11 @@ class DecisionEngine:
                 economic_evaluation.utility if economic_evaluation else None
             ),
             opportunity_cost=opportunity_cost,
+            social_compatibility=(
+                social_evaluation.compatibility
+                if social_evaluation
+                else None
+            ),
             score=score,
         )
 

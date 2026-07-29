@@ -4,6 +4,7 @@ from schemas import (
     EconomicContext,
     ObjectiveWorldState,
     PsychologyContext,
+    SocialContext,
     SubjectiveWorldModel,
 )
 
@@ -17,6 +18,7 @@ class EconomicLens(WorldLens):
         subjective_models: list[SubjectiveWorldModel],
         psychology: PsychologyContext | None = None,
         economics: EconomicContext | None = None,
+        social: SocialContext | None = None,
     ) -> list[CausalHypothesis]:
         step = objective_state.step + 1
         if economics is None or not economics.scarcity_assessments:

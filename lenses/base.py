@@ -5,6 +5,7 @@ from schemas import (
     EconomicContext,
     ObjectiveWorldState,
     PsychologyContext,
+    SocialContext,
     SubjectiveWorldModel,
 )
 
@@ -19,5 +20,6 @@ class WorldLens(ABC):
         subjective_models: list[SubjectiveWorldModel],
         psychology: PsychologyContext | None = None,
         economics: EconomicContext | None = None,
+        social: SocialContext | None = None,
     ) -> list[CausalHypothesis]:
         raise NotImplementedError

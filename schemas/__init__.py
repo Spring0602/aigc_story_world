@@ -52,6 +52,13 @@ from schemas.psychology import (
     StressState,
 )
 from schemas.scene_card import CameraSetup, ImagePrompt, SceneCard, SceneCharacter
+from schemas.social_structure import (
+    InstitutionPowerAssessment,
+    NormPressureAssessment,
+    RoleAssessment,
+    SocialActionEvaluation,
+    SocialContext,
+)
 from schemas.subjective_world import (
     Belief,
     EmotionState,
@@ -106,6 +113,7 @@ __all__ = [
     "InformationBoundary",
     "IncentiveAssessment",
     "Institution",
+    "InstitutionPowerAssessment",
     "Interpretation",
     "Location",
     "MentalModel",
@@ -120,8 +128,10 @@ __all__ = [
     "PsychologyContext",
     "PartialObservabilityControl",
     "Norm",
+    "NormPressureAssessment",
     "Relationship",
     "Resource",
+    "RoleAssessment",
     "SceneCard",
     "SceneCharacter",
     "SalienceFocus",
@@ -131,6 +141,8 @@ __all__ = [
     "StateProvenance",
     "StressBand",
     "StressState",
+    "SocialActionEvaluation",
+    "SocialContext",
     "SubjectiveWorldModel",
     "HumanNatureModel",
     "KnowledgeItem",

@@ -31,6 +31,10 @@ class OutputExporter:
         incentive_assessments,
         opportunity_costs,
         economic_action_evaluations,
+        role_assessments,
+        norm_pressures,
+        institution_powers,
+        social_action_evaluations,
         beliefs_about_others,
         hypotheses,
         candidate_futures,
@@ -83,6 +87,16 @@ class OutputExporter:
         self._write_json(
             run_dir / "economic_action_evaluations.json",
             economic_action_evaluations,
+        )
+        self._write_json(run_dir / "role_assessments.json", role_assessments)
+        self._write_json(run_dir / "norm_pressures.json", norm_pressures)
+        self._write_json(
+            run_dir / "institution_powers.json",
+            institution_powers,
+        )
+        self._write_json(
+            run_dir / "social_action_evaluations.json",
+            social_action_evaluations,
         )
         self._write_json(run_dir / "beliefs_about_others.json", beliefs_about_others)
         self._write_json(run_dir / "hypotheses.json", hypotheses)

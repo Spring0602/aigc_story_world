@@ -233,8 +233,11 @@ class EconomicLensTest(unittest.TestCase):
                 + selected["stress_adjustment"],
             ),
         )
-        expected = (psychological_score * 0.75) + (
+        economic_score = (psychological_score * 0.75) + (
             selected["economic_utility"] * 0.25
+        )
+        expected = (economic_score * 0.8) + (
+            selected["social_compatibility"] * 0.2
         )
         self.assertAlmostEqual(selected["score"], expected)
 

@@ -13,6 +13,7 @@ class ValueAssessment(BaseModel):
     motivation_state_id: str | None = None
     stress_state_id: str | None = None
     economic_evaluation_id: str | None = None
+    social_evaluation_id: str | None = None
     action: str
     value_contributions: dict[str, float] = Field(default_factory=dict)
     dominant_values: list[str] = Field(default_factory=list)
@@ -20,6 +21,7 @@ class ValueAssessment(BaseModel):
     stress_adjustment: float = Field(default=0.0, ge=-1.0, le=1.0)
     economic_utility: float | None = Field(default=None, ge=0.0, le=1.0)
     opportunity_cost: float | None = Field(default=None, ge=0.0, le=1.0)
+    social_compatibility: float | None = Field(default=None, ge=0.0, le=1.0)
     score: float = Field(ge=0.0, le=1.0)
 
 
@@ -34,6 +36,7 @@ class Decision(BaseModel):
     emotional_appraisal_id: str | None = None
     stress_state_id: str | None = None
     motivation_state_id: str | None = None
+    social_evaluation_id: str | None = None
     selected_action: str
     alternative_actions: list[str] = Field(default_factory=list)
     supporting_belief_ids: list[str] = Field(default_factory=list)

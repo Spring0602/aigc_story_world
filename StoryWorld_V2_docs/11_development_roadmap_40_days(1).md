@@ -526,7 +526,7 @@ CausalHypothesis。
 
 ------------------------------------------------------------------------
 
-## Day 17-18：Social Structure Lens
+## Day 17-18：Social Structure Lens（已完成）
 
 学习：
 
@@ -538,7 +538,27 @@ CausalHypothesis。
 
 开发：
 
-    SocialStructureLens
+    schemas/social_structure.py
+    core/social_structure_engine.py
+    lenses/social_structure.py
+    tests/test_social_structure_lens.py
+
+完整链路：
+
+    World → Observation → Belief
+                        ├→ Psychology: Motivation / Emotion / Bias
+                        └→ Society: Role / Norm / Institution
+                                          ↓
+                                  Decision → Action
+
+验收结果：
+
+- RoleAssessment、NormPressureAssessment、InstitutionPowerAssessment 均引用 Observation 与 BeliefState。
+- SocialActionEvaluation 同时闭合 Psychology 和 Society 两条分支。
+- Role alignment、Norm compliance、Institutional risk 与 Social support 形成 Social compatibility。
+- Social compatibility 实际进入 ValueAssessment，并通过 Decision 引用到 Action。
+- SocialStructureLens 按主体输出动态 CausalHypothesis，并保留 Role、Norm、Institution provenance。
+- 降低制度权限、资源控制和规范制裁后，公开对抗风险下降、社会适配度上升。
 
 ------------------------------------------------------------------------
 

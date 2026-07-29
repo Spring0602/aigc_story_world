@@ -22,6 +22,10 @@ InformationAsymmetryAssessment
 IncentiveAssessment
 OpportunityCostAssessment
 EconomicActionEvaluation
+RoleAssessment
+NormPressureAssessment
+InstitutionPowerAssessment
+SocialActionEvaluation
 CausalHypothesis
 AgentAction
 ValueAssessment
@@ -211,6 +215,24 @@ World
 - `IncentiveAssessment` 引用 InformationBoundary、BeliefState 与 MotivationState，对 Candidate Action 分解 benefits、costs、expected benefit、expected cost 与 net incentive。
 - `OpportunityCostAssessment` 记录选择当前行动所放弃的最佳替代。
 - `EconomicActionEvaluation` 闭合上述四类引用并给出相对 utility；`ValueAssessment` 保存该 utility 和 opportunity cost。
+
+## Social Agent Chain
+
+```text
+World → Observation → BeliefState
+                         ├→ Motivation / Emotion / Bias
+                         └→ Role / Norm / Institution
+                                      ↓
+                    SocialActionEvaluation
+                                      ↓
+                       ValueAssessment → Decision → Action
+```
+
+- `RoleAssessment` 保存角色集合、行为期待、role constraint、role conflict，并引用 Observation 与 BeliefState。
+- `NormPressureAssessment` 保存规范清晰度、制裁强度和 compliance pressure。
+- `InstitutionPowerAssessment` 保存 authority scope、受控制资源、resource dependence、authority power 与 power asymmetry。
+- `SocialActionEvaluation` 闭合心理与社会两条分支，计算 role alignment、norm compliance、institutional risk、social support 和 compatibility。
+- `ValueAssessment` 与 `Decision` 保存 `social_evaluation_id`，使 Action 可追溯到完整社会原因链。
 
 ## StateChange
 
