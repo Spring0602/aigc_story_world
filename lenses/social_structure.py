@@ -74,6 +74,15 @@ class SocialStructureLens(WorldLens):
                     constraints=[
                         f"role:{'+'.join(role.roles) or 'unspecified'}"
                     ],
+                    promotes_actions=(
+                        [
+                            "secretly_collect_network_evidence",
+                            "ask_roommate_for_help",
+                        ]
+                        if not prefers_compliance
+                        else ["delay_action"]
+                    ),
+                    inhibits_actions=["confront_authority"],
                     affected_agents=[agent_id],
                     supporting_role_assessment_ids=[
                         role.role_assessment_id
@@ -101,6 +110,8 @@ class SocialStructureLens(WorldLens):
             drivers=["authority_asymmetry", "institutional_opacity"],
             mediators=["role_constraint", "fear_of_sanction"],
             constraints=["unclear_policy_boundary"],
+            promotes_actions=["delay_action"],
+            inhibits_actions=["confront_authority"],
             affected_agents=["lin_xia", "wang_chen"],
             time_scale="days",
             confidence=0.69,

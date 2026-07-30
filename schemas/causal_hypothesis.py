@@ -23,6 +23,8 @@ class CausalHypothesis(BaseModel):
     drivers: list[NonEmptyText] = Field(min_length=1)
     mediators: list[NonEmptyText] = Field(min_length=1)
     constraints: list[NonEmptyText] = Field(min_length=1)
+    promotes_actions: list[NonEmptyText] = Field(default_factory=list)
+    inhibits_actions: list[NonEmptyText] = Field(default_factory=list)
     affected_agents: list[NonEmptyText] = Field(default_factory=list)
     supporting_event_ids: list[NonEmptyText] = Field(default_factory=list)
     supporting_perception_ids: list[NonEmptyText] = Field(default_factory=list)
@@ -52,6 +54,8 @@ class CausalHypothesis(BaseModel):
         "drivers",
         "mediators",
         "constraints",
+        "promotes_actions",
+        "inhibits_actions",
         "affected_agents",
         "supporting_event_ids",
         "supporting_perception_ids",
@@ -87,5 +91,13 @@ class CausalHypothesis(BaseModel):
             repeated = ", ".join(sorted(overlaps))
             raise ValueError(
                 f"drivers, mediators, and constraints must have distinct roles: {repeated}"
+            )
+        action_overlap = set(self.promotes_actions).intersection(
+            self.inhibits_actions
+        )
+        if action_overlap:
+            repeated = ", ".join(sorted(action_overlap))
+            raise ValueError(
+                f"an action cannot be both promoted and inhibited: {repeated}"
             )
         return self

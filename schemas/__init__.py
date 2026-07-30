@@ -26,6 +26,12 @@ from schemas.experiment import (
     SameWorldDifferentMindsResult,
 )
 from schemas.interpretation import Interpretation
+from schemas.hypothesis_relation import (
+    HypothesisRelation,
+    HypothesisRelationType,
+    LensAnalysisResult,
+    ResolutionStatus,
+)
 from schemas.narrative_event import NarrativeEvent
 from schemas.objective_world import (
     ActiveProcess,
@@ -115,7 +121,10 @@ __all__ = [
     "Institution",
     "InstitutionPowerAssessment",
     "Interpretation",
+    "HypothesisRelation",
+    "HypothesisRelationType",
     "Location",
+    "LensAnalysisResult",
     "MentalModel",
     "MotivationState",
     "MotivationType",
@@ -131,6 +140,7 @@ __all__ = [
     "NormPressureAssessment",
     "Relationship",
     "Resource",
+    "ResolutionStatus",
     "RoleAssessment",
     "SceneCard",
     "SceneCharacter",

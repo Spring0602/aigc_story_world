@@ -37,6 +37,7 @@ class OutputExporter:
         social_action_evaluations,
         beliefs_about_others,
         hypotheses,
+        hypothesis_relations,
         candidate_futures,
         selected_futures,
         value_assessments,
@@ -100,6 +101,10 @@ class OutputExporter:
         )
         self._write_json(run_dir / "beliefs_about_others.json", beliefs_about_others)
         self._write_json(run_dir / "hypotheses.json", hypotheses)
+        self._write_json(
+            run_dir / "hypothesis_relations.json",
+            hypothesis_relations,
+        )
         self._write_json(run_dir / "candidate_futures.json", candidate_futures)
         self._write_json(run_dir / "selected_futures.json", selected_futures)
         self._write_json(run_dir / "value_assessments.json", value_assessments)

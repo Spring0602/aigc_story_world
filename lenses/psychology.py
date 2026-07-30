@@ -58,6 +58,12 @@ class PsychologyLens(WorldLens):
                         f"stress_load:{stress.band}",
                         f"coping_capacity:{coping_band}",
                     ],
+                    promotes_actions=self._promoted_actions(
+                        motivation.motive
+                    ),
+                    inhibits_actions=self._inhibited_actions(
+                        motivation.motive
+                    ),
                     affected_agents=[motivation.agent_id],
                     supporting_event_ids=[perception.source_event_id],
                     supporting_perception_ids=[perception.perception_id],
@@ -88,6 +94,8 @@ class PsychologyLens(WorldLens):
             drivers=["unclear_monitoring_scope", "private_dns_redirect"],
             mediators=["curiosity", "fear", "need_for_control"],
             constraints=["risk_of_punishment", "limited_evidence"],
+            promotes_actions=["secretly_collect_network_evidence"],
+            inhibits_actions=["confront_authority"],
             affected_agents=["lin_xia"],
             time_scale="hours",
             confidence=0.72,
@@ -99,6 +107,18 @@ class PsychologyLens(WorldLens):
         if motive == "preserve_stability":
             return "安全价值通过稳定动机，降低主体立即对抗制度的可能性。"
         return "高不确定性通过证据寻求动机，促使主体延迟定论并寻找旁证。"
+
+    def _promoted_actions(self, motive: str) -> list[str]:
+        if motive == "verify_threat":
+            return ["secretly_collect_network_evidence"]
+        if motive == "preserve_stability":
+            return ["delay_action"]
+        return ["ask_roommate_for_help", "secretly_collect_network_evidence"]
+
+    def _inhibited_actions(self, motive: str) -> list[str]:
+        if motive == "verify_threat":
+            return ["delay_action"]
+        return ["confront_authority"]
 
     def _band(self, value: float) -> str:
         if value < 0.35:

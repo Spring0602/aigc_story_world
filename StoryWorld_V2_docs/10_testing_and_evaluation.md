@@ -188,6 +188,20 @@ World → Observation → Belief
 
 RoleAssessment、NormPressureAssessment 与 InstitutionPowerAssessment 必须引用角色 Observation 和 BeliefState。SocialActionEvaluation 必须同时引用 Motivation、EmotionalAppraisal、BiasFilterResult 与社会状态，并实际进入 ValueAssessment。降低 Institution authority、resource control 和 Norm sanctions 后，公开对抗的 institutional risk 应下降、social compatibility 应上升。
 
+## Hypothesis Conflict Resolver Test
+
+至少覆盖：
+
+```text
+same promoted/inhibited action → supports
+promote X vs inhibit X → contradicts + unresolved
+no direct action overlap → conditions
+same hypothesis count + different relation quality → different future score
+disable Lens → Hypothesis Pool and relations exclude that Lens
+```
+
+Resolver 不得使用 claim 文案关键词判断关系。测试应直接构造 `promotes_actions / inhibits_actions`，并验证相同数量的支持假设得分高于冲突假设。
+
 ## Lens Ablation Test
 
 在同一世界状态下分别运行：

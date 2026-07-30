@@ -76,6 +76,12 @@ class EconomicLens(WorldLens):
                     constraints=[
                         f"access_level:{self._band(scarcity.access_level)}"
                     ],
+                    promotes_actions=(
+                        ["secretly_collect_network_evidence"]
+                        if investigation_preferred
+                        else ["delay_action"]
+                    ),
+                    inhibits_actions=["confront_authority"],
                     affected_agents=[agent_id],
                     supporting_scarcity_assessment_ids=[
                         scarcity.scarcity_assessment_id
@@ -102,6 +108,8 @@ class EconomicLens(WorldLens):
             drivers=["information_asymmetry", "high_public_confrontation_cost"],
             mediators=["opportunity_cost", "resource_dependence"],
             constraints=["limited_access_to_network_logs"],
+            promotes_actions=["secretly_collect_network_evidence"],
+            inhibits_actions=["confront_authority"],
             affected_agents=["lin_xia", "wang_chen"],
             time_scale="hours",
             confidence=0.64,

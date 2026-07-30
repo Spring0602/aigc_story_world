@@ -22,6 +22,7 @@ InformationAsymmetryAssessment
 IncentiveAssessment
 OpportunityCostAssessment
 EconomicActionEvaluation
+HypothesisRelation
 RoleAssessment
 NormPressureAssessment
 InstitutionPowerAssessment
@@ -37,12 +38,6 @@ Event (WorldEvent)
 NarrativeEvent
 SceneCard
 ImagePrompt
-```
-
-V2.2 研究计划新增或强化：
-
-```text
-HypothesisRelation
 ```
 
 “字段存在”不等于“研究模型完成”：后续 Schema 仍必须通过可验证行为、信息边界和完整引用链验收。
@@ -233,6 +228,19 @@ World → Observation → BeliefState
 - `InstitutionPowerAssessment` 保存 authority scope、受控制资源、resource dependence、authority power 与 power asymmetry。
 - `SocialActionEvaluation` 闭合心理与社会两条分支，计算 role alignment、norm compliance、institutional risk、social support 和 compatibility。
 - `ValueAssessment` 与 `Decision` 保存 `social_evaluation_id`，使 Action 可追溯到完整社会原因链。
+
+## HypothesisRelation
+
+```text
+source_hypothesis_id / target_hypothesis_id
+source_lens / target_lens
+relation_type: supports | contradicts | conditions
+basis / shared_drivers / affected_agents
+strength
+resolution_status: reinforcing | context_dependent | unresolved
+```
+
+关系仅在具有共同 affected agent 的跨 Lens 假设之间生成。`contradicts` 必须保留为 `unresolved`，不得通过平均 confidence 隐式消除。`LensAnalysisResult` 同时保存 enabled lenses、Hypothesis Pool、relations 与 unresolved conflict IDs。
 
 ## StateChange
 

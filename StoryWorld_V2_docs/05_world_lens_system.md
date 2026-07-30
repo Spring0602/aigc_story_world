@@ -219,7 +219,14 @@ shared_drivers
 unresolved_tensions
 ```
 
-Future Evaluator 必须能看到这些冲突，避免把三个假设简单计数后当作一致支持。
+当前实现中，每个 `CausalHypothesis` 使用 `promotes_actions` 与 `inhibits_actions` 明确行动方向。`HypothesisConflictResolver` 对具有共同 affected agent 的跨 Lens 假设两两分析：
+
+- 行动方向相同输出 `supports / reinforcing`。
+- 促进与抑制同一行动输出 `contradicts / unresolved`。
+- 无直接行动交集时输出 `conditions / context_dependent`。
+- 所有关系保留 basis、shared drivers、affected agents 与 strength。
+
+FutureEvaluator 使用假设 confidence 与 HypothesisRelation 调整 causal support：支持关系加权、未解决冲突扣分、缺失条件扣分，避免把三个假设简单计数后当作一致支持。
 
 ## Lens Ablation
 

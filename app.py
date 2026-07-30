@@ -73,6 +73,8 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
     all_social_action_evaluations = []
     all_other_models = []
     all_hypotheses = []
+    all_hypothesis_relations = []
+    all_unresolved_hypothesis_conflicts = []
     all_candidate_futures = []
     selected_futures = []
     all_value_assessments = []
@@ -119,13 +121,14 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             subjective_models,
             cognition.belief_states,
         )
-        hypotheses = lens_router.analyze(
+        lens_analysis = lens_router.route(
             objective_state,
             subjective_models,
             psychology=psychology,
             economics=economics,
             social=social,
         )
+        hypotheses = lens_analysis.hypotheses
         futures = future_generator.generate(objective_state, subjective_models, hypotheses)
         economics = economic_engine.evaluate_actions(
             economics,
@@ -149,6 +152,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
                 objective_state,
                 subjective_models,
                 hypotheses,
+                lens_analysis.relations,
             )
             for future in futures
         }
@@ -199,6 +203,10 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
         all_social_action_evaluations.extend(social.action_evaluations)
         all_other_models.extend(other_models)
         all_hypotheses.extend(hypotheses)
+        all_hypothesis_relations.extend(lens_analysis.relations)
+        all_unresolved_hypothesis_conflicts.extend(
+            lens_analysis.unresolved_conflict_ids
+        )
         all_candidate_futures.extend(futures)
         selected_futures.append(selected_future)
         all_value_assessments.extend(value_assessments)
@@ -240,6 +248,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             social_action_evaluations=all_social_action_evaluations,
             beliefs_about_others=all_other_models,
             hypotheses=all_hypotheses,
+            hypothesis_relations=all_hypothesis_relations,
             candidate_futures=all_candidate_futures,
             selected_futures=selected_futures,
             value_assessments=all_value_assessments,
@@ -283,6 +292,10 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
         ),
         "beliefs_about_others": to_dict(all_other_models),
         "hypotheses": to_dict(all_hypotheses),
+        "hypothesis_relations": to_dict(all_hypothesis_relations),
+        "unresolved_hypothesis_conflicts": list(
+            all_unresolved_hypothesis_conflicts
+        ),
         "candidate_futures": to_dict(all_candidate_futures),
         "selected_futures": to_dict(selected_futures),
         "value_assessments": to_dict(all_value_assessments),

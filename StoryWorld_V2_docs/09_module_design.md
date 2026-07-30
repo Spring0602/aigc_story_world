@@ -114,6 +114,18 @@ World → Observation → Belief
 
 `assess_context()` 从 Agent roles、Norm clarity / sanctions、Institution authority / resource control 生成逐主体 RoleAssessment、NormPressureAssessment 和 InstitutionPowerAssessment。`evaluate_actions()` 将这些社会状态与 PsychologyContext、BiasFilterResult 汇合，对 Candidate Action 计算社会适配度。DecisionEngine 将 Social compatibility 作为 `ValueAssessment` 的独立评分分量，并在 Decision 中保留 `social_evaluation_id`。
 
+## LensRouter / HypothesisConflictResolver
+
+```text
+Objective State
+→ Enabled Lenses
+→ Hypothesis Pool
+→ Support / Conflict / Condition Relations
+→ FutureEvaluator
+```
+
+`LensRouter.route()` 支持启用或关闭指定 Lens，并返回 `LensAnalysisResult`。Resolver 基于 `promotes_actions` 和 `inhibits_actions` 判断跨 Lens 关系，不解析自然语言 claim。`FutureEvaluator.causal_support_score()` 使用 confidence 加权假设证据，并根据 supports、contradicts、conditions 调整分数；未解决冲突不会从结果中删除。
+
 ## BeliefUpdater
 
 输入旧 Belief 与结构化 Evidence，使用显式先验、`P(E|H)` 和 `P(E|~H)` 计算后验。支持性证据提高后验，反驳性证据降低后验；每次更新输出 `BayesianBeliefUpdate` 与 `BeliefState`，不以新对象覆盖历史原因链。
