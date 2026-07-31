@@ -72,3 +72,48 @@ class SameWorldDifferentMindsResult(BaseModel):
     epistemology_swap: list[EpistemologySwapResult] = Field(default_factory=list)
     partial_observability_control: PartialObservabilityControl
     passed: bool
+
+
+class LensAblationConditionResult(BaseModel):
+    condition_id: str
+    removed_lens: str | None = None
+    enabled_lenses: list[str] = Field(default_factory=list)
+    objective_world_fingerprint: str
+    hypothesis_ids: list[str] = Field(default_factory=list)
+    relation_ids: list[str] = Field(default_factory=list)
+    relation_type_counts: dict[str, int] = Field(default_factory=dict)
+    future_scores: dict[str, float] = Field(default_factory=dict)
+    action_scores: dict[str, float] = Field(default_factory=dict)
+    action_ranking: list[str] = Field(default_factory=list)
+    selected_future_id: str
+    selected_action: str
+    final_state_fingerprint: str
+
+
+class LensAblationComparison(BaseModel):
+    condition_id: str
+    removed_lens: str
+    world_control_preserved: bool
+    removed_lens_absent: bool
+    hypothesis_pool_changed: bool
+    relation_graph_changed: bool
+    future_score_deltas: dict[str, float] = Field(default_factory=dict)
+    action_score_deltas: dict[str, float] = Field(default_factory=dict)
+    future_scores_changed: bool
+    action_scores_changed: bool
+    action_ranking_changed: bool
+    selected_future_changed: bool
+    selected_action_changed: bool
+    final_state_changed: bool
+    passed: bool
+
+
+class LensAblationExperimentResult(BaseModel):
+    experiment_id: str
+    hypothesis: str
+    controlled_variables: list[str] = Field(default_factory=list)
+    baseline: LensAblationConditionResult
+    ablations: list[LensAblationConditionResult] = Field(default_factory=list)
+    comparisons: list[LensAblationComparison] = Field(default_factory=list)
+    metrics: list[ExperimentMetric] = Field(default_factory=list)
+    passed: bool

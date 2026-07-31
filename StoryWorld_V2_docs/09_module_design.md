@@ -204,6 +204,10 @@ contradiction_penalty
 
 输入旧状态、新状态、Future 和 Subjective Models，输出 NarrativeEvent。
 
+## LensAblationExperiment
+
+`experiments/lens_ablation.py` 使用 `run_pipeline(enabled_lenses=...)` 运行全 Lens 基线和三组 leave-one-out 条件。禁用 Lens 时同时切断其 Hypothesis、关系和 ValueAssessment 分量，避免“名称删除但评分仍泄漏”。运行器输出世界指纹、假设与关系 IDs、Future / Action scores、排序、最终选择和状态指纹，并导出 JSON 与 Markdown。
+
 ## LLM 使用位置
 
 允许用于：

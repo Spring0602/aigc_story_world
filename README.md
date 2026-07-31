@@ -24,7 +24,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 
 ## 当前进度
 
-目前已完成 40 天计划的前 19 天，核心研究链路可以端到端运行，并已完成第一项正式主体认知实验。
+目前已完成 40 天计划的前 20 天，核心研究链路可以端到端运行，并已完成主体认知与 Lens 消融两项正式实验。
 
 | 阶段 | 已完成能力 | 状态 |
 | --- | --- | :---: |
@@ -42,7 +42,8 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 | Day 15-16 | Economic Lens 与约束下行动评估 | 完成 |
 | Day 17-18 | Social Structure Lens 与社会智能体链 | 完成 |
 | Day 19 | Lens Router 与 Hypothesis Conflict Resolver | 完成 |
-| Day 20 | Lens Ablation 实验 | 下一步 |
+| Day 20 | Lens Ablation 实验 | 完成 |
+| Day 21 | Candidate Future Schema 强化 | 下一步 |
 
 当前基线包含 1 个共享客观世界、2 个角色、3 种认知 Lens，以及每个时间步 4 条候选未来。测试集还覆盖 Dataist、Institutionalist 和 Skeptic 三类认知配置，用于验证同一事实如何产生差异化判断。
 
@@ -286,7 +287,7 @@ print(result["run_dir"])
 python -m unittest discover -v
 ```
 
-当前共有 67 项自动化测试，覆盖：
+当前共有 73 项自动化测试，覆盖：
 
 - Pydantic Schema 校验与跨对象引用。
 - Observation、Evidence、Belief Update 和 Interpretation 链路。
@@ -299,6 +300,7 @@ python -m unittest discover -v
 - Information Boundary、Belief、Motivation、Value 到 Action 的角色经济链及经济反事实。
 - Psychology 与 Society 双分支、Role / Norm / Institution provenance 及制度权力反事实。
 - 跨 Lens 支持、冲突、条件关系，未解决冲突和关系感知 Future 评分。
+- Psychology、Economic、SocialStructure 的单 Lens 消融、模块无泄漏与确定性实验导出。
 
 运行 Day 10 正式实验：
 
@@ -307,6 +309,14 @@ python -m experiments.same_world_different_minds
 ```
 
 实验会生成机器可读的 [`experiment_01.json`](experiments/results/experiment_01.json) 和人工可读的 [`experiment_01.md`](experiments/results/experiment_01.md)。当前结果中 Observation 等价率、Belief 差异率、Interpretation 差异率和 Action 差异率均为 `1.000`。
+
+运行 Day 20 Lens 消融实验：
+
+```bash
+python -m experiments.lens_ablation
+```
+
+实验生成 [`lens_ablation.json`](experiments/results/lens_ablation.json) 与 [`lens_ablation.md`](experiments/results/lens_ablation.md)。移除任一 Lens 都会改变 Hypothesis Pool、关系图、Future 分数、Action 分数和最终状态 provenance；当前场景中秘密取证仍保持第一名，表现为机制敏感但最终选择稳健。
 
 ## 研究原则
 
@@ -327,11 +337,11 @@ python -m experiments.same_world_different_minds
 - [`StoryWorld_V2_docs/08_data_schema.md`](StoryWorld_V2_docs/08_data_schema.md)：主要 Schema、字段语义与数据契约。
 - [`StoryWorld_V2_docs/09_module_design.md`](StoryWorld_V2_docs/09_module_design.md)：Python 模块职责和代码组织。
 - [`StoryWorld_V2_docs/10_testing_and_evaluation.md`](StoryWorld_V2_docs/10_testing_and_evaluation.md)：差异化认知、消融与基线评估方法。
-- [`StoryWorld_V2_docs/causal_notes.md`](StoryWorld_V2_docs/causal_notes.md)：Cause、Driver、Mediator、Constraint 与反事实建模笔记。
+- [`notebooks/causal_notes.md`](notebooks/causal_notes.md)：Cause、Driver、Mediator、Constraint 与反事实建模笔记。
 
 ## 当前边界
 
-StoryWorld V2 仍是研究原型，而不是完整的生产级叙事平台。当前版本使用确定性规则和 mock structured model 保证实验可复现；校园场景的 Candidate Future 生成器仍包含领域特定逻辑；Theory of Mind 暂不支持递归心智推理；Hypothesis Conflict Resolver、Lens Ablation、Prompt-to-Story Baseline Comparison 和通用机制语言仍在后续计划中。
+StoryWorld V2 仍是研究原型，而不是完整的生产级叙事平台。当前版本使用确定性规则和 mock structured model 保证实验可复现；校园场景的 Candidate Future 生成器仍包含领域特定逻辑；Theory of Mind 暂不支持递归心智推理；Prompt-to-Story Baseline Comparison 和通用机制语言仍在后续计划中。
 
 这些限制是当前实验边界，也构成下一阶段最重要的验证方向。
 

@@ -29,13 +29,19 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool = True) -> dict:
+def run_pipeline(
+    user_input: str,
+    steps: int = DEFAULT_NUM_STEPS,
+    export: bool = True,
+    enabled_lenses: set[str] | None = None,
+) -> dict:
     initializer = WorldInitializer()
     observation_engine = ObservationEngine()
     cognition_engine = CognitionEngine()
     psychology_engine = PsychologyEngine()
     theory_of_mind_engine = TheoryOfMindEngine()
-    lens_router = LensRouter()
+    lens_router = LensRouter(enabled_lenses=enabled_lenses)
+    active_lens_names = {lens.name for lens in lens_router.lenses}
     future_generator = FutureGenerator()
     future_evaluator = FutureEvaluator()
     decision_engine = DecisionEngine()
@@ -75,6 +81,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
     all_hypotheses = []
     all_hypothesis_relations = []
     all_unresolved_hypothesis_conflicts = []
+    all_future_scores = []
     all_candidate_futures = []
     selected_futures = []
     all_value_assessments = []
@@ -103,6 +110,11 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             subjective_models,
             cognition.belief_states,
             cognition.interpretations,
+        )
+        active_psychology = (
+            psychology
+            if "psychology" in active_lens_names
+            else type(psychology)()
         )
         subjective_models, other_models = theory_of_mind_engine.infer(
             objective_state,
@@ -135,13 +147,13 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             futures,
             subjective_models,
             step=objective_state.step + 1,
-            motivation_states=psychology.motivation_states,
+            motivation_states=active_psychology.motivation_states,
         )
         social = social_structure_engine.evaluate_actions(
             social,
             objective_state,
             futures,
-            psychology,
+            active_psychology,
             cognition.bias_results,
             cognition.mental_models,
             step=objective_state.step + 1,
@@ -156,6 +168,14 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             )
             for future in futures
         }
+        all_future_scores.extend(
+            {
+                "step": objective_state.step + 1,
+                "future_id": future_id,
+                "score": score,
+            }
+            for future_id, score in future_scores.items()
+        )
         selected_future, value_assessments, decisions = decision_engine.decide(
             candidate_futures=futures,
             future_scores=future_scores,
@@ -164,9 +184,17 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
             interpretations=cognition.interpretations,
             other_models=other_models,
             step=objective_state.step + 1,
-            psychology=psychology,
-            economics=economics,
-            social=social,
+            psychology=(
+                psychology
+                if "psychology" in active_lens_names
+                else None
+            ),
+            economics=(
+                economics if "economic" in active_lens_names else None
+            ),
+            social=(
+                social if "social_structure" in active_lens_names else None
+            ),
         )
         actions = action_executor.execute(decisions)
         new_state = transition.apply(
@@ -262,6 +290,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
 
     return {
         "run_dir": str(run_dir) if run_dir else None,
+        "enabled_lenses": sorted(active_lens_names),
         "objective_states": to_dict(objective_states),
         "agent_profiles": to_dict(agents),
         "observations": to_dict(all_observations),
@@ -296,6 +325,7 @@ def run_pipeline(user_input: str, steps: int = DEFAULT_NUM_STEPS, export: bool =
         "unresolved_hypothesis_conflicts": list(
             all_unresolved_hypothesis_conflicts
         ),
+        "future_scores": all_future_scores,
         "candidate_futures": to_dict(all_candidate_futures),
         "selected_futures": to_dict(selected_futures),
         "value_assessments": to_dict(all_value_assessments),

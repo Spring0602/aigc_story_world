@@ -403,7 +403,7 @@ Same World Different Minds
 
 整理：
 
-    StoryWorld_V2_docs/causal_notes.md
+    notebooks/causal_notes.md
 
 笔记覆盖：
 
@@ -615,7 +615,7 @@ CausalHypothesis。
 
 ------------------------------------------------------------------------
 
-## Day 20：Lens 实验
+## Day 20：Lens 实验（已完成）
 
 测试：
 
@@ -623,7 +623,31 @@ CausalHypothesis。
 
 交付：
 
-    lens_ablation.md
+    experiments/lens_ablation.py
+    experiments/results/lens_ablation.json
+    experiments/results/lens_ablation.md
+    tests/test_lens_ablation.py
+
+实验条件：
+
+    All Lenses
+    Without PsychologyLens
+    Without EconomicLens
+    Without SocialStructureLens
+
+控制变量：
+
+- Objective World、Subjective Models、Observation 与 Belief Update 相同。
+- Candidate Future 模板、决策权重与确定性运行参数相同。
+- 被移除 Lens 的 Hypothesis、Relation 与 ValueAssessment 分量均被切断。
+
+验收结果：
+
+- 三组消融均改变 Hypothesis Pool 与跨 Lens Relation Graph。
+- 三组消融均改变至少一项 Future Score 与 Action Score。
+- 最终状态 provenance 随支持机制变化。
+- 当前校园场景的 Action 排序和第一名未翻转，表现为机制敏感、最终选择稳健。
+- 正式实验和 6 项自动化测试全部通过。
 
 ------------------------------------------------------------------------
 

@@ -1,0 +1,298 @@
+{
+  "experiment_id": "experiment_02_lens_ablation",
+  "hypothesis": "在客观世界、主体配置和候选未来模板不变时，移除任一 Lens 应改变假设池、跨 Lens 关系以及 Future 和 Action 的评分。",
+  "controlled_variables": [
+    "objective_world",
+    "subjective_models",
+    "observations",
+    "belief_updates",
+    "candidate_future_templates",
+    "deterministic_runtime",
+    "decision_weights"
+  ],
+  "baseline": {
+    "condition_id": "all_lenses",
+    "removed_lens": null,
+    "enabled_lenses": [
+      "economic",
+      "psychology",
+      "social_structure"
+    ],
+    "objective_world_fingerprint": "b604dc02745fed68ac8b1991e93e9efe022b723ae3c51d66ca368ca450bda411",
+    "hypothesis_ids": [
+      "hyp_psy_001_lin_xia",
+      "hyp_psy_001_wang_chen",
+      "hyp_eco_001_lin_xia",
+      "hyp_eco_001_wang_chen",
+      "hyp_soc_001_lin_xia",
+      "hyp_soc_001_wang_chen"
+    ],
+    "relation_ids": [
+      "relation_hyp_psy_001_lin_xia__hyp_eco_001_lin_xia",
+      "relation_hyp_psy_001_lin_xia__hyp_soc_001_lin_xia",
+      "relation_hyp_psy_001_wang_chen__hyp_eco_001_wang_chen",
+      "relation_hyp_psy_001_wang_chen__hyp_soc_001_wang_chen",
+      "relation_hyp_eco_001_lin_xia__hyp_soc_001_lin_xia",
+      "relation_hyp_eco_001_wang_chen__hyp_soc_001_wang_chen"
+    ],
+    "relation_type_counts": {
+      "supports": 6
+    },
+    "future_scores": {
+      "future_001_secret": 0.757,
+      "future_001_roommate": 0.489,
+      "future_001_confront": 0.356,
+      "future_001_ignore": 0.304
+    },
+    "action_scores": {
+      "secretly_collect_network_evidence": 0.8864073769730668,
+      "ask_roommate_for_help": 0.7094975956374634,
+      "confront_authority": 0.5428028214666519,
+      "delay_action": 0.46486056671072085
+    },
+    "action_ranking": [
+      "secretly_collect_network_evidence",
+      "ask_roommate_for_help",
+      "confront_authority",
+      "delay_action"
+    ],
+    "selected_future_id": "future_001_secret",
+    "selected_action": "secretly_collect_network_evidence",
+    "final_state_fingerprint": "5463415d65a55c6e1e4cd8d849d91587505b0b009d8eac80575c2285dcd59764"
+  },
+  "ablations": [
+    {
+      "condition_id": "without_economic",
+      "removed_lens": "economic",
+      "enabled_lenses": [
+        "psychology",
+        "social_structure"
+      ],
+      "objective_world_fingerprint": "b604dc02745fed68ac8b1991e93e9efe022b723ae3c51d66ca368ca450bda411",
+      "hypothesis_ids": [
+        "hyp_psy_001_lin_xia",
+        "hyp_psy_001_wang_chen",
+        "hyp_soc_001_lin_xia",
+        "hyp_soc_001_wang_chen"
+      ],
+      "relation_ids": [
+        "relation_hyp_psy_001_lin_xia__hyp_soc_001_lin_xia",
+        "relation_hyp_psy_001_wang_chen__hyp_soc_001_wang_chen"
+      ],
+      "relation_type_counts": {
+        "supports": 2
+      },
+      "future_scores": {
+        "future_001_secret": 0.757,
+        "future_001_roommate": 0.527,
+        "future_001_confront": 0.376,
+        "future_001_ignore": 0.304
+      },
+      "action_scores": {
+        "secretly_collect_network_evidence": 0.9027654582172001,
+        "ask_roommate_for_help": 0.6999146940800001,
+        "confront_authority": 0.5277220264106667,
+        "delay_action": 0.45257562687999997
+      },
+      "action_ranking": [
+        "secretly_collect_network_evidence",
+        "ask_roommate_for_help",
+        "confront_authority",
+        "delay_action"
+      ],
+      "selected_future_id": "future_001_secret",
+      "selected_action": "secretly_collect_network_evidence",
+      "final_state_fingerprint": "3acd9a3e45d27d69cfc015be325d2d66f827568919280c1208b7d8e7d40df73a"
+    },
+    {
+      "condition_id": "without_psychology",
+      "removed_lens": "psychology",
+      "enabled_lenses": [
+        "economic",
+        "social_structure"
+      ],
+      "objective_world_fingerprint": "b604dc02745fed68ac8b1991e93e9efe022b723ae3c51d66ca368ca450bda411",
+      "hypothesis_ids": [
+        "hyp_eco_001_lin_xia",
+        "hyp_eco_001_wang_chen",
+        "hyp_soc_001_lin_xia",
+        "hyp_soc_001_wang_chen"
+      ],
+      "relation_ids": [
+        "relation_hyp_eco_001_lin_xia__hyp_soc_001_lin_xia",
+        "relation_hyp_eco_001_wang_chen__hyp_soc_001_wang_chen"
+      ],
+      "relation_type_counts": {
+        "supports": 2
+      },
+      "future_scores": {
+        "future_001_secret": 0.757,
+        "future_001_roommate": 0.52,
+        "future_001_confront": 0.379,
+        "future_001_ignore": 0.304
+      },
+      "action_scores": {
+        "secretly_collect_network_evidence": 0.8244617846666668,
+        "ask_roommate_for_help": 0.70790702003356,
+        "confront_authority": 0.6410067911546555,
+        "delay_action": 0.5041516810884668
+      },
+      "action_ranking": [
+        "secretly_collect_network_evidence",
+        "ask_roommate_for_help",
+        "confront_authority",
+        "delay_action"
+      ],
+      "selected_future_id": "future_001_secret",
+      "selected_action": "secretly_collect_network_evidence",
+      "final_state_fingerprint": "84e7f882cea83fc6d57d164bd293330ffece96c4a3a37d94425154df136caaf7"
+    },
+    {
+      "condition_id": "without_social_structure",
+      "removed_lens": "social_structure",
+      "enabled_lenses": [
+        "economic",
+        "psychology"
+      ],
+      "objective_world_fingerprint": "b604dc02745fed68ac8b1991e93e9efe022b723ae3c51d66ca368ca450bda411",
+      "hypothesis_ids": [
+        "hyp_psy_001_lin_xia",
+        "hyp_psy_001_wang_chen",
+        "hyp_eco_001_lin_xia",
+        "hyp_eco_001_wang_chen"
+      ],
+      "relation_ids": [
+        "relation_hyp_psy_001_lin_xia__hyp_eco_001_lin_xia",
+        "relation_hyp_psy_001_wang_chen__hyp_eco_001_wang_chen"
+      ],
+      "relation_type_counts": {
+        "supports": 2
+      },
+      "future_scores": {
+        "future_001_secret": 0.757,
+        "future_001_roommate": 0.535,
+        "future_001_confront": 0.372,
+        "future_001_ignore": 0.304
+      },
+      "action_scores": {
+        "secretly_collect_network_evidence": 0.9478423865728334,
+        "ask_roommate_for_help": 0.6874786269468293,
+        "confront_authority": 0.6059593568333148,
+        "delay_action": 0.35535617478840104
+      },
+      "action_ranking": [
+        "secretly_collect_network_evidence",
+        "ask_roommate_for_help",
+        "confront_authority",
+        "delay_action"
+      ],
+      "selected_future_id": "future_001_secret",
+      "selected_action": "secretly_collect_network_evidence",
+      "final_state_fingerprint": "b3fcd75fcf89f9d08818e3fdb8af89623aa54287645b516bbf87741549549f14"
+    }
+  ],
+  "comparisons": [
+    {
+      "condition_id": "without_economic",
+      "removed_lens": "economic",
+      "world_control_preserved": true,
+      "removed_lens_absent": true,
+      "hypothesis_pool_changed": true,
+      "relation_graph_changed": true,
+      "future_score_deltas": {
+        "future_001_confront": 0.02,
+        "future_001_ignore": 0.0,
+        "future_001_roommate": 0.038,
+        "future_001_secret": 0.0
+      },
+      "action_score_deltas": {
+        "ask_roommate_for_help": -0.009583,
+        "confront_authority": -0.015081,
+        "delay_action": -0.012285,
+        "secretly_collect_network_evidence": 0.016358
+      },
+      "future_scores_changed": true,
+      "action_scores_changed": true,
+      "action_ranking_changed": false,
+      "selected_future_changed": false,
+      "selected_action_changed": false,
+      "final_state_changed": true,
+      "passed": true
+    },
+    {
+      "condition_id": "without_psychology",
+      "removed_lens": "psychology",
+      "world_control_preserved": true,
+      "removed_lens_absent": true,
+      "hypothesis_pool_changed": true,
+      "relation_graph_changed": true,
+      "future_score_deltas": {
+        "future_001_confront": 0.023,
+        "future_001_ignore": 0.0,
+        "future_001_roommate": 0.031,
+        "future_001_secret": 0.0
+      },
+      "action_score_deltas": {
+        "ask_roommate_for_help": -0.001591,
+        "confront_authority": 0.098204,
+        "delay_action": 0.039291,
+        "secretly_collect_network_evidence": -0.061946
+      },
+      "future_scores_changed": true,
+      "action_scores_changed": true,
+      "action_ranking_changed": false,
+      "selected_future_changed": false,
+      "selected_action_changed": false,
+      "final_state_changed": true,
+      "passed": true
+    },
+    {
+      "condition_id": "without_social_structure",
+      "removed_lens": "social_structure",
+      "world_control_preserved": true,
+      "removed_lens_absent": true,
+      "hypothesis_pool_changed": true,
+      "relation_graph_changed": true,
+      "future_score_deltas": {
+        "future_001_confront": 0.016,
+        "future_001_ignore": 0.0,
+        "future_001_roommate": 0.046,
+        "future_001_secret": 0.0
+      },
+      "action_score_deltas": {
+        "ask_roommate_for_help": -0.022019,
+        "confront_authority": 0.063157,
+        "delay_action": -0.109504,
+        "secretly_collect_network_evidence": 0.061435
+      },
+      "future_scores_changed": true,
+      "action_scores_changed": true,
+      "action_ranking_changed": false,
+      "selected_future_changed": false,
+      "selected_action_changed": false,
+      "final_state_changed": true,
+      "passed": true
+    }
+  ],
+  "metrics": [
+    {
+      "metric": "economic_mechanism_sensitivity",
+      "value": 1.0,
+      "passed": true,
+      "detail": "future_changed=True; action_changed=True; ranking_changed=False; selection_changed=False"
+    },
+    {
+      "metric": "psychology_mechanism_sensitivity",
+      "value": 1.0,
+      "passed": true,
+      "detail": "future_changed=True; action_changed=True; ranking_changed=False; selection_changed=False"
+    },
+    {
+      "metric": "social_structure_mechanism_sensitivity",
+      "value": 1.0,
+      "passed": true,
+      "detail": "future_changed=True; action_changed=True; ranking_changed=False; selection_changed=False"
+    }
+  ],
+  "passed": true
+}

@@ -265,7 +265,16 @@ Day 10 主对照已通过：三种认知配置共享同一世界指纹和规范�
 
 ### Experiment 2：Lens Ablation
 
-逐个移除 Lens，测量机制和未来分支变化。
+当前实现：
+
+- 运行器：`experiments/lens_ablation.py`
+- 自动测试：`tests/test_lens_ablation.py`
+- 结构化结果：`experiments/results/lens_ablation.json`
+- 实验报告：`experiments/results/lens_ablation.md`
+
+逐个移除 Psychology、Economic、SocialStructure，保持 Objective World、Subjective Models、Observation、Belief Update、Candidate Future 模板和决策权重不变。验收要求被移除模块不得继续写入 ValueAssessment，且 Hypothesis Pool、Relation Graph、至少一项 Future Score 与 Action Score 必须变化。
+
+当前结果：三组消融全部通过。最大 Future Score 变化依次为 Economic `0.038`、Psychology `0.031`、SocialStructure `0.046`；最大 Action Score 变化为 `0.016`、`0.098`、`0.110`。最终 Action 排序未改变，但最终状态 provenance 随支持机制变化。
 
 ### Experiment 3：Baseline Comparison
 

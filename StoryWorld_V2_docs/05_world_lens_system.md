@@ -240,3 +240,5 @@ All Lenses
 ```
 
 若移除 Lens 后候选未来、行动排序或解释链完全不变，说明 Lens 尚未真正参与世界模型。
+
+Day 20 正式实验已经完成。三种 leave-one-lens-out 条件均保持 Objective World、Subjective Models、Observation、Belief Update、Candidate Future 模板和决策权重不变。移除任一 Lens 后，Hypothesis Pool、Relation Graph、Future Score、Action Score 与最终状态 provenance 均发生变化；当前样例的 Action 排序和第一名未翻转，说明选择稳健但形成机制敏感。报告见 `experiments/results/lens_ablation.md`。

@@ -23,6 +23,9 @@ IncentiveAssessment
 OpportunityCostAssessment
 EconomicActionEvaluation
 HypothesisRelation
+LensAblationConditionResult
+LensAblationComparison
+LensAblationExperimentResult
 RoleAssessment
 NormPressureAssessment
 InstitutionPowerAssessment
