@@ -60,6 +60,17 @@ from schemas.psychology import (
     StressBand,
     StressState,
 )
+from schemas.possible_world import (
+    BayesianWorldRevision,
+    BeliefDistribution,
+    DistributionStage,
+    EvidenceCompatibility,
+    PossibleWorld,
+    PossibleWorldBelief,
+    PossibleWorldContext,
+    PossibleWorldKind,
+    WorldEvidenceAssessment,
+)
 from schemas.scene_card import CameraSetup, ImagePrompt, SceneCard, SceneCharacter
 from schemas.social_structure import (
     InstitutionPowerAssessment,
@@ -94,6 +105,8 @@ __all__ = [
     "BeliefState",
     "BeliefAboutOther",
     "BayesianBeliefUpdate",
+    "BayesianWorldRevision",
+    "BeliefDistribution",
     "BiasFilterResult",
     "BiasSignal",
     "BiasType",
@@ -112,6 +125,7 @@ __all__ = [
     "EvidenceType",
     "Evidence",
     "EvidencePolarity",
+    "EvidenceCompatibility",
     "ExperimentalAction",
     "ExperimentMetric",
     "LensAblationComparison",
@@ -140,6 +154,10 @@ __all__ = [
     "ObservationVisibility",
     "OpportunityCostAssessment",
     "Perception",
+    "PossibleWorld",
+    "PossibleWorldBelief",
+    "PossibleWorldContext",
+    "PossibleWorldKind",
     "PsychologyContext",
     "PartialObservabilityControl",
     "Norm",
@@ -147,6 +165,7 @@ __all__ = [
     "Relationship",
     "Resource",
     "ResolutionStatus",
+    "DistributionStage",
     "RoleAssessment",
     "SceneCard",
     "SceneCharacter",
@@ -167,4 +186,5 @@ __all__ = [
     "Uncertainty",
     "Value",
     "ValueAssessment",
+    "WorldEvidenceAssessment",
 ]

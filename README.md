@@ -24,7 +24,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 
 ## 当前进度
 
-目前已完成 40 天计划的前 20 天，核心研究链路可以端到端运行，并已完成主体认知与 Lens 消融两项正式实验。
+目前已完成 40 天计划的前 21 天，核心研究链路可以端到端运行，并已完成主体认知与 Lens 消融两项正式实验。
 
 | 阶段 | 已完成能力 | 状态 |
 | --- | --- | :---: |
@@ -43,7 +43,8 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 | Day 17-18 | Social Structure Lens 与社会智能体链 | 完成 |
 | Day 19 | Lens Router 与 Hypothesis Conflict Resolver | 完成 |
 | Day 20 | Lens Ablation 实验 | 完成 |
-| Day 21 | Candidate Future Schema 强化 | 下一步 |
+| Day 21 | Possible Worlds、Belief Distribution 与 Candidate Future 溯源 | 完成 |
+| Day 22-23 | 机制差异化 Future Generator | 下一步 |
 
 当前基线包含 1 个共享客观世界、2 个角色、3 种认知 Lens，以及每个时间步 4 条候选未来。测试集还覆盖 Dataist、Institutionalist 和 Skeptic 三类认知配置，用于验证同一事实如何产生差异化判断。
 
@@ -52,7 +53,13 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 ```mermaid
 flowchart TD
     W[Objective World State] --> O[Observation]
+    O --> IB[Information Boundary]
     O --> E[Evidence]
+    IB --> PW[Possible Worlds]
+    E --> PW
+    PW --> PBD[Prior Belief Distribution]
+    PBD --> BWR[Bayesian World Revision]
+    BWR --> NWB[New Possible-World Belief]
     E --> BBU[Bayesian Belief Update]
     BBU --> BS[Belief State]
     BS --> MM[Mental Model]
@@ -60,6 +67,7 @@ flowchart TD
     BF --> I[Interpretation]
 
     BS --> MB[My Belief]
+    NWB --> MB
     O --> OM[Other Model / Theory of Mind]
     MB --> D[Decision]
     OM --> D
@@ -151,7 +159,13 @@ World
 
 `InformationBoundary` 记录每个角色可见与不可访问的信息、Observation 来源、资源和访问规则。`EconomicEngine` 在该边界内结合 Belief uncertainty、Motivation 与 Value，对每项 Candidate Action 分解 Scarcity、Information Asymmetry、收益、成本和机会成本。最终 Economic Utility 进入 `ValueAssessment.score`，所有结果可沿 ID 追溯至 Decision 与 Action。
 
-### 9. Social Structure Lens
+### 9. Possible Worlds 与贝叶斯修正
+
+系统不会把单一解释直接当成世界真相。每个主体先在自身 `InformationBoundary` 内建立制度性监控、防御性安全和技术异常三个互斥 `PossibleWorld`，再用可见 `Evidence` 计算似然、排除被硬证据否定的世界，并归一化为后验 `BeliefDistribution`。主导世界形成 `PossibleWorldBelief`，同时保留概率分布和不确定性。
+
+`CandidateFuture` 通过 `source_possible_world_ids`、`source_belief_distribution_ids` 和 `belief_plausibility` 引用这条认识论链。后验概率进入 `FutureEvaluator`，再与 Lens 因果支持、角色一致性、Value 和 Motivation 一起影响 Decision。
+
+### 10. Social Structure Lens
 
 社会智能体链将心理状态与社会位置并行汇入决策：
 
@@ -165,7 +179,7 @@ World → Observation → Belief
 
 `SocialStructureEngine` 生成逐角色的 Role constraint、Norm pressure 和 Institution power，并为每项候选行动计算 role alignment、norm compliance、institutional risk、social support 与 compatibility。`SocialStructureLens` 按角色动态生成带 provenance 的假设；Social compatibility 以独立分量进入 `ValueAssessment.score`。
 
-### 10. Lens Router 与冲突解析
+### 11. Lens Router 与冲突解析
 
 ```text
 Objective State
@@ -244,13 +258,14 @@ print(result["run_dir"])
 
 ## 输出说明
 
-每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 36 个 JSON 文件和 1 份 Markdown 报告。
+每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 42 个 JSON 文件和 1 份 Markdown 报告。
 
 | 分组 | 文件 | 用途 |
 | --- | --- | --- |
 | 世界与主体 | `objective_states.json`、`agent_profiles.json` | 保存共享世界快照与主体配置 |
 | 观察与证据 | `observations.json`、`evidence.json` | 记录主体看到什么，以及证据如何支持判断 |
 | 信念更新 | `belief_updates.json`、`belief_states.json` | 保存先验、后验及每步信念状态 |
+| 可能世界 | `possible_worlds.json`、`world_evidence_assessments.json`、`prior_belief_distributions.json`、`world_revisions.json`、`posterior_belief_distributions.json`、`possible_world_beliefs.json` | 保存信息边界内的候选解释、证据似然、淘汰结果、贝叶斯修正与新信念 |
 | 主观认知 | `subjective_models.json`、`mental_models.json`、`bias_filter_results.json`、`interpretations.json` | 展示从认知框架到解释的完整过程 |
 | 心理机制 | `perceptions.json`、`emotional_appraisals.json`、`stress_states.json`、`motivation_states.json` | 展示事件如何通过心理状态进入价值评估和决策 |
 | 经济机制 | `information_boundaries.json`、`scarcity_assessments.json`、`information_asymmetries.json`、`incentive_assessments.json`、`opportunity_costs.json`、`economic_action_evaluations.json` | 展示角色的信息边界、信念和动机如何改变行动的收益、成本及相对效用 |
@@ -287,7 +302,7 @@ print(result["run_dir"])
 python -m unittest discover -v
 ```
 
-当前共有 73 项自动化测试，覆盖：
+当前共有 78 项自动化测试，覆盖：
 
 - Pydantic Schema 校验与跨对象引用。
 - Observation、Evidence、Belief Update 和 Interpretation 链路。
@@ -301,6 +316,7 @@ python -m unittest discover -v
 - Psychology 与 Society 双分支、Role / Norm / Institution provenance 及制度权力反事实。
 - 跨 Lens 支持、冲突、条件关系，未解决冲突和关系感知 Future 评分。
 - Psychology、Economic、SocialStructure 的单 Lens 消融、模块无泄漏与确定性实验导出。
+- Possible Worlds 的信息隔离、概率归一化、硬证据淘汰、后验新信念与 Candidate Future 评分接入。
 
 运行 Day 10 正式实验：
 

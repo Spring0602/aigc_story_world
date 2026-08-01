@@ -17,6 +17,11 @@ EmotionalAppraisal
 StressState
 MotivationState
 InformationBoundary
+PossibleWorld
+WorldEvidenceAssessment
+BeliefDistribution
+BayesianWorldRevision
+PossibleWorldBelief
 ScarcityAssessment
 InformationAsymmetryAssessment
 IncentiveAssessment
@@ -117,6 +122,31 @@ ImagePrompt
 ## BeliefState
 
 `BeliefState` 保存某一步主体全部信念 ID、当前主导信念、来源更新和不确定性，是认知层进入价值决策层的稳定接口。
+
+## Possible Worlds 与 Belief Distribution
+
+```text
+World Truth
+→ Observation
+→ InformationBoundary
+→ PossibleWorld[]
+→ Prior BeliefDistribution
+→ WorldEvidenceAssessment[]
+→ Remove impossible worlds
+→ BayesianWorldRevision
+→ Posterior BeliefDistribution
+→ PossibleWorldBelief
+→ Value + Motivation
+→ Decision
+→ Action
+```
+
+- `PossibleWorld` 是主体对当前世界的互斥解释，不是客观事实，也不是后续剧情分支。
+- `WorldEvidenceAssessment` 为每个 Evidence / Possible World 对保存似然、兼容方向、理由与 `rules_out_world`。
+- `BeliefDistribution` 同时保存 prior / posterior 概率、主导世界、归一化熵和已排除世界；全部概率之和必须为 1，已排除世界必须为 0。
+- `BayesianWorldRevision` 保存先验分布、后验分布、证据评估、归一化常数和公式。
+- `PossibleWorldBelief` 是后验分布产生的新信念，保留 Observation、Evidence、Revision 和 Information Boundary 的完整来源链。
+- `CandidateFuture` 仍表示行动之后的候选世界状态分支，通过来源世界 ID、分布 ID 与 `belief_plausibility` 接入认识论层。
 
 ## MentalModel
 

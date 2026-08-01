@@ -1,4 +1,12 @@
-from schemas import AgentAction, CandidateFuture, CausalHypothesis, ObjectiveWorldState, StateChange, SubjectiveWorldModel
+from schemas import (
+    AgentAction,
+    CandidateFuture,
+    CausalHypothesis,
+    ObjectiveWorldState,
+    PossibleWorldContext,
+    StateChange,
+    SubjectiveWorldModel,
+)
 
 
 class FutureGenerator:
@@ -7,10 +15,11 @@ class FutureGenerator:
         objective_state: ObjectiveWorldState,
         subjective_models: list[SubjectiveWorldModel],
         hypotheses: list[CausalHypothesis],
+        possible_world_context: PossibleWorldContext | None = None,
     ) -> list[CandidateFuture]:
         step = objective_state.step + 1
         support_ids = [hyp.hypothesis_id for hyp in hypotheses]
-        return [
+        futures = [
             CandidateFuture(
                 future_id=f"future_{step:03d}_secret",
                 summary="林夏不会立即公开对抗学校，而会先秘密验证监控机制。",
@@ -62,3 +71,53 @@ class FutureGenerator:
                 risks=["失去早期验证窗口"],
             ),
         ]
+        if possible_world_context is None:
+            return futures
+        return [
+            self._attach_possible_world_support(future, possible_world_context)
+            for future in futures
+        ]
+
+    def _attach_possible_world_support(
+        self,
+        future: CandidateFuture,
+        context: PossibleWorldContext,
+    ) -> CandidateFuture:
+        if not future.agent_actions:
+            return future
+        action = future.agent_actions[0]
+        if "secretly" in action.action or "confront" in action.action:
+            world_kind = "institutional_monitoring"
+        elif "help" in action.action:
+            world_kind = "technical_anomaly"
+        else:
+            world_kind = "protective_security"
+
+        world = next(
+            (
+                item
+                for item in context.possible_worlds
+                if item.agent_id == action.agent_id and item.kind == world_kind
+            ),
+            None,
+        )
+        distribution = next(
+            (
+                item
+                for item in context.posterior_distributions
+                if item.agent_id == action.agent_id
+            ),
+            None,
+        )
+        if world is None or distribution is None:
+            return future
+        return future.model_copy(
+            update={
+                "source_possible_world_ids": [world.possible_world_id],
+                "source_belief_distribution_ids": [distribution.distribution_id],
+                "belief_plausibility": distribution.probabilities[
+                    world.possible_world_id
+                ],
+            },
+            deep=True,
+        )

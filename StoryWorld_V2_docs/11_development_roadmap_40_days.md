@@ -250,6 +250,8 @@ Future C
 
 不是剧情分支，而是世界状态分支。
 
+Day 21 已完成认识论前置层：主体在 `InformationBoundary` 内由 Observation / Evidence 建立多个 `PossibleWorld`，排除被硬证据否定的世界，并通过贝叶斯修正形成新的 `BeliefDistribution`。该分布以来源 ID 和 `belief_plausibility` 接入 `CandidateFuture` 评分；Day 22-23 的机制差异化 Future Generator 仍作为下一步。
+
 ------------------------------------------------------------------------
 
 ## Day 24-26

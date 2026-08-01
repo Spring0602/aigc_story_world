@@ -26,6 +26,12 @@ class OutputExporter:
         stress_states,
         motivation_states,
         information_boundaries,
+        possible_worlds,
+        world_evidence_assessments,
+        prior_belief_distributions,
+        world_revisions,
+        posterior_belief_distributions,
+        possible_world_beliefs,
         scarcity_assessments,
         information_asymmetries,
         incentive_assessments,
@@ -71,6 +77,24 @@ class OutputExporter:
         self._write_json(
             run_dir / "information_boundaries.json",
             information_boundaries,
+        )
+        self._write_json(run_dir / "possible_worlds.json", possible_worlds)
+        self._write_json(
+            run_dir / "world_evidence_assessments.json",
+            world_evidence_assessments,
+        )
+        self._write_json(
+            run_dir / "prior_belief_distributions.json",
+            prior_belief_distributions,
+        )
+        self._write_json(run_dir / "world_revisions.json", world_revisions)
+        self._write_json(
+            run_dir / "posterior_belief_distributions.json",
+            posterior_belief_distributions,
+        )
+        self._write_json(
+            run_dir / "possible_world_beliefs.json",
+            possible_world_beliefs,
         )
         self._write_json(
             run_dir / "scarcity_assessments.json",

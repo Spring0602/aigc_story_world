@@ -13,6 +13,7 @@ from core.model_utils import to_dict
 from core.narrative_engine import NarrativeEngine
 from core.observation_engine import ObservationEngine
 from core.output_exporter import OutputExporter
+from core.possible_world_engine import PossibleWorldEngine
 from core.psychology_engine import PsychologyEngine
 from core.scene_generator import SceneGenerator
 from core.social_structure_engine import SocialStructureEngine
@@ -46,6 +47,7 @@ def run_pipeline(
     future_evaluator = FutureEvaluator()
     decision_engine = DecisionEngine()
     economic_engine = EconomicEngine()
+    possible_world_engine = PossibleWorldEngine()
     social_structure_engine = SocialStructureEngine()
     action_executor = ActionExecutor()
     transition = WorldTransition()
@@ -68,6 +70,12 @@ def run_pipeline(
     all_stress_states = []
     all_motivation_states = []
     all_information_boundaries = []
+    all_possible_worlds = []
+    all_world_evidence_assessments = []
+    all_prior_belief_distributions = []
+    all_world_revisions = []
+    all_posterior_belief_distributions = []
+    all_possible_world_beliefs = []
     all_scarcity_assessments = []
     all_information_asymmetries = []
     all_incentive_assessments = []
@@ -127,6 +135,13 @@ def run_pipeline(
             observations,
             cognition.belief_states,
         )
+        possible_worlds = possible_world_engine.build_context(
+            observations=observations,
+            evidence=cognition.evidence,
+            information_boundaries=economics.information_boundaries,
+            subjective_models=subjective_models,
+            step=objective_state.step,
+        )
         social = social_structure_engine.assess_context(
             objective_state,
             observations,
@@ -141,7 +156,12 @@ def run_pipeline(
             social=social,
         )
         hypotheses = lens_analysis.hypotheses
-        futures = future_generator.generate(objective_state, subjective_models, hypotheses)
+        futures = future_generator.generate(
+            objective_state,
+            subjective_models,
+            hypotheses,
+            possible_world_context=possible_worlds,
+        )
         economics = economic_engine.evaluate_actions(
             economics,
             futures,
@@ -220,6 +240,18 @@ def run_pipeline(
         all_stress_states.extend(psychology.stress_states)
         all_motivation_states.extend(psychology.motivation_states)
         all_information_boundaries.extend(economics.information_boundaries)
+        all_possible_worlds.extend(possible_worlds.possible_worlds)
+        all_world_evidence_assessments.extend(
+            possible_worlds.evidence_assessments
+        )
+        all_prior_belief_distributions.extend(
+            possible_worlds.prior_distributions
+        )
+        all_world_revisions.extend(possible_worlds.revisions)
+        all_posterior_belief_distributions.extend(
+            possible_worlds.posterior_distributions
+        )
+        all_possible_world_beliefs.extend(possible_worlds.new_beliefs)
         all_scarcity_assessments.extend(economics.scarcity_assessments)
         all_information_asymmetries.extend(economics.information_asymmetries)
         all_incentive_assessments.extend(economics.incentive_assessments)
@@ -265,6 +297,14 @@ def run_pipeline(
             stress_states=all_stress_states,
             motivation_states=all_motivation_states,
             information_boundaries=all_information_boundaries,
+            possible_worlds=all_possible_worlds,
+            world_evidence_assessments=all_world_evidence_assessments,
+            prior_belief_distributions=all_prior_belief_distributions,
+            world_revisions=all_world_revisions,
+            posterior_belief_distributions=(
+                all_posterior_belief_distributions
+            ),
+            possible_world_beliefs=all_possible_world_beliefs,
             scarcity_assessments=all_scarcity_assessments,
             information_asymmetries=all_information_asymmetries,
             incentive_assessments=all_incentive_assessments,
@@ -306,6 +346,18 @@ def run_pipeline(
         "stress_states": to_dict(all_stress_states),
         "motivation_states": to_dict(all_motivation_states),
         "information_boundaries": to_dict(all_information_boundaries),
+        "possible_worlds": to_dict(all_possible_worlds),
+        "world_evidence_assessments": to_dict(
+            all_world_evidence_assessments
+        ),
+        "prior_belief_distributions": to_dict(
+            all_prior_belief_distributions
+        ),
+        "world_revisions": to_dict(all_world_revisions),
+        "posterior_belief_distributions": to_dict(
+            all_posterior_belief_distributions
+        ),
+        "possible_world_beliefs": to_dict(all_possible_world_beliefs),
         "scarcity_assessments": to_dict(all_scarcity_assessments),
         "information_asymmetries": to_dict(all_information_asymmetries),
         "incentive_assessments": to_dict(all_incentive_assessments),

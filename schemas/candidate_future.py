@@ -29,3 +29,6 @@ class CandidateFuture(BaseModel):
     expected_state_changes: list[StateChange] = Field(default_factory=list)
     uncertainties: list[str] = Field(default_factory=list)
     risks: list[str] = Field(default_factory=list)
+    source_possible_world_ids: list[str] = Field(default_factory=list)
+    source_belief_distribution_ids: list[str] = Field(default_factory=list)
+    belief_plausibility: float = Field(default=0.5, ge=0.0, le=1.0)

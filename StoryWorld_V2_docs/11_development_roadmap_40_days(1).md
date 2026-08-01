@@ -666,6 +666,16 @@ CausalHypothesis。
 
     CandidateFuture
 
+完成情况：
+
+- 已区分认识论层的 `PossibleWorld` 与演化层的 `CandidateFuture`，避免把主体解释误写为客观未来。
+- 已定义 `WorldEvidenceAssessment`、`BeliefDistribution`、`BayesianWorldRevision`、`PossibleWorldBelief` 与 `PossibleWorldContext`。
+- 已完成 `Observation → Evidence → Remove impossible worlds → Update probabilities → New Belief`。
+- Possible Worlds 只读取主体 `InformationBoundary` 内的 Observation / Evidence，隐藏事实不得泄漏。
+- 被硬证据排除的世界后验严格为 0，其余世界按贝叶斯公式重新归一化。
+- `CandidateFuture` 已引用来源 Possible World、后验分布与 belief plausibility，后验进入 Future Score，并继续经过 Value + Motivation → Decision → Action。
+- 默认样例中林夏与王晨形成不同主导世界，相关 Schema、信息边界、淘汰、归一化和决策接入测试均已通过。
+
 ------------------------------------------------------------------------
 
 ## Day 22-23：Future Generator

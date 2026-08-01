@@ -26,7 +26,13 @@ class FutureEvaluator:
             relations or [],
         )
         consistency = self.agent_consistency.score(future, subjective_models)
-        return round((future.estimated_plausibility * 0.45) + (causal_support * 0.25) + (consistency * 0.30), 3)
+        return round(
+            (future.estimated_plausibility * 0.35)
+            + (future.belief_plausibility * 0.10)
+            + (causal_support * 0.25)
+            + (consistency * 0.30),
+            3,
+        )
 
     def causal_support_score(
         self,
