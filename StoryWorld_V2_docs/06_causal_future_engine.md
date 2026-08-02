@@ -52,11 +52,20 @@ Environmental Constraint
 ```json
 {
   "future_id": "future_001",
+  "source_state_id": "state_000",
   "summary": "林夏不会立即公开对抗学校，而会先秘密验证监控机制",
   "estimated_plausibility": 0.46,
   "time_horizon": "hours",
   "trigger_conditions": ["林夏确认网络流量异常"],
   "supporting_hypotheses": ["hyp_psy_001", "hyp_social_003"],
+  "opposing_hypotheses": [],
+  "mechanism": {
+    "mechanism_type": "information_discovery",
+    "drivers": ["perceived_threat", "information_asymmetry"],
+    "mediators": ["private_evidence_collection"],
+    "constraints": ["detection_risk"],
+    "lens_names": ["psychology", "economic", "social_structure"]
+  },
   "agent_actions": [
     {
       "agent_id": "lin_xia",
@@ -83,6 +92,8 @@ D：暂时忽略
 ```
 
 这些是不同的世界状态分支，不是为了制造戏剧性的剧情选项。每个分支都必须绑定行动、机制、约束和预期 StateChange。
+
+Day 22-23 的生成器实现四种机制：信息发现改变主体可获得的证据条件，社会协作改变关系状态，制度争议改变组织透明度，过程惯性表示缺少干预时 ActiveProcess 延续。支持与抑制假设必须根据 action effect 和 affected agent 选择，不得按假设列表位置切片。每个生成结果保存 source state、生成理由、风险、不确定性和至少一个可应用的 StateChange。
 
 ## 概率说明
 

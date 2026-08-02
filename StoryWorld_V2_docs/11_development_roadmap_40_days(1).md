@@ -690,6 +690,16 @@ CausalHypothesis。
 
 机制不同。
 
+完成情况：
+
+- 每个 step 稳定生成 4 个 Candidate Future，满足 3-5 个分支要求。
+- 四类机制分别为 `information_discovery`、`social_coordination`、`institutional_contestation` 与 `process_inertia`，不是同义剧情选项。
+- 新增结构化 `FutureMechanism`，保存 driver、mediator、constraint、Lens、CausalHypothesis 与 ActiveProcess 来源。
+- 支持与抑制假设按 `promotes_actions`、`inhibits_actions` 和 `affected_agents` 动态选择，不再按列表位置切片。
+- 每条分支均绑定 AgentAction、Possible World 后验、风险、不确定性和可执行 StateChange。
+- estimated plausibility 由 base rate、机制支持、反向约束和 belief plausibility 共同计算，并保留 generation rationale。
+- 主行动者由 Subjective Model 动态选择；专项测试覆盖机制多样性、引用闭合、状态可应用性与机制消融。
+
 ------------------------------------------------------------------------
 
 ## Day 24：Agent Action Model

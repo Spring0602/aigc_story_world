@@ -169,6 +169,8 @@ Objective Constraints
 Objective State
 Subjective Models
 Hypotheses
+Possible World Context
+Active Processes
 ```
 
 输出：
@@ -176,6 +178,19 @@ Hypotheses
 ```text
 3～5 CandidateFuture
 ```
+
+每个输出必须形成独立机制而非同义行动文案，并闭合以下引用：
+
+```text
+Source State
+→ Possible World / Belief Distribution
+→ Supporting + Opposing Hypotheses
+→ Future Mechanism
+→ Agent Action
+→ Expected StateChange
+```
+
+当前实现生成信息发现、社会协作、制度争议和过程惯性四类分支；相对可信度由 base rate、机制支持、抑制约束和 belief plausibility 共同计算。
 
 ## FutureEvaluator
 

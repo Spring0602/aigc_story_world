@@ -24,7 +24,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 
 ## 当前进度
 
-目前已完成 40 天计划的前 21 天，核心研究链路可以端到端运行，并已完成主体认知与 Lens 消融两项正式实验。
+目前已完成 40 天计划的前 23 天，核心研究链路可以端到端运行，并已完成主体认知与 Lens 消融两项正式实验。
 
 | 阶段 | 已完成能力 | 状态 |
 | --- | --- | :---: |
@@ -44,7 +44,8 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 | Day 19 | Lens Router 与 Hypothesis Conflict Resolver | 完成 |
 | Day 20 | Lens Ablation 实验 | 完成 |
 | Day 21 | Possible Worlds、Belief Distribution 与 Candidate Future 溯源 | 完成 |
-| Day 22-23 | 机制差异化 Future Generator | 下一步 |
+| Day 22-23 | 机制差异化 Future Generator | 完成 |
+| Day 24 | Bounded Rationality Agent Action Model | 下一步 |
 
 当前基线包含 1 个共享客观世界、2 个角色、3 种认知 Lens，以及每个时间步 4 条候选未来。测试集还覆盖 Dataist、Institutionalist 和 Skeptic 三类认知配置，用于验证同一事实如何产生差异化判断。
 
@@ -165,7 +166,13 @@ World
 
 `CandidateFuture` 通过 `source_possible_world_ids`、`source_belief_distribution_ids` 和 `belief_plausibility` 引用这条认识论链。后验概率进入 `FutureEvaluator`，再与 Lens 因果支持、角色一致性、Value 和 Motivation 一起影响 Decision。
 
-### 10. Social Structure Lens
+### 10. 机制差异化 Future Generator
+
+`FutureGenerator` 每步生成 4 条世界状态分支，而不是同义剧情选项：秘密取证对应 `information_discovery`，同伴求助对应 `social_coordination`，公开质询对应 `institutional_contestation`，延迟行动对应 `process_inertia`。每条分支都包含结构化 `FutureMechanism`、行动、支持与抑制假设、约束、Possible World 后验、风险、不确定性和可实际应用的 `StateChange`。
+
+生成器按 `promotes_actions` / `inhibits_actions` 和 `affected_agents` 选择假设，并由基础率、机制支持、反向约束和 belief plausibility 计算相对可信度。主行动者依据 Subjective Model 动态选择，不再固定为某个角色。
+
+### 11. Social Structure Lens
 
 社会智能体链将心理状态与社会位置并行汇入决策：
 
@@ -179,7 +186,7 @@ World → Observation → Belief
 
 `SocialStructureEngine` 生成逐角色的 Role constraint、Norm pressure 和 Institution power，并为每项候选行动计算 role alignment、norm compliance、institutional risk、social support 与 compatibility。`SocialStructureLens` 按角色动态生成带 provenance 的假设；Social compatibility 以独立分量进入 `ValueAssessment.score`。
 
-### 11. Lens Router 与冲突解析
+### 12. Lens Router 与冲突解析
 
 ```text
 Objective State
@@ -302,7 +309,7 @@ print(result["run_dir"])
 python -m unittest discover -v
 ```
 
-当前共有 78 项自动化测试，覆盖：
+当前共有 85 项自动化测试，覆盖：
 
 - Pydantic Schema 校验与跨对象引用。
 - Observation、Evidence、Belief Update 和 Interpretation 链路。
@@ -317,6 +324,7 @@ python -m unittest discover -v
 - 跨 Lens 支持、冲突、条件关系，未解决冲突和关系感知 Future 评分。
 - Psychology、Economic、SocialStructure 的单 Lens 消融、模块无泄漏与确定性实验导出。
 - Possible Worlds 的信息隔离、概率归一化、硬证据淘汰、后验新信念与 Candidate Future 评分接入。
+- Future Generator 的机制多样性、正反假设绑定、动态行动者、真实状态分支和机制消融。
 
 运行 Day 10 正式实验：
 

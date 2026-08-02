@@ -41,6 +41,7 @@ ValueAssessment
 Decision
 Action
 CandidateFuture
+FutureMechanism
 StateChange
 Event (WorldEvent)
 NarrativeEvent
@@ -147,6 +148,12 @@ World Truth
 - `BayesianWorldRevision` 保存先验分布、后验分布、证据评估、归一化常数和公式。
 - `PossibleWorldBelief` 是后验分布产生的新信念，保留 Observation、Evidence、Revision 和 Information Boundary 的完整来源链。
 - `CandidateFuture` 仍表示行动之后的候选世界状态分支，通过来源世界 ID、分布 ID 与 `belief_plausibility` 接入认识论层。
+
+## FutureMechanism 与 CandidateFuture
+
+`FutureMechanism` 显式区分 `information_discovery`、`social_coordination`、`institutional_contestation` 和 `process_inertia`，并保存 drivers、mediators、constraints、Lens、CausalHypothesis 与 ActiveProcess 来源。
+
+生成后的 `CandidateFuture` 必须包含 `source_state_id`、结构化 mechanism、支持与抑制假设、AgentAction、风险、不确定性、generation rationale 和至少一个 `StateChange`。Mechanism 的 source hypothesis IDs 必须与 Candidate Future 的 supporting hypothesis IDs 一致，StateChange 也必须反向引用所属 future ID。
 
 ## MentalModel
 

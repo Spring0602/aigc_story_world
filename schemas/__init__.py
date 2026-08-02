@@ -4,7 +4,13 @@ from schemas.agent import AgentProfile
 from schemas.agency import Action, ActionStatus, Decision, ValueAssessment
 from schemas.common import EvidenceType, InformationVisibility, ObservationVisibility
 from schemas.causal_hypothesis import CausalHypothesis, TimeScale
-from schemas.candidate_future import AgentAction, CandidateFuture, StateChange
+from schemas.candidate_future import (
+    AgentAction,
+    CandidateFuture,
+    FutureMechanism,
+    FutureMechanismType,
+    StateChange,
+)
 from schemas.cognitive import BiasFilterResult, BiasSignal, BiasType, MentalModel, SalienceFocus
 from schemas.evidence import BayesianBeliefUpdate, BeliefState, Evidence, EvidencePolarity
 from schemas.economics import (
@@ -133,6 +139,8 @@ __all__ = [
     "LensAblationExperimentResult",
     "Event",
     "ImagePrompt",
+    "FutureMechanism",
+    "FutureMechanismType",
     "InformationItem",
     "InformationVisibility",
     "InformationAsymmetryAssessment",
