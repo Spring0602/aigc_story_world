@@ -45,6 +45,12 @@ class Decision(BaseModel):
     other_model_adjustment: float = Field(default=0.0, ge=-1.0, le=1.0)
     rationale: str
     confidence: float = Field(ge=0.0, le=1.0)
+    agent_action_decision_id: str | None = None
+    bounded_rationality_score: float | None = Field(
+        default=None,
+        ge=0.0,
+        le=1.0,
+    )
 
 
 class Action(BaseModel):

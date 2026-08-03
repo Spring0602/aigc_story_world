@@ -45,6 +45,7 @@ class OutputExporter:
         hypotheses,
         hypothesis_relations,
         candidate_futures,
+        agent_action_decisions,
         selected_futures,
         value_assessments,
         decisions,
@@ -130,6 +131,10 @@ class OutputExporter:
             hypothesis_relations,
         )
         self._write_json(run_dir / "candidate_futures.json", candidate_futures)
+        self._write_json(
+            run_dir / "agent_action_decisions.json",
+            agent_action_decisions,
+        )
         self._write_json(run_dir / "selected_futures.json", selected_futures)
         self._write_json(run_dir / "value_assessments.json", value_assessments)
         self._write_json(run_dir / "decisions.json", decisions)

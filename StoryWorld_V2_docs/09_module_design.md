@@ -154,12 +154,17 @@ Objective State
 
 ```text
 Subjective Model
+Belief State / Possible World Context
+Emotion / Motivation
+Value System
 Beliefs About Others
 Causal Hypotheses
 Objective Constraints
 ```
 
 输出多个带解释分解的 `AgentActionDecision`，供 Future Generator 组合为世界状态分支。
+
+当前实现对 belief、possible world、goal、value、emotion、motivation、other model 与 constraint 八项评分。阈值随 belief uncertainty、stress 和 information coverage 调整；动作达到阈值表示“足够可接受”，排序第一的动作标记为 preferred。所有动作仍作为 Candidate Future 的可比较分支保留，最终执行权属于 Decision Engine。
 
 ## FutureGenerator
 
@@ -171,6 +176,7 @@ Subjective Models
 Hypotheses
 Possible World Context
 Active Processes
+Agent Action Decisions
 ```
 
 输出：

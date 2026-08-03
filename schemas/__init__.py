@@ -1,6 +1,7 @@
 """StoryWorld V2 structured data models."""
 
 from schemas.agent import AgentProfile
+from schemas.agent_action import ActionScoreBreakdown, AgentActionDecision
 from schemas.agency import Action, ActionStatus, Decision, ValueAssessment
 from schemas.common import EvidenceType, InformationVisibility, ObservationVisibility
 from schemas.causal_hypothesis import CausalHypothesis, TimeScale
@@ -101,10 +102,12 @@ from schemas.theory_of_mind import AttributedBelief, BeliefAboutOther
 __all__ = [
     "ActiveProcess",
     "Action",
+    "ActionScoreBreakdown",
     "ActionStatus",
     "ActionOrientation",
     "Agent",
     "AgentAction",
+    "AgentActionDecision",
     "AgentProfile",
     "AttributedBelief",
     "Belief",

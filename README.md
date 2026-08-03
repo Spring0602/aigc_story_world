@@ -24,7 +24,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 
 ## 当前进度
 
-目前已完成 40 天计划的前 23 天，核心研究链路可以端到端运行，并已完成主体认知与 Lens 消融两项正式实验。
+目前已完成 40 天计划的前 24 天，核心研究链路可以端到端运行，并已完成主体认知与 Lens 消融两项正式实验。
 
 | 阶段 | 已完成能力 | 状态 |
 | --- | --- | :---: |
@@ -45,7 +45,8 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 | Day 20 | Lens Ablation 实验 | 完成 |
 | Day 21 | Possible Worlds、Belief Distribution 与 Candidate Future 溯源 | 完成 |
 | Day 22-23 | 机制差异化 Future Generator | 完成 |
-| Day 24 | Bounded Rationality Agent Action Model | 下一步 |
+| Day 24 | Bounded Rationality Agent Action Model | 完成 |
+| Day 25-26 | Future Evaluator 强化 | 下一步 |
 
 当前基线包含 1 个共享客观世界、2 个角色、3 种认知 Lens，以及每个时间步 4 条候选未来。测试集还覆盖 Dataist、Institutionalist 和 Skeptic 三类认知配置，用于验证同一事实如何产生差异化判断。
 
@@ -70,10 +71,15 @@ flowchart TD
     BS --> MB[My Belief]
     NWB --> MB
     O --> OM[Other Model / Theory of Mind]
-    MB --> D[Decision]
-    OM --> D
-    I --> D
-    VS[Value System] --> D
+    MB --> BR[Bounded Rationality / Agent Action Model]
+    OM --> BR
+    I --> BR
+    EM[Emotion] --> BR
+    MOT[Motivation] --> BR
+    VS[Value System] --> BR
+    C[Constraints] --> BR
+    BR --> CF[Candidate Futures]
+    CF --> D[Decision]
 
     D --> A[Action]
     A --> WE[World Event]
@@ -172,7 +178,13 @@ World
 
 生成器按 `promotes_actions` / `inhibits_actions` 和 `affected_agents` 选择假设，并由基础率、机制支持、反向约束和 belief plausibility 计算相对可信度。主行动者依据 Subjective Model 动态选择，不再固定为某个角色。
 
-### 11. Social Structure Lens
+### 11. Bounded Rationality Agent Action Model
+
+`AgentActionModel` 在 Future Generator 之前评估候选动作。每个 `AgentActionDecision` 保存 Belief、Possible World、Goal、Value、Emotion、Motivation、Other Model 与 Constraint 八个分项，以及角色的信息覆盖率、动态 satisficing threshold、考虑顺序和首选动作。模型使用主体边界内的最新 BeliefState，不读取隐藏事实，也不假设角色拥有无限计算能力。
+
+Action score 进入 `CandidateFuture.bounded_rationality_score` 和 Future Evaluation；最终 `Decision` 继续引用对应 `action_decision_id`，形成 `Observation → Belief / Possible Worlds → Emotion → Motivation → Value → Bounded Rationality → Decision → Action` 的闭合链路。
+
+### 12. Social Structure Lens
 
 社会智能体链将心理状态与社会位置并行汇入决策：
 
@@ -186,7 +198,7 @@ World → Observation → Belief
 
 `SocialStructureEngine` 生成逐角色的 Role constraint、Norm pressure 和 Institution power，并为每项候选行动计算 role alignment、norm compliance、institutional risk、social support 与 compatibility。`SocialStructureLens` 按角色动态生成带 provenance 的假设；Social compatibility 以独立分量进入 `ValueAssessment.score`。
 
-### 12. Lens Router 与冲突解析
+### 13. Lens Router 与冲突解析
 
 ```text
 Objective State
@@ -265,7 +277,7 @@ print(result["run_dir"])
 
 ## 输出说明
 
-每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 42 个 JSON 文件和 1 份 Markdown 报告。
+每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 43 个 JSON 文件和 1 份 Markdown 报告。
 
 | 分组 | 文件 | 用途 |
 | --- | --- | --- |
@@ -279,7 +291,7 @@ print(result["run_dir"])
 | 社会结构 | `role_assessments.json`、`norm_pressures.json`、`institution_powers.json`、`social_action_evaluations.json` | 展示角色、规范、制度权力与社会支持如何改变行动适配度 |
 | 他心模型 | `beliefs_about_others.json` | 保存主体对其他主体信念、目标与动作的预测 |
 | 未来推演 | `hypotheses.json`、`hypothesis_relations.json`、`candidate_futures.json`、`selected_futures.json` | 保存机制假设、跨 Lens 关系和候选世界走向 |
-| 决策与行动 | `value_assessments.json`、`decisions.json`、`actions.json` | 解释为何选择某项行动以及如何执行 |
+| 决策与行动 | `agent_action_decisions.json`、`value_assessments.json`、`decisions.json`、`actions.json` | 展示有限理性行动考虑、最终选择及执行结果 |
 | 世界变化 | `world_events.json` | 记录行动产生的客观事件和状态更新依据 |
 | 叙事表达 | `narrative_events.json`、`scene_cards.json`、`image_prompts.json` | 将世界变化转换为叙事与视觉生成输入 |
 | 汇总报告 | `report.md` | 提供适合人工阅读的本次运行摘要 |
@@ -309,7 +321,7 @@ print(result["run_dir"])
 python -m unittest discover -v
 ```
 
-当前共有 85 项自动化测试，覆盖：
+当前共有 93 项自动化测试，覆盖：
 
 - Pydantic Schema 校验与跨对象引用。
 - Observation、Evidence、Belief Update 和 Interpretation 链路。
@@ -325,6 +337,7 @@ python -m unittest discover -v
 - Psychology、Economic、SocialStructure 的单 Lens 消融、模块无泄漏与确定性实验导出。
 - Possible Worlds 的信息隔离、概率归一化、硬证据淘汰、后验新信念与 Candidate Future 评分接入。
 - Future Generator 的机制多样性、正反假设绑定、动态行动者、真实状态分支和机制消融。
+- Bounded Rationality 的八维行动分解、satisficing、信息边界、约束与 Possible World 反事实，以及 Action Model 到最终 Action 的引用闭环。
 
 运行 Day 10 正式实验：
 

@@ -45,6 +45,8 @@ Environmental Constraint
 }
 ```
 
+Day 24 已实现 Bounded Rationality Action Model。动作在主体 Information Boundary 内按 Belief / Possible World、Goal、Value、Emotion、Motivation、Beliefs About Others 和 Constraint 八项评分；阈值随不确定性、压力与信息覆盖率动态变化。`AgentActionDecision` 保存完整分项、satisficing 结果和来源 ID，随后由 Candidate Future 与最终 Decision 共同引用。
+
 ## CandidateFuture
 
 `PossibleWorld` 与 `CandidateFuture` 必须区分：前者是主体在有限信息下对“当前世界究竟是什么”的概率解释，后者是行动发生后“世界可能变成什么”的状态分支。认识论链先完成 Possible Worlds 的证据淘汰和贝叶斯修正，再把后验 `belief_plausibility` 作为 Candidate Future 评分的一项输入。

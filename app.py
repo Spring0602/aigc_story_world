@@ -2,6 +2,7 @@ import argparse
 import json
 
 from config import DEFAULT_NUM_STEPS
+from core.agent_action_model import AgentActionModel
 from core.cognition_engine import CognitionEngine
 from core.decision_engine import ActionExecutor, DecisionEngine
 from core.economic_engine import EconomicEngine
@@ -39,6 +40,7 @@ def run_pipeline(
     initializer = WorldInitializer()
     observation_engine = ObservationEngine()
     cognition_engine = CognitionEngine()
+    agent_action_model = AgentActionModel()
     psychology_engine = PsychologyEngine()
     theory_of_mind_engine = TheoryOfMindEngine()
     lens_router = LensRouter(enabled_lenses=enabled_lenses)
@@ -90,6 +92,7 @@ def run_pipeline(
     all_hypothesis_relations = []
     all_unresolved_hypothesis_conflicts = []
     all_future_scores = []
+    all_agent_action_decisions = []
     all_candidate_futures = []
     selected_futures = []
     all_value_assessments = []
@@ -156,11 +159,28 @@ def run_pipeline(
             social=social,
         )
         hypotheses = lens_analysis.hypotheses
+        agent_action_decisions = agent_action_model.evaluate(
+            subjective_models=subjective_models,
+            belief_states=cognition.belief_states,
+            possible_worlds=possible_worlds,
+            psychology=active_psychology,
+            information_boundaries=economics.information_boundaries,
+            other_models=other_models,
+            hypotheses=hypotheses,
+            step=objective_state.step + 1,
+            economics=(
+                economics if "economic" in active_lens_names else None
+            ),
+            social=(
+                social if "social_structure" in active_lens_names else None
+            ),
+        )
         futures = future_generator.generate(
             objective_state,
             subjective_models,
             hypotheses,
             possible_world_context=possible_worlds,
+            action_decisions=agent_action_decisions,
         )
         economics = economic_engine.evaluate_actions(
             economics,
@@ -215,6 +235,7 @@ def run_pipeline(
             social=(
                 social if "social_structure" in active_lens_names else None
             ),
+            action_decisions=agent_action_decisions,
         )
         actions = action_executor.execute(decisions)
         new_state = transition.apply(
@@ -268,6 +289,7 @@ def run_pipeline(
             lens_analysis.unresolved_conflict_ids
         )
         all_candidate_futures.extend(futures)
+        all_agent_action_decisions.extend(agent_action_decisions)
         selected_futures.append(selected_future)
         all_value_assessments.extend(value_assessments)
         all_decisions.extend(decisions)
@@ -318,6 +340,7 @@ def run_pipeline(
             hypotheses=all_hypotheses,
             hypothesis_relations=all_hypothesis_relations,
             candidate_futures=all_candidate_futures,
+            agent_action_decisions=all_agent_action_decisions,
             selected_futures=selected_futures,
             value_assessments=all_value_assessments,
             decisions=all_decisions,
@@ -379,6 +402,7 @@ def run_pipeline(
         ),
         "future_scores": all_future_scores,
         "candidate_futures": to_dict(all_candidate_futures),
+        "agent_action_decisions": to_dict(all_agent_action_decisions),
         "selected_futures": to_dict(selected_futures),
         "value_assessments": to_dict(all_value_assessments),
         "decisions": to_dict(all_decisions),

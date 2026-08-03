@@ -37,6 +37,8 @@ InstitutionPowerAssessment
 SocialActionEvaluation
 CausalHypothesis
 AgentAction
+ActionScoreBreakdown
+AgentActionDecision
 ValueAssessment
 Decision
 Action
@@ -154,6 +156,18 @@ World Truth
 `FutureMechanism` 显式区分 `information_discovery`、`social_coordination`、`institutional_contestation` 和 `process_inertia`，并保存 drivers、mediators、constraints、Lens、CausalHypothesis 与 ActiveProcess 来源。
 
 生成后的 `CandidateFuture` 必须包含 `source_state_id`、结构化 mechanism、支持与抑制假设、AgentAction、风险、不确定性、generation rationale 和至少一个 `StateChange`。Mechanism 的 source hypothesis IDs 必须与 Candidate Future 的 supporting hypothesis IDs 一致，StateChange 也必须反向引用所属 future ID。
+
+## Bounded Rationality 与 AgentActionDecision
+
+```text
+World → Observation → Belief / Possible Worlds
+→ Emotion → Motivation → Value
+→ Bounded Rationality → Decision → Action
+```
+
+`ActionScoreBreakdown` 保存 belief、possible world、goal、value、emotion、motivation、other model 和 constraint 八项兼容度及加权分数。`AgentActionDecision` 进一步保存 Information Boundary、来源 Observation / Belief、当前主导 Possible World Belief、本动作实际评估的 Possible World、支持目标与价值、正反 Causal Hypothesis、约束 ID、动态 satisficing threshold、考虑顺序和首选标记。
+
+主体只使用边界内可见信息，并优先读取当前 step 信息最完整的 BeliefState。`CandidateFuture.source_action_decision_ids` 与 `Decision.agent_action_decision_id` 将有限理性评估连接到未来评分和最终 Action。
 
 ## MentalModel
 

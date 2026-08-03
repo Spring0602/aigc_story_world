@@ -56,6 +56,8 @@ class CandidateFuture(BaseModel):
     mechanism: FutureMechanism | None = None
     opposing_hypotheses: list[str] = Field(default_factory=list)
     generation_rationale: str = ""
+    source_action_decision_ids: list[str] = Field(default_factory=list)
+    bounded_rationality_score: float = Field(default=0.5, ge=0.0, le=1.0)
 
     @model_validator(mode="after")
     def validate_mechanism_references(self) -> "CandidateFuture":

@@ -1,5 +1,6 @@
 from schemas import (
     Action,
+    AgentActionDecision,
     BeliefAboutOther,
     BeliefState,
     CandidateFuture,
@@ -30,6 +31,7 @@ class DecisionEngine:
         psychology: PsychologyContext | None = None,
         economics: EconomicContext | None = None,
         social: SocialContext | None = None,
+        action_decisions: list[AgentActionDecision] | None = None,
     ) -> tuple[CandidateFuture, list[ValueAssessment], list[Decision]]:
         models = {model.agent_id: model for model in subjective_models}
         latest_belief_state = {item.agent_id: item for item in belief_states}
@@ -65,6 +67,10 @@ class DecisionEngine:
         other_models_by_observer: dict[str, list[BeliefAboutOther]] = {}
         for item in other_models:
             other_models_by_observer.setdefault(item.observer_agent_id, []).append(item)
+        action_decisions_by_key = {
+            (item.agent_id, item.action): item
+            for item in (action_decisions or [])
+        }
         alternatives = sorted(
             {
                 action.action
@@ -141,6 +147,9 @@ class DecisionEngine:
                 proposed_action.action,
                 relevant_other_models,
             )
+            action_decision = action_decisions_by_key.get(
+                (agent_id, proposed_action.action)
+            )
             decision = Decision(
                 decision_id=f"decision_{step:03d}_{decision_sequence:03d}",
                 agent_id=agent_id,
@@ -193,6 +202,14 @@ class DecisionEngine:
                         (decision_score(selected_future) * 0.6)
                         + (interpretation.confidence * 0.4),
                     ),
+                ),
+                agent_action_decision_id=(
+                    action_decision.action_decision_id
+                    if action_decision else None
+                ),
+                bounded_rationality_score=(
+                    action_decision.score_breakdown.weighted_score
+                    if action_decision else None
                 ),
             )
             decisions.append(decision)

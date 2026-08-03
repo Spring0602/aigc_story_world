@@ -725,6 +725,15 @@ CausalHypothesis。
 
 要求记录每个动作的支持信念、目标、价值、情绪和约束分项。
 
+完成情况：
+
+- 新增 `schemas/agent_action.py`，定义 `ActionScoreBreakdown` 与 `AgentActionDecision`。
+- 新增 `core/agent_action_model.py`，在 Information Boundary 内读取最新 BeliefState、Possible World、Emotion、Motivation、Value、Other Model 和现实约束。
+- 每个候选动作保存八维兼容度、动态 satisficing threshold、考虑顺序、是否满足阈值及首选标记。
+- Economic / Social constraint 与 opposing hypothesis 会降低 constraint satisfaction；禁用对应 Lens 时不会从新路径泄漏。
+- AgentActionDecision 进入 Candidate Future 的 bounded-rationality score，并由最终 Decision 反向引用，闭合到 Action。
+- 已通过信息边界、公式、约束消融、Possible World 反事实、Schema 校验和端到端 provenance 测试。
+
 交付：
 
     core/agent_action_model.py

@@ -2,6 +2,7 @@ from typing import Any
 
 from schemas import (
     AgentAction,
+    AgentActionDecision,
     CandidateFuture,
     CausalHypothesis,
     FutureMechanism,
@@ -78,9 +79,25 @@ class FutureGenerator:
         subjective_models: list[SubjectiveWorldModel],
         hypotheses: list[CausalHypothesis],
         possible_world_context: PossibleWorldContext | None = None,
+        action_decisions: list[AgentActionDecision] | None = None,
     ) -> list[CandidateFuture]:
         step = objective_state.step + 1
-        actor = self._select_actor(objective_state, subjective_models)
+        if action_decisions:
+            preferred = next(
+                (item for item in action_decisions if item.is_preferred),
+                action_decisions[0],
+            )
+            actor = next(
+                item
+                for item in subjective_models
+                if item.agent_id == preferred.agent_id
+            )
+        else:
+            actor = self._select_actor(objective_state, subjective_models)
+        decisions_by_action = {
+            item.action: item for item in (action_decisions or [])
+            if item.agent_id == actor.agent_id
+        }
         companion_id = self._select_companion(objective_state, actor.agent_id)
         active_process_ids = [
             item.process_id for item in objective_state.active_processes
@@ -94,6 +111,7 @@ class FutureGenerator:
         futures = []
         for branch in self.BRANCHES:
             action = str(branch["action"])
+            action_decision = decisions_by_action.get(action)
             supporting = self._matching_hypotheses(
                 hypotheses,
                 actor.agent_id,
@@ -172,6 +190,14 @@ class FutureGenerator:
                         f"support={self._average_confidence(supporting):.3f}; "
                         f"opposition={self._average_confidence(opposing):.3f}; "
                         f"belief={belief_plausibility:.3f}."
+                    ),
+                    source_action_decision_ids=(
+                        [action_decision.action_decision_id]
+                        if action_decision else []
+                    ),
+                    bounded_rationality_score=(
+                        action_decision.score_breakdown.weighted_score
+                        if action_decision else 0.5
                     ),
                 )
             )
