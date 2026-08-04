@@ -211,6 +211,20 @@ cross_lens_support
 contradiction_penalty
 ```
 
+当前实现输出 `FutureEvaluation`，并以如下权重计算最终分数：
+
+```text
+0.15 * estimated_plausibility
++ 0.20 * causal_support
++ 0.20 * agent_consistency
++ 0.15 * constraint_satisfaction
++ 0.20 * compatibility
++ 0.10 * cross_lens_support
+- 0.15 * contradiction_penalty
+```
+
+其中 `compatibility` 由 `state_compatibility`（0.50）、`epistemic_compatibility`（0.20）和 `action_compatibility`（0.30）组成。StateChange 必须匹配当前 `source_state_id`、可解析路径和 `old_value`；约束与行动兼容性继承对应的 `AgentActionDecision`。输出同时记录正反假设、跨 Lens 关系、约束、动作决策及状态路径，供实验复核。
+
 ## WorldTransition
 
 必须：

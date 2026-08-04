@@ -46,7 +46,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 | Day 21 | Possible Worlds、Belief Distribution 与 Candidate Future 溯源 | 完成 |
 | Day 22-23 | 机制差异化 Future Generator | 完成 |
 | Day 24 | Bounded Rationality Agent Action Model | 完成 |
-| Day 25-26 | Future Evaluator 强化 | 下一步 |
+| Day 25-26 | Future Evaluator 强化 | 完成 |
 
 当前基线包含 1 个共享客观世界、2 个角色、3 种认知 Lens，以及每个时间步 4 条候选未来。测试集还覆盖 Dataist、Institutionalist 和 Skeptic 三类认知配置，用于验证同一事实如何产生差异化判断。
 
@@ -182,6 +182,10 @@ World
 
 `AgentActionModel` 在 Future Generator 之前评估候选动作。每个 `AgentActionDecision` 保存 Belief、Possible World、Goal、Value、Emotion、Motivation、Other Model 与 Constraint 八个分项，以及角色的信息覆盖率、动态 satisficing threshold、考虑顺序和首选动作。模型使用主体边界内的最新 BeliefState，不读取隐藏事实，也不假设角色拥有无限计算能力。
 
+### Future Evaluator
+
+`FutureEvaluator` 为每个候选未来生成结构化 `FutureEvaluation`，评分包含 `causal_support`、`agent_consistency`、`constraint_satisfaction` 和综合 `compatibility`。兼容性继续拆分为世界状态、认识论和行动兼容性；跨 Lens 支持提供加分，正反假设冲突则形成显式惩罚。评估记录引用的假设、关系、约束、动作决策和状态路径，同时保留扁平 `future_scores` 供 Decision Engine 与消融实验兼容使用。
+
 Action score 进入 `CandidateFuture.bounded_rationality_score` 和 Future Evaluation；最终 `Decision` 继续引用对应 `action_decision_id`，形成 `Observation → Belief / Possible Worlds → Emotion → Motivation → Value → Bounded Rationality → Decision → Action` 的闭合链路。
 
 ### 12. Social Structure Lens
@@ -277,7 +281,7 @@ print(result["run_dir"])
 
 ## 输出说明
 
-每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 43 个 JSON 文件和 1 份 Markdown 报告。
+每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 44 个 JSON 文件和 1 份 Markdown 报告，其中 `future_evaluations.json` 保存候选未来的完整评分分解与溯源。
 
 | 分组 | 文件 | 用途 |
 | --- | --- | --- |

@@ -92,6 +92,7 @@ def run_pipeline(
     all_hypothesis_relations = []
     all_unresolved_hypothesis_conflicts = []
     all_future_scores = []
+    all_future_evaluations = []
     all_agent_action_decisions = []
     all_candidate_futures = []
     selected_futures = []
@@ -198,15 +199,20 @@ def run_pipeline(
             cognition.mental_models,
             step=objective_state.step + 1,
         )
-        future_scores = {
-            future.future_id: future_evaluator.score(
+        future_evaluations = [
+            future_evaluator.evaluate(
                 future,
                 objective_state,
                 subjective_models,
                 hypotheses,
                 lens_analysis.relations,
+                agent_action_decisions,
             )
             for future in futures
+        ]
+        future_scores = {
+            evaluation.future_id: evaluation.score_breakdown.final_score
+            for evaluation in future_evaluations
         }
         all_future_scores.extend(
             {
@@ -290,6 +296,7 @@ def run_pipeline(
         )
         all_candidate_futures.extend(futures)
         all_agent_action_decisions.extend(agent_action_decisions)
+        all_future_evaluations.extend(future_evaluations)
         selected_futures.append(selected_future)
         all_value_assessments.extend(value_assessments)
         all_decisions.extend(decisions)
@@ -341,6 +348,7 @@ def run_pipeline(
             hypothesis_relations=all_hypothesis_relations,
             candidate_futures=all_candidate_futures,
             agent_action_decisions=all_agent_action_decisions,
+            future_evaluations=all_future_evaluations,
             selected_futures=selected_futures,
             value_assessments=all_value_assessments,
             decisions=all_decisions,
@@ -401,6 +409,7 @@ def run_pipeline(
             all_unresolved_hypothesis_conflicts
         ),
         "future_scores": all_future_scores,
+        "future_evaluations": to_dict(all_future_evaluations),
         "candidate_futures": to_dict(all_candidate_futures),
         "agent_action_decisions": to_dict(all_agent_action_decisions),
         "selected_futures": to_dict(selected_futures),

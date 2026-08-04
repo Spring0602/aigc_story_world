@@ -51,6 +51,8 @@ storyworld_v2/
 │   ├── interpretation.py
 │   ├── causal_hypothesis.py
 │   ├── candidate_future.py
+│   ├── agent_action.py
+│   ├── future_evaluation.py
 │   ├── state_provenance.py
 │   ├── narrative_event.py
 │   └── scene_card.py

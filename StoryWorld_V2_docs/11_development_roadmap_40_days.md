@@ -274,7 +274,9 @@ Constraint
 
 共同决定。
 
-Day 24 已完成：`AgentActionModel` 在主体有限信息下为候选动作计算 Belief、Possible World、Goal、Value、Emotion、Motivation、Beliefs About Others 与 Constraint 分项，使用动态 satisficing threshold 形成排序，并把 `AgentActionDecision` 接入 Candidate Future、Decision 与 Action provenance。Day 25-26 的 Future Evaluator 强化仍为下一步。
+Day 24 已完成：`AgentActionModel` 在主体有限信息下为候选动作计算 Belief、Possible World、Goal、Value、Emotion、Motivation、Beliefs About Others 与 Constraint 分项，使用动态 satisficing threshold 形成排序，并把 `AgentActionDecision` 接入 Candidate Future、Decision 与 Action provenance。
+
+Day 25-26 已完成：`FutureEvaluator` 输出结构化 `FutureEvaluation`，分别评估 Causal Support、Agent Consistency、Constraint Satisfaction 与 Compatibility；Compatibility 进一步覆盖状态、认识论和行动兼容性。跨 Lens 支持和矛盾惩罚进入最终评分，评估结果闭合 Hypothesis、HypothesisRelation、AgentActionDecision、Constraint 与 StateChange 引用，并导出为 `future_evaluations.json`。
 
 ------------------------------------------------------------------------
 

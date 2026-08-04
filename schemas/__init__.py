@@ -35,6 +35,7 @@ from schemas.experiment import (
     PartialObservabilityControl,
     SameWorldDifferentMindsResult,
 )
+from schemas.future_evaluation import FutureEvaluation, FutureScoreBreakdown
 from schemas.interpretation import Interpretation
 from schemas.hypothesis_relation import (
     HypothesisRelation,
@@ -144,6 +145,8 @@ __all__ = [
     "ImagePrompt",
     "FutureMechanism",
     "FutureMechanismType",
+    "FutureEvaluation",
+    "FutureScoreBreakdown",
     "InformationItem",
     "InformationVisibility",
     "InformationAsymmetryAssessment",
