@@ -174,7 +174,7 @@ class PsychologyLensTest(unittest.TestCase):
 
             run_dir = Path(result["run_dir"])
             json_files = list(run_dir.glob("*.json"))
-            self.assertEqual(len(json_files), 44)
+            self.assertEqual(len(json_files), 45)
             for filename in (
                 "perceptions.json",
                 "emotional_appraisals.json",
@@ -192,6 +192,7 @@ class PsychologyLensTest(unittest.TestCase):
                 "actions.json",
                 "agent_action_decisions.json",
                 "future_evaluations.json",
+                "state_provenance.json",
                 "scarcity_assessments.json",
                 "information_asymmetries.json",
                 "incentive_assessments.json",

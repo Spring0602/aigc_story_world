@@ -308,6 +308,8 @@ State(t+1)
 provenance
 ```
 
+Day 27-28 已完成：`WorldTransition` 在状态写入前验证 source state、StateChange 路径与旧值、重复修改、no-op、受保护字段、目标 step 及 Action / Decision / Future Evaluation 一致性；全部检查通过后才在深拷贝快照上原子生成 `State(t+1)`。独立 `StateProvenance` Schema 闭合状态、事件、动作、决策、价值评估、行动模型、正反假设、Lens、观察、信念、目标、心理状态、约束、Other Model 与 Possible World 引用，并通过 `state_provenance.json` 导出。Day 29 的 3-5 步 Simulation 正式验收仍为下一步。
+
 ------------------------------------------------------------------------
 
 # Phase 4：Narrative Engine（Day 31-35）

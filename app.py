@@ -60,6 +60,7 @@ def run_pipeline(
     objective_state, agents, subjective_models = initializer.initialize(user_input)
 
     objective_states = [objective_state]
+    all_state_provenance = list(objective_state.history)
     all_observations = []
     all_evidence = []
     all_belief_updates = []
@@ -244,11 +245,23 @@ def run_pipeline(
             action_decisions=agent_action_decisions,
         )
         actions = action_executor.execute(decisions)
+        selected_evaluation = next(
+            item
+            for item in future_evaluations
+            if item.future_id == selected_future.future_id
+        )
+        previous_history_length = len(objective_state.history)
         new_state = transition.apply(
             objective_state,
             selected_future,
             actions=actions,
             decisions=decisions,
+            action_decisions=agent_action_decisions,
+            value_assessments=value_assessments,
+            future_evaluation=selected_evaluation,
+        )
+        all_state_provenance.extend(
+            new_state.history[previous_history_length:]
         )
         world_events = new_state.events[len(objective_state.events) :]
         narrative_event = narrative_engine.express(objective_state, new_state, selected_future, subjective_models)
@@ -312,6 +325,7 @@ def run_pipeline(
     if export:
         run_dir = OutputExporter().export_all(
             objective_states=objective_states,
+            state_provenance=all_state_provenance,
             agents=agents,
             observations=all_observations,
             evidence=all_evidence,
@@ -363,6 +377,7 @@ def run_pipeline(
         "run_dir": str(run_dir) if run_dir else None,
         "enabled_lenses": sorted(active_lens_names),
         "objective_states": to_dict(objective_states),
+        "state_provenance": to_dict(all_state_provenance),
         "agent_profiles": to_dict(agents),
         "observations": to_dict(all_observations),
         "evidence": to_dict(all_evidence),

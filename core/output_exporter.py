@@ -12,6 +12,7 @@ class OutputExporter:
     def export_all(
         self,
         objective_states,
+        state_provenance,
         agents,
         observations,
         evidence,
@@ -60,6 +61,7 @@ class OutputExporter:
         run_dir.mkdir(parents=True, exist_ok=False)
 
         self._write_json(run_dir / "objective_states.json", objective_states)
+        self._write_json(run_dir / "state_provenance.json", state_provenance)
         self._write_json(run_dir / "agent_profiles.json", agents)
         self._write_json(run_dir / "observations.json", observations)
         self._write_json(run_dir / "evidence.json", evidence)

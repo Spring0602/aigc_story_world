@@ -99,6 +99,7 @@ class PhaseOneDaysOneToSixTest(unittest.TestCase):
     def test_state_transition_records_cause_and_source_state(self):
         future = CandidateFuture(
             future_id="future_move",
+            source_state_id=self.state.state_id,
             summary="Move to the computer lab",
             estimated_plausibility=0.7,
             time_horizon="hours",

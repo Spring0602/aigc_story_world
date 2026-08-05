@@ -24,7 +24,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 
 ## 当前进度
 
-目前已完成 40 天计划的前 24 天，核心研究链路可以端到端运行，并已完成主体认知与 Lens 消融两项正式实验。
+目前已完成 40 天计划的前 28 天，核心研究链路可以端到端运行，并已完成主体认知与 Lens 消融两项正式实验。
 
 | 阶段 | 已完成能力 | 状态 |
 | --- | --- | :---: |
@@ -47,6 +47,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 | Day 22-23 | 机制差异化 Future Generator | 完成 |
 | Day 24 | Bounded Rationality Agent Action Model | 完成 |
 | Day 25-26 | Future Evaluator 强化 | 完成 |
+| Day 27-28 | 原子化 World Transition 与完整 State Provenance | 完成 |
 
 当前基线包含 1 个共享客观世界、2 个角色、3 种认知 Lens，以及每个时间步 4 条候选未来。测试集还覆盖 Dataist、Institutionalist 和 Skeptic 三类认知配置，用于验证同一事实如何产生差异化判断。
 
@@ -188,6 +189,12 @@ World
 
 Action score 进入 `CandidateFuture.bounded_rationality_score` 和 Future Evaluation；最终 `Decision` 继续引用对应 `action_decision_id`，形成 `Observation → Belief / Possible Worlds → Emotion → Motivation → Value → Bounded Rationality → Decision → Action` 的闭合链路。
 
+### World Transition
+
+`WorldTransition` 在写入 `State(t+1)` 前统一校验 Candidate Future 来源、StateChange 路径、`old_value`、重复修改、no-op、受保护元数据以及 Action / Decision / Future Evaluation 引用。只有全部检查通过才会在深拷贝状态上原子应用变化，原始 `State(t)` 始终保持不变。
+
+每条 `StateProvenance` 可反向追踪 source/target state、World Event、Future、Future Evaluation、Action、Decision、Agent Action Decision、Value Assessment、正反假设、Lens、Observation、Belief、Goal、Emotion、Motivation、Constraint、Other Model 与 Possible World。World Event 同时通过 `provenance_ids` 指回实际状态变化。
+
 ### 12. Social Structure Lens
 
 社会智能体链将心理状态与社会位置并行汇入决策：
@@ -281,11 +288,11 @@ print(result["run_dir"])
 
 ## 输出说明
 
-每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 44 个 JSON 文件和 1 份 Markdown 报告，其中 `future_evaluations.json` 保存候选未来的完整评分分解与溯源。
+每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 45 个 JSON 文件和 1 份 Markdown 报告，其中 `future_evaluations.json` 保存候选未来的完整评分分解，`state_provenance.json` 独立保存状态变化因果链。
 
 | 分组 | 文件 | 用途 |
 | --- | --- | --- |
-| 世界与主体 | `objective_states.json`、`agent_profiles.json` | 保存共享世界快照与主体配置 |
+| 世界与主体 | `objective_states.json`、`state_provenance.json`、`agent_profiles.json` | 保存共享世界快照、状态变化因果链与主体配置 |
 | 观察与证据 | `observations.json`、`evidence.json` | 记录主体看到什么，以及证据如何支持判断 |
 | 信念更新 | `belief_updates.json`、`belief_states.json` | 保存先验、后验及每步信念状态 |
 | 可能世界 | `possible_worlds.json`、`world_evidence_assessments.json`、`prior_belief_distributions.json`、`world_revisions.json`、`posterior_belief_distributions.json`、`possible_world_beliefs.json` | 保存信息边界内的候选解释、证据似然、淘汰结果、贝叶斯修正与新信念 |

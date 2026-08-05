@@ -3,6 +3,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from schemas.common import EvidenceType, InformationVisibility
+from schemas.state_provenance import StateProvenance
 
 
 class Location(BaseModel):
@@ -89,6 +90,7 @@ class Event(BaseModel):
     source_belief_ids: list[str] = Field(default_factory=list)
     source_observation_ids: list[str] = Field(default_factory=list)
     source_other_model_ids: list[str] = Field(default_factory=list)
+    provenance_ids: list[str] = Field(default_factory=list)
 
 
 class ActiveProcess(BaseModel):
@@ -98,25 +100,6 @@ class ActiveProcess(BaseModel):
     time_scale: str
     drivers: list[str] = Field(default_factory=list)
     current_stage: str = ""
-
-
-class StateProvenance(BaseModel):
-    provenance_id: str
-    step: int = Field(ge=0)
-    timestamp: str
-    source: str
-    source_state_id: str | None = None
-    target_state_id: str | None = None
-    fact: str | None = None
-    path: str | None = None
-    old_value: Any = None
-    new_value: Any = None
-    cause: str = ""
-    future_id: str | None = None
-    action_ids: list[str] = Field(default_factory=list)
-    supporting_hypothesis_ids: list[str] = Field(default_factory=list)
-    source_observation_ids: list[str] = Field(default_factory=list)
-    supporting_other_model_ids: list[str] = Field(default_factory=list)
 
 
 class ObjectiveWorldState(BaseModel):

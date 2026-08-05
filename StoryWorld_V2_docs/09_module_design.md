@@ -229,11 +229,13 @@ contradiction_penalty
 
 必须：
 
-- 校验 StateChange。
-- 记录 provenance。
-- 保存旧状态。
-- 创建新 state_id。
-- 将 StateChange 关联到 action、future、hypothesis、observation 与 source state。
+- 在修改前校验 Candidate Future 的 `source_state_id`。
+- 校验 StateChange 路径存在、`old_value` 与当前事实一致、`new_value` 不是 no-op，且不得重复修改同一路径或覆盖 state_id、step、timestamp、events、history。
+- 校验 Action 已执行并与 Decision、Candidate Future 及目标 step 一致。
+- 在深拷贝状态上原子应用全部变化，校验失败时旧状态和新状态都不得出现部分写入。
+- 创建新 `state_id`、World Event 和强类型 StateProvenance。
+- 将 StateChange 关联到 source/target state、event、action、decision、AgentActionDecision、ValueAssessment、future、FutureEvaluation、正反 hypothesis、relation、lens、observation、belief、goal、emotion、motivation、constraint、Other Model 与 Possible World。
+- World Event 通过 `provenance_ids` 反向引用产生的状态变化。
 
 ## NarrativeEngine
 

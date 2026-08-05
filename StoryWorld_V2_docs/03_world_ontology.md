@@ -110,7 +110,7 @@ HistoryRecord
 }
 ```
 
-`history` 不是任意字典日志，而应由强类型 provenance 记录组成。初始事实也要记录 `source`，例如案例文件、用户输入或系统规则。当前代码只有 `reason` 与 `future_id` 的最小记录，完整模型按 V2.2 的 World Transition 阶段实现。
+`history` 不是任意字典日志，而由独立的强类型 `StateProvenance` 记录组成。初始事实记录 `source`，例如案例文件、用户输入或系统规则；状态转移记录 source/target state、old/new value、World Event、Action、Decision、Future Evaluation、因果假设、Lens、Observation、Belief、Goal、心理状态、约束与 Possible World 等引用。相同记录另行汇总导出到 `state_provenance.json`，便于跨状态检索。
 
 ## Event 与 Action 的边界
 

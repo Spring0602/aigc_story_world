@@ -785,6 +785,16 @@ CausalHypothesis。
     source_observation_ids
     old_value / new_value / cause / step
 
+完成情况：
+
+- 新增独立 `schemas/state_provenance.py`，并由 `ObjectiveWorldState.history` 使用强类型记录。
+- WorldTransition 在写入前校验 source state、StateChange 路径、old value、no-op、重复路径和受保护元数据。
+- Action 必须为 executed，并与 Decision、Candidate Future 和目标 step 一致；Future Evaluation 必须基于当前 source state。
+- 全部校验通过后才在深拷贝快照上原子应用变化，源状态保持不可变。
+- StateProvenance 闭合 Event、Action、Decision、AgentActionDecision、ValueAssessment、Future / Evaluation、Hypothesis / Relation / Lens、Observation、Belief、Goal、Emotion、Motivation、Constraint、Other Model 和 Possible World 引用。
+- Event 通过 `provenance_ids` 反向关联 StateChange，流水线另行导出 `state_provenance.json`。
+- 已通过完整因果链、快照不可变、陈旧来源、错误旧值、无效路径、no-op、重复路径、受保护字段、动作不一致和 Schema 完整性测试。
+
 交付：
 
     core/world_transition.py

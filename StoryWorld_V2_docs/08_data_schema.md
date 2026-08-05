@@ -310,6 +310,8 @@ resolution_status: reinforcing | context_dependent | unresolved
 
 `StateChange` 描述“改了什么”，`StateProvenance` 描述“为什么改、由谁推动、依据什么机制”。两者不能互相替代。
 
+`StateProvenance` 位于独立的 `schemas/state_provenance.py`。World Transition 记录必须至少包含 source/target state、path、old/new value、cause、future、event 和 action，并可继续追踪 Future Evaluation、Decision、AgentActionDecision、ValueAssessment、正反假设、跨 Lens 关系、Observation、Belief、Goal、Emotion、Motivation、Constraint、Other Model 与 Possible World。`Event.provenance_ids` 提供从客观事件返回具体状态变化的反向引用。
+
 ## BeliefAboutOther
 
 ```json

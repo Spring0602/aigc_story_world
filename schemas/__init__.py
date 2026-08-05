@@ -55,7 +55,6 @@ from schemas.objective_world import (
     ObjectiveWorldState,
     Relationship,
     Resource,
-    StateProvenance,
 )
 from schemas.observation import Observation
 from schemas.psychology import (
@@ -98,6 +97,7 @@ from schemas.subjective_world import (
     Uncertainty,
     Value,
 )
+from schemas.state_provenance import StateProvenance
 from schemas.theory_of_mind import AttributedBelief, BeliefAboutOther
 
 __all__ = [

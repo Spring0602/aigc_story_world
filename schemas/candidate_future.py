@@ -61,11 +61,9 @@ class CandidateFuture(BaseModel):
 
     @model_validator(mode="after")
     def validate_mechanism_references(self) -> "CandidateFuture":
-        if self.mechanism is None:
-            return self
-        if set(self.mechanism.source_hypothesis_ids) != set(
-            self.supporting_hypotheses
-        ):
+        if self.mechanism is not None and set(
+            self.mechanism.source_hypothesis_ids
+        ) != set(self.supporting_hypotheses):
             raise ValueError(
                 "mechanism source hypotheses must match future support"
             )
