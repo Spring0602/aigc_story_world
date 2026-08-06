@@ -809,6 +809,14 @@ CausalHypothesis。
 
 3-5 step 世界演化。
 
+完成情况：
+
+- 新增 `experiments/multi_step_simulation.py` 与强类型 `MultiStepSimulationResult` / `SimulationStepTrace`。
+- 支持 3-5 步边界，逐步保存 source/target state、Observation、BeliefState、Candidate Future、Decision、Action、Event、StateChange 与 provenance 引用。
+- 自动验证状态连续性、源快照不可变、old/new value 一致、无 no-op、完整 provenance 和确定性复跑。
+- 正式 3 步结果为 `state_000 → state_001 → state_002 → state_003`，全部验收项通过。
+- 导出 `experiments/results/multi_step_simulation.json` 与 `.md` 报告。
+
 ------------------------------------------------------------------------
 
 ## Day 30：世界模型实验
@@ -819,6 +827,15 @@ CausalHypothesis。
 -   有 Subjective Model
 
 效果差异。
+
+完成情况：
+
+- 新增 `experiments/world_model_ablation.py` 和强类型 Condition、Comparison、Experiment Result。
+- 控制初始 Objective World、Agent 身份与角色、Observation 边界、Lens、Future 模板、决策权重和 3 步 horizon。
+- 无 Subjective Model 条件使用中性 Agent 载体维持模块接口，但移除个体知识、信念先验、价值、目标和认识论偏好。
+- 两组共享相同 Objective World 与 Observation；Belief、Interpretation、Future Score、Action Score 和 provenance 轨迹发生变化。
+- 最优 Action 与最终事实状态未翻转，说明当前场景形成机制敏感但选择稳健；两组 provenance 均保持完整。
+- 导出 `experiments/results/world_model_ablation.json` 与 `.md` 报告，实验通过。
 
 ------------------------------------------------------------------------
 

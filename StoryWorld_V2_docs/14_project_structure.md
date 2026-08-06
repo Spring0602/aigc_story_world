@@ -82,6 +82,8 @@ storyworld_v2/
 │   ├── test_theory_of_mind.py
 │   ├── test_agent_action.py
 │   ├── test_provenance.py
+│   ├── test_multi_step_simulation.py
+│   ├── test_world_model_ablation.py
 │   ├── test_hypothesis.py
 │   ├── test_future.py
 │   └── test_narrative_separation.py
@@ -89,6 +91,8 @@ storyworld_v2/
 ├── experiments/
 │   ├── same_world_different_minds.py
 │   ├── lens_ablation.py
+│   ├── multi_step_simulation.py
+│   ├── world_model_ablation.py
 │   └── baseline_comparison.py
 │
 └── docs/

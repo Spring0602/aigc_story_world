@@ -117,3 +117,51 @@ class LensAblationExperimentResult(BaseModel):
     comparisons: list[LensAblationComparison] = Field(default_factory=list)
     metrics: list[ExperimentMetric] = Field(default_factory=list)
     passed: bool
+
+
+class WorldModelConditionResult(BaseModel):
+    condition_id: str
+    subjective_models_enabled: bool
+    steps: int = Field(ge=3, le=5)
+    initial_world_fingerprint: str
+    subjective_model_fingerprint: str
+    observation_fingerprint: str
+    belief_trajectory_fingerprint: str
+    interpretation_trajectory_fingerprint: str
+    future_scores: list[dict[str, float]] = Field(default_factory=list)
+    action_scores: list[dict[str, float]] = Field(default_factory=list)
+    selected_actions: list[str] = Field(default_factory=list)
+    selected_mechanisms: list[str] = Field(default_factory=list)
+    state_change_paths: list[str] = Field(default_factory=list)
+    final_state_fingerprint: str
+    provenance_fingerprint: str
+    provenance_complete: bool
+
+
+class WorldModelComparison(BaseModel):
+    objective_control_preserved: bool
+    observation_boundary_preserved: bool
+    subjective_configuration_removed: bool
+    belief_trajectory_changed: bool
+    interpretation_trajectory_changed: bool
+    future_scores_changed: bool
+    action_scores_changed: bool
+    selected_actions_changed: bool
+    selected_mechanisms_changed: bool
+    final_state_changed: bool
+    provenance_changed: bool
+    subjective_effect_detected: bool
+    provenance_preserved: bool
+    passed: bool
+
+
+class WorldModelExperimentResult(BaseModel):
+    experiment_id: str
+    hypothesis: str
+    controlled_variables: list[str] = Field(default_factory=list)
+    independent_variable: str
+    with_subjective_model: WorldModelConditionResult
+    without_subjective_model: WorldModelConditionResult
+    comparison: WorldModelComparison
+    metrics: list[ExperimentMetric] = Field(default_factory=list)
+    passed: bool

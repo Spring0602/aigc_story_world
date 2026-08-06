@@ -1,0 +1,206 @@
+{
+  "experiment_id": "day30_world_model_ablation",
+  "hypothesis": "在客观世界、可见性边界、运行步数和推演模块不变时，移除主体的个体知识、价值、目标与认识论先验，应改变信念、解释或行动评估轨迹。",
+  "controlled_variables": [
+    "initial_objective_world",
+    "agent_ids_and_roles",
+    "information_visibility",
+    "three_step_horizon",
+    "enabled_lenses",
+    "future_templates",
+    "decision_weights",
+    "deterministic_runtime"
+  ],
+  "independent_variable": "configured_subjective_world_models",
+  "with_subjective_model": {
+    "condition_id": "with_subjective_model",
+    "subjective_models_enabled": true,
+    "steps": 3,
+    "initial_world_fingerprint": "e303c6a42ebd297ee20cfc84e75d50f0da12be3a503a6a869ed2245365ef51e4",
+    "subjective_model_fingerprint": "84f71d53c18d5bb34c2dbd4fafa2cb56c33567c64ba6ff8e833bdfae382082e4",
+    "observation_fingerprint": "e9ac35cc8b16f4e5e36ecf9b22c6e603e9122c04231175b9d02a23e548d1be98",
+    "belief_trajectory_fingerprint": "770ce66d6a612be3a04c84ad39692d0fe6025eebf2417bc3c6790d87faf09bb5",
+    "interpretation_trajectory_fingerprint": "2429b00dee60aa1dba2ef83f4d68dbb3c5b61c4871812acd5454d45e24950b32",
+    "future_scores": [
+      {
+        "future_001_secret": 0.739,
+        "future_001_roommate": 0.569,
+        "future_001_confront": 0.321,
+        "future_001_ignore": 0.319
+      },
+      {
+        "future_002_secret": 0.739,
+        "future_002_roommate": 0.679,
+        "future_002_confront": 0.296,
+        "future_002_ignore": 0.485
+      },
+      {
+        "future_003_secret": 0.743,
+        "future_003_roommate": 0.682,
+        "future_003_confront": 0.297,
+        "future_003_ignore": 0.486
+      }
+    ],
+    "action_scores": [
+      {
+        "secretly_collect_network_evidence": 0.8864073769730668,
+        "ask_roommate_for_help": 0.7094975956374634,
+        "confront_authority": 0.5428028214666519,
+        "delay_action": 0.46486056671072085
+      },
+      {
+        "secretly_collect_network_evidence": 0.7978034513333334,
+        "ask_roommate_for_help": 0.7836279573303722,
+        "confront_authority": 0.459817445711688,
+        "delay_action": 0.5300427772551334
+      },
+      {
+        "secretly_collect_network_evidence": 0.7979487734646175,
+        "ask_roommate_for_help": 0.7845456297730644,
+        "confront_authority": 0.4584985758108743,
+        "delay_action": 0.530050069944656
+      }
+    ],
+    "selected_actions": [
+      "secretly_collect_network_evidence",
+      "secretly_collect_network_evidence",
+      "secretly_collect_network_evidence"
+    ],
+    "selected_mechanisms": [
+      "information_discovery",
+      "information_discovery",
+      "information_discovery"
+    ],
+    "state_change_paths": [
+      "agents.lin_xia.location_id",
+      "agents.lin_xia.status",
+      "agents.lin_xia.status"
+    ],
+    "final_state_fingerprint": "82803e7b8d1d779d30aa67a34643373380d62d6b01afc10b6c7e94b260116d24",
+    "provenance_fingerprint": "30d90c26c861a3562dc981ca502b25994dcaccab1916abfd6f72d224579d23d0",
+    "provenance_complete": true
+  },
+  "without_subjective_model": {
+    "condition_id": "without_subjective_model",
+    "subjective_models_enabled": false,
+    "steps": 3,
+    "initial_world_fingerprint": "e303c6a42ebd297ee20cfc84e75d50f0da12be3a503a6a869ed2245365ef51e4",
+    "subjective_model_fingerprint": "576349f8cf95521fb14963055f8346b20cc58a4ae2a49e23327e80649a85e2b2",
+    "observation_fingerprint": "e9ac35cc8b16f4e5e36ecf9b22c6e603e9122c04231175b9d02a23e548d1be98",
+    "belief_trajectory_fingerprint": "89234fba088ab43b19160f4dbee45d35cc24ce5f9e471fb6819f556d9d4fe8a8",
+    "interpretation_trajectory_fingerprint": "211e3f6b70882414d4b2b7043ed87d18364a913bb2a9cc0c61ca3bdec59c7373",
+    "future_scores": [
+      {
+        "future_001_secret": 0.687,
+        "future_001_roommate": 0.642,
+        "future_001_confront": 0.279,
+        "future_001_ignore": 0.507
+      },
+      {
+        "future_002_secret": 0.687,
+        "future_002_roommate": 0.648,
+        "future_002_confront": 0.271,
+        "future_002_ignore": 0.507
+      },
+      {
+        "future_003_secret": 0.689,
+        "future_003_roommate": 0.65,
+        "future_003_confront": 0.271,
+        "future_003_ignore": 0.507
+      }
+    ],
+    "action_scores": [
+      {
+        "secretly_collect_network_evidence": 0.5835640284893305,
+        "ask_roommate_for_help": 0.7039342327017881,
+        "confront_authority": 0.36908835647665994,
+        "delay_action": 0.6090557420602492
+      },
+      {
+        "secretly_collect_network_evidence": 0.5832261547859018,
+        "ask_roommate_for_help": 0.7010790132238343,
+        "confront_authority": 0.36424609002618125,
+        "delay_action": 0.6086405516203365
+      },
+      {
+        "secretly_collect_network_evidence": 0.5831080097679501,
+        "ask_roommate_for_help": 0.7016165888636916,
+        "confront_authority": 0.3622663012203059,
+        "delay_action": 0.6085072034999109
+      }
+    ],
+    "selected_actions": [
+      "secretly_collect_network_evidence",
+      "secretly_collect_network_evidence",
+      "secretly_collect_network_evidence"
+    ],
+    "selected_mechanisms": [
+      "information_discovery",
+      "information_discovery",
+      "information_discovery"
+    ],
+    "state_change_paths": [
+      "agents.lin_xia.location_id",
+      "agents.lin_xia.status",
+      "agents.lin_xia.status"
+    ],
+    "final_state_fingerprint": "82803e7b8d1d779d30aa67a34643373380d62d6b01afc10b6c7e94b260116d24",
+    "provenance_fingerprint": "f0c438018d324f7d8b4008683190aa5d185fed998e08253c6ef226f92a4f1ac6",
+    "provenance_complete": true
+  },
+  "comparison": {
+    "objective_control_preserved": true,
+    "observation_boundary_preserved": true,
+    "subjective_configuration_removed": true,
+    "belief_trajectory_changed": true,
+    "interpretation_trajectory_changed": true,
+    "future_scores_changed": true,
+    "action_scores_changed": true,
+    "selected_actions_changed": false,
+    "selected_mechanisms_changed": false,
+    "final_state_changed": false,
+    "provenance_changed": true,
+    "subjective_effect_detected": true,
+    "provenance_preserved": true,
+    "passed": true
+  },
+  "metrics": [
+    {
+      "metric": "objective_control_preserved",
+      "value": 1.0,
+      "passed": true,
+      "detail": "Both conditions start from the same objective world."
+    },
+    {
+      "metric": "observation_boundary_preserved",
+      "value": 1.0,
+      "passed": true,
+      "detail": "Both conditions receive the same visible observations."
+    },
+    {
+      "metric": "belief_trajectory_changed",
+      "value": 1.0,
+      "passed": true,
+      "detail": "Removing configured subjectivity changes belief dynamics."
+    },
+    {
+      "metric": "interpretation_trajectory_changed",
+      "value": 1.0,
+      "passed": true,
+      "detail": "Removing configured subjectivity changes interpretation."
+    },
+    {
+      "metric": "decision_scores_changed",
+      "value": 1.0,
+      "passed": true,
+      "detail": "Future and action evaluations respond to the ablation."
+    },
+    {
+      "metric": "provenance_preserved",
+      "value": 1.0,
+      "passed": true,
+      "detail": "Both conditions retain complete transition provenance."
+    }
+  ],
+  "passed": true
+}

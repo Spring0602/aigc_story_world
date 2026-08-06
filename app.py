@@ -21,6 +21,7 @@ from core.social_structure_engine import SocialStructureEngine
 from core.theory_of_mind import TheoryOfMindEngine
 from core.world_initializer import WorldInitializer
 from core.world_transition import WorldTransition
+from schemas import SubjectiveWorldModel
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -28,6 +29,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--input", "-i", default="校园监控：学校部署不透明的网络异常流量检测系统。")
     parser.add_argument("--steps", "-n", type=int, default=DEFAULT_NUM_STEPS)
     parser.add_argument("--no-export", action="store_true")
+    parser.add_argument(
+        "--no-subjective-models",
+        action="store_true",
+        help="replace configured subjective models with neutral agent carriers",
+    )
     return parser
 
 
@@ -36,6 +42,7 @@ def run_pipeline(
     steps: int = DEFAULT_NUM_STEPS,
     export: bool = True,
     enabled_lenses: set[str] | None = None,
+    use_subjective_models: bool = True,
 ) -> dict:
     initializer = WorldInitializer()
     observation_engine = ObservationEngine()
@@ -58,6 +65,14 @@ def run_pipeline(
     image_prompt_generator = ImagePromptGenerator()
 
     objective_state, agents, subjective_models = initializer.initialize(user_input)
+    if not use_subjective_models:
+        subjective_models = [
+            SubjectiveWorldModel(
+                agent_id=agent.agent_id,
+                roles=list(agent.roles),
+            )
+            for agent in objective_state.agents.values()
+        ]
 
     objective_states = [objective_state]
     all_state_provenance = list(objective_state.history)
@@ -376,6 +391,7 @@ def run_pipeline(
     return {
         "run_dir": str(run_dir) if run_dir else None,
         "enabled_lenses": sorted(active_lens_names),
+        "subjective_models_enabled": use_subjective_models,
         "objective_states": to_dict(objective_states),
         "state_provenance": to_dict(all_state_provenance),
         "agent_profiles": to_dict(agents),
@@ -440,7 +456,12 @@ def run_pipeline(
 
 def main() -> None:
     args = build_parser().parse_args()
-    result = run_pipeline(args.input, args.steps, export=not args.no_export)
+    result = run_pipeline(
+        args.input,
+        args.steps,
+        export=not args.no_export,
+        use_subjective_models=not args.no_subjective_models,
+    )
     print(json.dumps(result, ensure_ascii=False, indent=2))
     if result["run_dir"]:
         print(f"\n结果已保存到：{result['run_dir']}")

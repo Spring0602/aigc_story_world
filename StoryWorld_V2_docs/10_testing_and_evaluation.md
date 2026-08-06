@@ -276,6 +276,22 @@ Day 10 主对照已通过：三种认知配置共享同一世界指纹和规范�
 
 当前结果：三组消融全部通过。最大 Future Score 变化依次为 Economic `0.038`、Psychology `0.031`、SocialStructure `0.046`；最大 Action Score 变化为 `0.016`、`0.098`、`0.110`。最终 Action 排序未改变，但最终状态 provenance 随支持机制变化。
 
+### Day 29：Multi-step Simulation
+
+- 运行器：`experiments/multi_step_simulation.py`
+- 自动测试：`tests/test_multi_step_simulation.py`
+- 结果：`experiments/results/multi_step_simulation.json` / `.md`
+
+运行器接受 3-5 步，逐步验证 source/target state 连续、历史快照不可变、StateChange old/new value 与实际状态一致、无 no-op，并闭合 Candidate Future、Decision、Action、Event 和 provenance。当前 3 步正式结果全部通过。
+
+### Day 30：Subjective World Model Ablation
+
+- 运行器：`experiments/world_model_ablation.py`
+- 自动测试：`tests/test_world_model_ablation.py`
+- 结果：`experiments/results/world_model_ablation.json` / `.md`
+
+完整条件与中性主体条件共享 Objective World、Agent 身份与角色、Observation、Lens、Future 模板和决策权重。中性条件移除个体知识、信念先验、价值、目标与认识论偏好。当前结果中 Belief、Interpretation、Future Score、Action Score 和 provenance 发生变化；Action 与最终事实状态未翻转，两组 provenance 完整，实验通过。
+
 ### Experiment 3：Baseline Comparison
 
 比较 `Prompt → Story` 与完整 StoryWorld 链路。至少报告角色一致性、因果显式性、未来多样性和可解释性。

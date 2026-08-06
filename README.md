@@ -24,7 +24,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 
 ## 当前进度
 
-目前已完成 40 天计划的前 28 天，核心研究链路可以端到端运行，并已完成主体认知与 Lens 消融两项正式实验。
+目前已完成 40 天计划的前 30 天，核心研究链路可以连续演化 3-5 步，并已完成主体认知、Lens 消融和主观世界模型消融实验。
 
 | 阶段 | 已完成能力 | 状态 |
 | --- | --- | :---: |
@@ -48,6 +48,8 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 | Day 24 | Bounded Rationality Agent Action Model | 完成 |
 | Day 25-26 | Future Evaluator 强化 | 完成 |
 | Day 27-28 | 原子化 World Transition 与完整 State Provenance | 完成 |
+| Day 29 | 3-5 步连续 World Simulation | 完成 |
+| Day 30 | 有/无 Subjective Model 受控实验 | 完成 |
 
 当前基线包含 1 个共享客观世界、2 个角色、3 种认知 Lens，以及每个时间步 4 条候选未来。测试集还覆盖 Dataist、Institutionalist 和 Skeptic 三类认知配置，用于验证同一事实如何产生差异化判断。
 
@@ -195,6 +197,12 @@ Action score 进入 `CandidateFuture.bounded_rationality_score` 和 Future Evalu
 
 每条 `StateProvenance` 可反向追踪 source/target state、World Event、Future、Future Evaluation、Action、Decision、Agent Action Decision、Value Assessment、正反假设、Lens、Observation、Belief、Goal、Emotion、Motivation、Constraint、Other Model 与 Possible World。World Event 同时通过 `provenance_ids` 指回实际状态变化。
 
+### Multi-step Simulation 与世界模型实验
+
+`MultiStepSimulation` 对 3-5 步 rollout 逐步验证状态连续性、历史快照不可变、StateChange 的 old/new value、no-op 和完整 provenance。当前正式结果形成 `state_000 → state_001 → state_002 → state_003`，三步均通过。
+
+Day30 实验在相同 Objective World、Agent 身份与角色、Observation 边界、Lens、Future 模板和决策权重下，对比完整 Subjective Model 与中性主体消融。中性条件保留接口所需的 Agent 载体，但移除个体知识、既有信念、价值、目标和认识论偏好。结果显示 Belief、Interpretation、Future Score、Action Score 与 provenance 均发生变化；秘密取证仍保持首选，最终事实状态未翻转，表现为形成机制敏感而行动选择稳健。
+
 ### 12. Social Structure Lens
 
 社会智能体链将心理状态与社会位置并行汇入决策：
@@ -332,7 +340,7 @@ print(result["run_dir"])
 python -m unittest discover -v
 ```
 
-当前共有 93 项自动化测试，覆盖：
+当前共有 114 项自动化测试，覆盖：
 
 - Pydantic Schema 校验与跨对象引用。
 - Observation、Evidence、Belief Update 和 Interpretation 链路。
@@ -349,6 +357,8 @@ python -m unittest discover -v
 - Possible Worlds 的信息隔离、概率归一化、硬证据淘汰、后验新信念与 Candidate Future 评分接入。
 - Future Generator 的机制多样性、正反假设绑定、动态行动者、真实状态分支和机制消融。
 - Bounded Rationality 的八维行动分解、satisficing、信息边界、约束与 Possible World 反事实，以及 Action Model 到最终 Action 的引用闭环。
+- 3-5 步状态连续性、快照不可变、逐步 provenance 闭合与确定性复跑。
+- 有/无 Subjective Model 的受控消融，以及 Belief、Interpretation、Future / Action Score 和最终状态差异。
 
 运行 Day 10 正式实验：
 
@@ -365,6 +375,22 @@ python -m experiments.lens_ablation
 ```
 
 实验生成 [`lens_ablation.json`](experiments/results/lens_ablation.json) 与 [`lens_ablation.md`](experiments/results/lens_ablation.md)。移除任一 Lens 都会改变 Hypothesis Pool、关系图、Future 分数、Action 分数和最终状态 provenance；当前场景中秘密取证仍保持第一名，表现为机制敏感但最终选择稳健。
+
+运行 Day29 多步模拟验收：
+
+```bash
+python -m experiments.multi_step_simulation --steps 3
+```
+
+结果见 [`multi_step_simulation.json`](experiments/results/multi_step_simulation.json) 与 [`multi_step_simulation.md`](experiments/results/multi_step_simulation.md)。运行器支持 3-5 步，并验证状态链、快照、StateChange 与 provenance。
+
+运行 Day30 世界模型消融实验：
+
+```bash
+python -m experiments.world_model_ablation --steps 3
+```
+
+结果见 [`world_model_ablation.json`](experiments/results/world_model_ablation.json) 与 [`world_model_ablation.md`](experiments/results/world_model_ablation.md)。当前所有控制与差异指标通过；Action 与最终事实状态保持稳定，但认知、评分和 provenance 轨迹发生变化。
 
 ## 研究原则
 

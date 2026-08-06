@@ -245,6 +245,16 @@ contradiction_penalty
 
 `experiments/lens_ablation.py` 使用 `run_pipeline(enabled_lenses=...)` 运行全 Lens 基线和三组 leave-one-out 条件。禁用 Lens 时同时切断其 Hypothesis、关系和 ValueAssessment 分量，避免“名称删除但评分仍泄漏”。运行器输出世界指纹、假设与关系 IDs、Future / Action scores、排序、最终选择和状态指纹，并导出 JSON 与 Markdown。
 
+## Multi-step Simulation
+
+`experiments/multi_step_simulation.py` 调用确定性的 `run_pipeline` 执行 3-5 步 rollout，并输出 `MultiStepSimulationResult`。每个 `SimulationStepTrace` 保存 source/target state、Observation、BeliefState、Candidate Future、Decision、Action、Event、StateChange 与 provenance IDs。运行器验证状态连续性、快照不可变、old/new value、无 no-op 和引用闭合。
+
+## Subjective Model Ablation
+
+`run_pipeline(use_subjective_models=False)` 保留相同 Objective Agent、角色和可见性规则，但将配置的 Subjective World Model 替换为中性接口载体，不注入个体知识、信念先验、价值、目标或认识论偏好。该模式只用于受控实验，不改变默认运行行为。
+
+`experiments/world_model_ablation.py` 在 3 步条件下比较完整与中性主体配置，固定 Objective World、Observation 边界、Lens、Future 模板及决策权重，比较 Belief、Interpretation、Future / Action Score、选择轨迹、最终事实状态和 provenance。Action 未翻转不自动判为失败，只要认知或决策形成机制出现可复现差异且两组 provenance 完整。
+
 ## LLM 使用位置
 
 允许用于：

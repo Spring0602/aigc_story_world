@@ -1,0 +1,141 @@
+{
+  "simulation_id": "day29_multi_step_simulation",
+  "requested_steps": 3,
+  "initial_state_id": "state_000",
+  "final_state_id": "state_003",
+  "traces": [
+    {
+      "step": 1,
+      "source_state_id": "state_000",
+      "target_state_id": "state_001",
+      "selected_future_id": "future_001_secret",
+      "selected_mechanism_type": "information_discovery",
+      "selected_action": "secretly_collect_network_evidence",
+      "observation_ids": [
+        "obs_000_lin_xia_info_private_dns_redirect",
+        "obs_000_lin_xia_info_public_network_upgrade",
+        "obs_000_wang_chen_info_public_network_upgrade"
+      ],
+      "belief_state_ids": [
+        "belief_state_000_001",
+        "belief_state_000_002",
+        "belief_state_000_003"
+      ],
+      "candidate_future_ids": [
+        "future_001_confront",
+        "future_001_ignore",
+        "future_001_roommate",
+        "future_001_secret"
+      ],
+      "decision_ids": [
+        "decision_001_001"
+      ],
+      "action_ids": [
+        "action_001_001"
+      ],
+      "event_ids": [
+        "event_001_future_001_secret"
+      ],
+      "state_change_paths": [
+        "agents.lin_xia.location_id"
+      ],
+      "provenance_ids": [
+        "prov_001_001"
+      ],
+      "source_values_match": true,
+      "target_values_match": true,
+      "references_closed": true
+    },
+    {
+      "step": 2,
+      "source_state_id": "state_001",
+      "target_state_id": "state_002",
+      "selected_future_id": "future_002_secret",
+      "selected_mechanism_type": "information_discovery",
+      "selected_action": "secretly_collect_network_evidence",
+      "observation_ids": [
+        "obs_001_lin_xia_info_public_network_upgrade",
+        "obs_001_wang_chen_info_public_network_upgrade"
+      ],
+      "belief_state_ids": [
+        "belief_state_001_001",
+        "belief_state_001_002"
+      ],
+      "candidate_future_ids": [
+        "future_002_confront",
+        "future_002_ignore",
+        "future_002_roommate",
+        "future_002_secret"
+      ],
+      "decision_ids": [
+        "decision_002_001"
+      ],
+      "action_ids": [
+        "action_002_001"
+      ],
+      "event_ids": [
+        "event_002_future_002_secret"
+      ],
+      "state_change_paths": [
+        "agents.lin_xia.status"
+      ],
+      "provenance_ids": [
+        "prov_002_001"
+      ],
+      "source_values_match": true,
+      "target_values_match": true,
+      "references_closed": true
+    },
+    {
+      "step": 3,
+      "source_state_id": "state_002",
+      "target_state_id": "state_003",
+      "selected_future_id": "future_003_secret",
+      "selected_mechanism_type": "information_discovery",
+      "selected_action": "secretly_collect_network_evidence",
+      "observation_ids": [
+        "obs_002_lin_xia_info_public_network_upgrade",
+        "obs_002_wang_chen_info_public_network_upgrade"
+      ],
+      "belief_state_ids": [
+        "belief_state_002_001",
+        "belief_state_002_002"
+      ],
+      "candidate_future_ids": [
+        "future_003_confront",
+        "future_003_ignore",
+        "future_003_roommate",
+        "future_003_secret"
+      ],
+      "decision_ids": [
+        "decision_003_001"
+      ],
+      "action_ids": [
+        "action_003_001"
+      ],
+      "event_ids": [
+        "event_003_future_003_secret"
+      ],
+      "state_change_paths": [
+        "agents.lin_xia.status"
+      ],
+      "provenance_ids": [
+        "prov_003_001"
+      ],
+      "source_values_match": true,
+      "target_values_match": true,
+      "references_closed": true
+    }
+  ],
+  "state_ids": [
+    "state_000",
+    "state_001",
+    "state_002",
+    "state_003"
+  ],
+  "continuity_preserved": true,
+  "snapshots_immutable": true,
+  "provenance_complete": true,
+  "no_noop_changes": true,
+  "passed": true
+}

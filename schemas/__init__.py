@@ -34,6 +34,9 @@ from schemas.experiment import (
     LensAblationExperimentResult,
     PartialObservabilityControl,
     SameWorldDifferentMindsResult,
+    WorldModelComparison,
+    WorldModelConditionResult,
+    WorldModelExperimentResult,
 )
 from schemas.future_evaluation import FutureEvaluation, FutureScoreBreakdown
 from schemas.interpretation import Interpretation
@@ -79,6 +82,7 @@ from schemas.possible_world import (
     WorldEvidenceAssessment,
 )
 from schemas.scene_card import CameraSetup, ImagePrompt, SceneCard, SceneCharacter
+from schemas.simulation import MultiStepSimulationResult, SimulationStepTrace
 from schemas.social_structure import (
     InstitutionPowerAssessment,
     NormPressureAssessment,
@@ -162,6 +166,7 @@ __all__ = [
     "MentalModel",
     "MotivationState",
     "MotivationType",
+    "MultiStepSimulationResult",
     "NarrativeEvent",
     "ObjectiveWorldState",
     "Observation",
@@ -185,6 +190,7 @@ __all__ = [
     "SceneCharacter",
     "SalienceFocus",
     "SameWorldDifferentMindsResult",
+    "SimulationStepTrace",
     "ScarcityAssessment",
     "StateChange",
     "StateProvenance",
@@ -201,4 +207,7 @@ __all__ = [
     "Value",
     "ValueAssessment",
     "WorldEvidenceAssessment",
+    "WorldModelComparison",
+    "WorldModelConditionResult",
+    "WorldModelExperimentResult",
 ]

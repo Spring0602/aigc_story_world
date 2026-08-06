@@ -308,7 +308,9 @@ State(t+1)
 provenance
 ```
 
-Day 27-28 已完成：`WorldTransition` 在状态写入前验证 source state、StateChange 路径与旧值、重复修改、no-op、受保护字段、目标 step 及 Action / Decision / Future Evaluation 一致性；全部检查通过后才在深拷贝快照上原子生成 `State(t+1)`。独立 `StateProvenance` Schema 闭合状态、事件、动作、决策、价值评估、行动模型、正反假设、Lens、观察、信念、目标、心理状态、约束、Other Model 与 Possible World 引用，并通过 `state_provenance.json` 导出。Day 29 的 3-5 步 Simulation 正式验收仍为下一步。
+Day 27-28 已完成：`WorldTransition` 在状态写入前验证 source state、StateChange 路径与旧值、重复修改、no-op、受保护字段、目标 step 及 Action / Decision / Future Evaluation 一致性；全部检查通过后才在深拷贝快照上原子生成 `State(t+1)`。独立 `StateProvenance` Schema 闭合状态、事件、动作、决策、价值评估、行动模型、正反假设、Lens、观察、信念、目标、心理状态、约束、Other Model 与 Possible World 引用，并通过 `state_provenance.json` 导出。
+
+Day 29 已完成 3-5 步 Simulation 运行器和正式 3 步验收，状态连续性、快照不可变、StateChange old/new value、no-op、provenance 与确定性复跑全部通过。Day 30 已完成有/无 Subjective Model 的受控消融：两组共享相同客观世界与 Observation，移除个体主观配置后 Belief、Interpretation、Future / Action Score 与 provenance 轨迹改变；当前最优行动和最终事实状态保持稳定。结果分别保存于 `multi_step_simulation.*` 与 `world_model_ablation.*`。
 
 ------------------------------------------------------------------------
 
