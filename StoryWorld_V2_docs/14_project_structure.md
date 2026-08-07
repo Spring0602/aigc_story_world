@@ -28,6 +28,8 @@ storyworld_v2/
 │   ├── future_evaluator.py
 │   ├── world_transition.py
 │   ├── narrative_importance.py
+│   ├── fabula_builder.py
+│   ├── narrative_planner.py
 │   ├── narrative_engine.py
 │   ├── scene_generator.py
 │   ├── image_prompt_generator.py
@@ -53,6 +55,8 @@ storyworld_v2/
 │   ├── candidate_future.py
 │   ├── agent_action.py
 │   ├── future_evaluation.py
+│   ├── narrative_importance.py
+│   ├── narrative_structure.py
 │   ├── state_provenance.py
 │   ├── narrative_event.py
 │   └── scene_card.py
@@ -82,6 +86,8 @@ storyworld_v2/
 │   ├── test_theory_of_mind.py
 │   ├── test_agent_action.py
 │   ├── test_provenance.py
+│   ├── test_narrative_importance.py
+│   ├── test_narrative_pipeline.py
 │   ├── test_multi_step_simulation.py
 │   ├── test_world_model_ablation.py
 │   ├── test_hypothesis.py

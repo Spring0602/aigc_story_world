@@ -341,6 +341,8 @@ Scene Card
 -   观众知道什么？
 -   信息差在哪里？
 
+Day 32 已完成结构化 Narrative Importance，并按修订链路接入 `World Simulation → Fabula → Narrative Planner → Syuzhet + Focalization → Story Output`。Importance 对真实 World Event 评估七个维度；Fabula 保留时间与因果事实，Planner 负责选材，Syuzhet 独立排序，Focalization 依据角色 Observation 控制观众信息。第一版采用 chronological syuzhet 和 third-person limited，Day33 继续增强 Narrative Engine 的表达策略。
+
 ------------------------------------------------------------------------
 
 # Phase 5：实验验证（Day 36-40）

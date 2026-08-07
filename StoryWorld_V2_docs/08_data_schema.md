@@ -296,6 +296,31 @@ resolution_status: reinforcing | context_dependent | unresolved
 
 关系仅在具有共同 affected agent 的跨 Lens 假设之间生成。`contradicts` 必须保留为 `unresolved`，不得通过平均 confidence 隐式消除。`LensAnalysisResult` 同时保存 enabled lenses、Hypothesis Pool、relations 与 unresolved conflict IDs。
 
+## NarrativeImportanceAssessment
+
+```text
+assessment_id / source_event_id / source_future_id
+source_future_evaluation_id
+source_state_id / target_state_id / step
+importance_band: low | medium | high
+score_breakdown:
+  conflict_change / information_gain / character_decision
+  relationship_change / irreversibility
+  theme_relevance / visual_potential / weighted_score
+action_ids / decision_ids / provenance_ids / state_change_paths
+dimension_rationales / rationale
+```
+
+Assessment 只读取 World Transition 已产生的事实、机制和 provenance。`NarrativeImportanceBreakdown` 校验七维固定权重与 `weighted_score` 一致，禁止调用方提交互相矛盾的分项和总分。`NarrativeEvent.importance_assessment_id` 与 `source_event_id` 将后续表达反向关联到评估和真实 World Event。
+
+## Narrative Structure
+
+- `FabulaEvent` 保存 World Event 的 step、source/target state、actor、action、decision、cause、effect 与 provenance；`Fabula` 强制事件按时间排序并保存完整状态链。
+- `NarrativePlanItem` 将 FabulaEvent 与 Importance Assessment 绑定，记录重要性和叙事功能；`NarrativePlan` 保存选中与省略事件。
+- `Syuzhet` 只保存呈现顺序和排列策略，不复制或篡改 Fabula 事实。
+- `Focalization` 保存焦点角色、模式、Observation、character/audience known information 和 withheld information。
+- `StoryOutput` 闭合 Fabula、NarrativePlan、Syuzhet、Focalization、NarrativeEvent 与 source state IDs。
+
 ## StateChange
 
 ```json

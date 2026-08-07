@@ -237,9 +237,15 @@ contradiction_penalty
 - 将 StateChange 关联到 source/target state、event、action、decision、AgentActionDecision、ValueAssessment、future、FutureEvaluation、正反 hypothesis、relation、lens、observation、belief、goal、emotion、motivation、constraint、Other Model 与 Possible World。
 - World Event 通过 `provenance_ids` 反向引用产生的状态变化。
 
+## NarrativeImportance
+
+`NarrativeImportance.assess()` 输入 Old/New Objective State、World Event、Selected Future、Subjective Models 与 Future Evaluation，输出七维 `NarrativeImportanceAssessment`。评分依据结构化机制、实际 StateChange、Action / Decision、因果支持和主体价值目标，不能依据摘要关键词。`score(future)` 仅作为旧调用方的兼容接口；主流水线使用完整 `assess()`。
+
+`rank()` 按 weighted score 降序和 event ID 稳定排序。Narrative Importance 在 World Transition 之后执行，不得修改 Objective World，也不得反馈到 Future Evaluation。
+
 ## NarrativeEngine
 
-输入旧状态、新状态、Future 和 Subjective Models，输出 NarrativeEvent。
+World Simulation 循环完成后，`FabulaBuilder` 从 Objective State snapshots、World Events 与 StateProvenance 构建时间和因果均闭合的 Fabula。`NarrativePlanner.plan()` 按 Importance 选材，`arrange()` 生成独立 Syuzhet，`focalize()` 依据焦点角色真实 Observation 建立第三人称限知的信息边界，`story_output()` 汇总表达链引用。`NarrativeEngine.express_planned()` 只把计划结果渲染为 NarrativeEvent，不参与世界演化。
 
 ## LensAblationExperiment
 
@@ -283,8 +289,13 @@ candidate_futures.json
 selected_future.json
 objective_states.json
 state_provenance.json
+narrative_importance_assessments.json
+narrative_plans.json
+syuzhets.json
+focalizations.json
+story_outputs.json
 narrative_events.json
 scene_cards.json
 ```
 
-当前 OutputExporter 尚未生成全部新增文件；该清单是 V2.2 目标契约。
+当前 OutputExporter 已生成上述核心链路文件；一次完整运行共输出 51 个 JSON 和一份 Markdown 汇总报告。

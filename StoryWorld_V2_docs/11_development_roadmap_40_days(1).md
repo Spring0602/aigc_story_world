@@ -857,6 +857,16 @@ CausalHypothesis。
 
 Narrative Importance。
 
+完成情况：
+
+- 新增 `schemas/narrative_importance.py`，定义七维 Breakdown 与可追溯 Assessment。
+- 按 Conflict Change、Information Gain、Character Decision、Relationship Change、Irreversibility、Theme Relevance、Visual Potential 固定权重评分，并由 Schema 校验总分。
+- `core/narrative_importance.py` 改为评估 World Transition 后的真实 World Event，闭合 source/target state、Future / Evaluation、Action、Decision、StateChange 和 provenance。
+- 评分仅依赖结构化机制和状态变化；摘要或 ID 中的戏剧性关键词不会改变结果。
+- NarrativeEvent 引用 source Event 和 Importance Assessment，主流水线导出 `narrative_importance_assessments.json`。
+- 按修订链路新增 FabulaBuilder、NarrativePlanner、独立 Syuzhet、第三人称限知 Focalization 与 StoryOutput；所有叙事规划均在完整 World Simulation 结束后执行。
+- 已通过公式、四机制反事实、关键词不敏感、稳定排序、引用校验、Schema 和端到端导出测试。
+
 ------------------------------------------------------------------------
 
 ## Day 33

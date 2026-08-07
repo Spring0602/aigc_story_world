@@ -8,10 +8,12 @@ from core.decision_engine import ActionExecutor, DecisionEngine
 from core.economic_engine import EconomicEngine
 from core.future_evaluator import FutureEvaluator
 from core.future_generator import FutureGenerator
+from core.fabula_builder import FabulaBuilder
 from core.image_prompt_generator import ImagePromptGenerator
 from core.lens_router import LensRouter
 from core.model_utils import to_dict
 from core.narrative_engine import NarrativeEngine
+from core.narrative_planner import NarrativePlanner
 from core.observation_engine import ObservationEngine
 from core.output_exporter import OutputExporter
 from core.possible_world_engine import PossibleWorldEngine
@@ -61,6 +63,8 @@ def run_pipeline(
     action_executor = ActionExecutor()
     transition = WorldTransition()
     narrative_engine = NarrativeEngine()
+    fabula_builder = FabulaBuilder()
+    narrative_planner = NarrativePlanner()
     scene_generator = SceneGenerator()
     image_prompt_generator = ImagePromptGenerator()
 
@@ -117,6 +121,13 @@ def run_pipeline(
     all_actions = []
     all_world_events = []
     narrative_events = []
+    narrative_importance_assessments = []
+    subjective_model_snapshots = []
+    fabulas = []
+    narrative_plans = []
+    syuzhets = []
+    focalizations = []
+    story_outputs = []
     scene_cards = []
     image_prompts = []
 
@@ -279,9 +290,6 @@ def run_pipeline(
             new_state.history[previous_history_length:]
         )
         world_events = new_state.events[len(objective_state.events) :]
-        narrative_event = narrative_engine.express(objective_state, new_state, selected_future, subjective_models)
-        scene_card = scene_generator.generate(new_state, narrative_event)
-        image_prompt = image_prompt_generator.generate(scene_card)
 
         all_observations.extend(observations)
         all_evidence.extend(cognition.evidence)
@@ -331,10 +339,83 @@ def run_pipeline(
         all_actions.extend(actions)
         all_world_events.extend(world_events)
         objective_states.append(new_state)
-        narrative_events.append(narrative_event)
-        scene_cards.append(scene_card)
-        image_prompts.append(image_prompt)
+        subjective_model_snapshots.append(
+            [item.model_copy(deep=True) for item in subjective_models]
+        )
         objective_state = new_state
+
+    fabula = fabula_builder.build(objective_states, all_state_provenance)
+    fabulas.append(fabula)
+    world_events_by_id = {
+        item.event_id: item for item in all_world_events
+    }
+    evaluations_by_future = {
+        item.future_id: item for item in all_future_evaluations
+    }
+    for fabula_event in fabula.events:
+        future = next(
+            item
+            for item in selected_futures
+            if item.source_state_id == fabula_event.source_state_id
+        )
+        assessment = narrative_engine.importance.assess(
+            objective_states[fabula_event.step - 1],
+            objective_states[fabula_event.step],
+            world_events_by_id[fabula_event.world_event_id],
+            future,
+            subjective_model_snapshots[fabula_event.step - 1],
+            evaluations_by_future[future.future_id],
+            fabula_event=fabula_event,
+        )
+        narrative_importance_assessments.append(assessment)
+
+    narrative_plan = narrative_planner.plan(
+        fabula,
+        narrative_importance_assessments,
+    )
+    narrative_plans.append(narrative_plan)
+    syuzhet = narrative_planner.arrange(fabula, narrative_plan)
+    syuzhets.append(syuzhet)
+    focalizations = narrative_planner.focalize(
+        fabula,
+        syuzhet,
+        objective_states[-1],
+        all_observations,
+    )
+    fabula_events_by_id = {
+        item.fabula_event_id: item for item in fabula.events
+    }
+    assessments_by_fabula_event = {
+        item.source_fabula_event_id: item
+        for item in narrative_importance_assessments
+    }
+    for focalization in focalizations:
+        fabula_event = fabula_events_by_id[focalization.fabula_event_id]
+        narrative_event = narrative_engine.express_planned(
+            objective_states[fabula_event.step],
+            fabula_event,
+            narrative_plan,
+            syuzhet,
+            focalization,
+            assessments_by_fabula_event[fabula_event.fabula_event_id],
+            subjective_model_snapshots[fabula_event.step - 1],
+        )
+        narrative_events.append(narrative_event)
+        scene_card = scene_generator.generate(
+            objective_states[fabula_event.step],
+            narrative_event,
+        )
+        scene_cards.append(scene_card)
+        image_prompts.append(image_prompt_generator.generate(scene_card))
+    story_outputs.append(
+        narrative_planner.story_output(
+            fabula,
+            narrative_plan,
+            syuzhet,
+            focalizations,
+            narrative_events,
+        )
+    )
 
     run_dir = None
     if export:
@@ -383,6 +464,14 @@ def run_pipeline(
             decisions=all_decisions,
             actions=all_actions,
             world_events=all_world_events,
+            fabulas=fabulas,
+            narrative_importance_assessments=(
+                narrative_importance_assessments
+            ),
+            narrative_plans=narrative_plans,
+            syuzhets=syuzhets,
+            focalizations=focalizations,
+            story_outputs=story_outputs,
             narrative_events=narrative_events,
             scene_cards=scene_cards,
             image_prompts=image_prompts,
@@ -448,7 +537,15 @@ def run_pipeline(
         "decisions": to_dict(all_decisions),
         "actions": to_dict(all_actions),
         "world_events": to_dict(all_world_events),
+        "fabulas": to_dict(fabulas),
+        "narrative_importance_assessments": to_dict(
+            narrative_importance_assessments
+        ),
         "narrative_events": to_dict(narrative_events),
+        "narrative_plans": to_dict(narrative_plans),
+        "syuzhets": to_dict(syuzhets),
+        "focalizations": to_dict(focalizations),
+        "story_outputs": to_dict(story_outputs),
         "scene_cards": to_dict(scene_cards),
         "image_prompts": to_dict(image_prompts),
     }

@@ -24,7 +24,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 
 ## 当前进度
 
-目前已完成 40 天计划的前 30 天，核心研究链路可以连续演化 3-5 步，并已完成主体认知、Lens 消融和主观世界模型消融实验。
+目前已完成 40 天计划的 Day 1-30 与 Day 32 开发任务，核心研究链路可以连续演化 3-5 步，并已完成主体认知、Lens 消融和主观世界模型消融实验。
 
 | 阶段 | 已完成能力 | 状态 |
 | --- | --- | :---: |
@@ -50,6 +50,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 | Day 27-28 | 原子化 World Transition 与完整 State Provenance | 完成 |
 | Day 29 | 3-5 步连续 World Simulation | 完成 |
 | Day 30 | 有/无 Subjective Model 受控实验 | 完成 |
+| Day 32 | 结构化 Narrative Importance | 完成 |
 
 当前基线包含 1 个共享客观世界、2 个角色、3 种认知 Lens，以及每个时间步 4 条候选未来。测试集还覆盖 Dataist、Institutionalist 和 Skeptic 三类认知配置，用于验证同一事实如何产生差异化判断。
 
@@ -89,8 +90,12 @@ flowchart TD
     WE --> WT[World Transition + Provenance]
     WT --> W2[Updated Objective World]
 
-    W2 --> NE[Narrative Event]
-    NE --> SC[Scene Card]
+    W2 --> FAB[Fabula]
+    FAB --> NP[Narrative Planner + Importance]
+    NP --> SY[Syuzhet]
+    SY --> FO[Focalization]
+    FO --> SO[Story Output]
+    SO --> SC[Scene Card]
     SC --> IP[Image Prompt]
 ```
 
@@ -197,6 +202,12 @@ Action score 进入 `CandidateFuture.bounded_rationality_score` 和 Future Evalu
 
 每条 `StateProvenance` 可反向追踪 source/target state、World Event、Future、Future Evaluation、Action、Decision、Agent Action Decision、Value Assessment、正反假设、Lens、Observation、Belief、Goal、Emotion、Motivation、Constraint、Other Model 与 Possible World。World Event 同时通过 `provenance_ids` 指回实际状态变化。
 
+### Narrative Importance
+
+`NarrativeImportance` 在世界状态完成更新后评估真实 `WorldEvent`，不参与 Future 选择，也不修改 Objective World。每个 `NarrativeImportanceAssessment` 分解 Conflict Change、Information Gain、Character Decision、Relationship Change、Irreversibility、Theme Relevance 和 Visual Potential，并保存 Event、Future Evaluation、source/target state、Action、Decision、StateChange 与 provenance 引用。
+
+评分只读取结构化机制与状态差异，不根据摘要是否包含“秘密”等戏剧性关键词加分。完整表达链在全部 World Simulation 完成后运行：`FabulaBuilder` 按时间与因果组织世界事件；`NarrativePlanner` 依据 Importance 选材；独立 `Syuzhet` 决定呈现顺序；`Focalization` 按主体 Observation 控制角色与观众知识；最终 `StoryOutput` 闭合所有表达引用。第一版 Syuzhet 保持时间顺序，但不与 Fabula 共用数据结构。
+
 ### Multi-step Simulation 与世界模型实验
 
 `MultiStepSimulation` 对 3-5 步 rollout 逐步验证状态连续性、历史快照不可变、StateChange 的 old/new value、no-op 和完整 provenance。当前正式结果形成 `state_000 → state_001 → state_002 → state_003`，三步均通过。
@@ -296,7 +307,7 @@ print(result["run_dir"])
 
 ## 输出说明
 
-每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 45 个 JSON 文件和 1 份 Markdown 报告，其中 `future_evaluations.json` 保存候选未来的完整评分分解，`state_provenance.json` 独立保存状态变化因果链。
+每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 51 个 JSON 文件和 1 份 Markdown 报告。叙事链单独导出 `fabulas.json`、`narrative_importance_assessments.json`、`narrative_plans.json`、`syuzhets.json`、`focalizations.json` 与 `story_outputs.json`。
 
 | 分组 | 文件 | 用途 |
 | --- | --- | --- |
@@ -311,8 +322,8 @@ print(result["run_dir"])
 | 他心模型 | `beliefs_about_others.json` | 保存主体对其他主体信念、目标与动作的预测 |
 | 未来推演 | `hypotheses.json`、`hypothesis_relations.json`、`candidate_futures.json`、`selected_futures.json` | 保存机制假设、跨 Lens 关系和候选世界走向 |
 | 决策与行动 | `agent_action_decisions.json`、`value_assessments.json`、`decisions.json`、`actions.json` | 展示有限理性行动考虑、最终选择及执行结果 |
-| 世界变化 | `world_events.json` | 记录行动产生的客观事件和状态更新依据 |
-| 叙事表达 | `narrative_events.json`、`scene_cards.json`、`image_prompts.json` | 将世界变化转换为叙事与视觉生成输入 |
+| 世界变化 | `world_events.json`、`narrative_importance_assessments.json` | 记录行动产生的客观事件及其七维叙事重要性评估 |
+| 叙事表达 | `fabulas.json`、`narrative_plans.json`、`syuzhets.json`、`focalizations.json`、`story_outputs.json`、`narrative_events.json` | 将完整世界演化组织为选材、顺序、视角与故事输出 |
 | 汇总报告 | `report.md` | 提供适合人工阅读的本次运行摘要 |
 
 `outputs/` 默认不纳入 Git。它用于保存本地实验产物，建议在比较不同认知配置或模型版本时保留对应的 `run_XXX` 目录。
@@ -340,7 +351,7 @@ print(result["run_dir"])
 python -m unittest discover -v
 ```
 
-当前共有 114 项自动化测试，覆盖：
+当前共有 127 项自动化测试，覆盖：
 
 - Pydantic Schema 校验与跨对象引用。
 - Observation、Evidence、Belief Update 和 Interpretation 链路。

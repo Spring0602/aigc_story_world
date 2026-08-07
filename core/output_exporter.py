@@ -53,6 +53,12 @@ class OutputExporter:
         decisions,
         actions,
         world_events,
+        fabulas,
+        narrative_importance_assessments,
+        narrative_plans,
+        syuzhets,
+        focalizations,
+        story_outputs,
         narrative_events,
         scene_cards,
         image_prompts,
@@ -147,6 +153,15 @@ class OutputExporter:
         self._write_json(run_dir / "decisions.json", decisions)
         self._write_json(run_dir / "actions.json", actions)
         self._write_json(run_dir / "world_events.json", world_events)
+        self._write_json(run_dir / "fabulas.json", fabulas)
+        self._write_json(
+            run_dir / "narrative_importance_assessments.json",
+            narrative_importance_assessments,
+        )
+        self._write_json(run_dir / "narrative_plans.json", narrative_plans)
+        self._write_json(run_dir / "syuzhets.json", syuzhets)
+        self._write_json(run_dir / "focalizations.json", focalizations)
+        self._write_json(run_dir / "story_outputs.json", story_outputs)
         self._write_json(run_dir / "narrative_events.json", narrative_events)
         self._write_json(run_dir / "scene_cards.json", scene_cards)
         self._write_json(run_dir / "image_prompts.json", image_prompts)

@@ -9,6 +9,18 @@ World Evolution
 
 世界先变化，叙事引擎后选择“什么值得被观众看到”。
 
+完整链路固定为：
+
+```text
+World Simulation
+→ Fabula
+→ Narrative Planner + Narrative Importance
+→ Syuzhet + Focalization
+→ Story Output
+```
+
+Simulation 循环结束前不得创建 Narrative Plan 或 Story Output。Fabula 保存实际发生事件的时间与因果顺序；Narrative Planner 只负责选择表达素材；Syuzhet 与 Fabula 使用独立 Schema；Focalization 只能基于焦点角色可见 Observation 暴露信息。
+
 V2.1 研究路线中，Narrative Engine 是下游展示层。主体认知、行动决策和世界转移实验完成前，不优先优化文风、图片或戏剧性。
 
 ## 输入
@@ -34,6 +46,22 @@ Irreversibility
 Theme Relevance
 Visual Potential
 ```
+
+当前 Day32 实现使用强类型 `NarrativeImportanceAssessment`，权重为：
+
+```text
+Conflict Change       0.16
+Information Gain      0.18
+Character Decision    0.18
+Relationship Change   0.12
+Irreversibility       0.14
+Theme Relevance       0.12
+Visual Potential      0.10
+```
+
+评分发生在 World Transition 之后，输入 Old/New Objective State、实际 World Event、Selected Candidate Future、Future Evaluation 与 Subjective Models。每个维度保存独立分数和 rationale，总分映射为 low / medium / high。Assessment 闭合 source/target state、Event、Future、Action、Decision、StateChange 与 provenance 引用。
+
+评分不得依据摘要措辞、future ID 中是否出现 `secret` 或预设戏剧性标签。信息发现、社会协作、制度质询和过程惯性必须因结构化机制及实际 StateChange 不同而激活不同维度。Narrative Importance 只决定表达优先级，不反向改变 World Probability、Future Evaluation 或 Objective World。
 
 ## Focalization
 
@@ -79,6 +107,8 @@ C → A → D → B
 ```
 
 第一版按时间顺序表达，后续再支持非线性。
+
+当前实现中，`FabulaBuilder` 由 Objective State 快照、World Event 与 StateProvenance 构建 Fabula。`NarrativePlanner` 按 Importance threshold 选择事件并标注 revelation、decision、confrontation、relationship shift、turning point、thematic reinforcement 或 visual emphasis 功能。`Syuzhet` 第一版保持 chronology；`Focalization` 固定 third-person limited，并显式保存 character known、audience known 与 withheld information IDs。`StoryOutput` 闭合 Fabula、Plan、Syuzhet、Focalization 和 NarrativeEvent IDs。
 
 ## NarrativeEvent
 

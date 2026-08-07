@@ -47,6 +47,20 @@ from schemas.hypothesis_relation import (
     ResolutionStatus,
 )
 from schemas.narrative_event import NarrativeEvent
+from schemas.narrative_importance import (
+    NARRATIVE_IMPORTANCE_WEIGHTS,
+    NarrativeImportanceAssessment,
+    NarrativeImportanceBreakdown,
+)
+from schemas.narrative_structure import (
+    Fabula,
+    FabulaEvent,
+    Focalization,
+    NarrativePlan,
+    NarrativePlanItem,
+    StoryOutput,
+    Syuzhet,
+)
 from schemas.objective_world import (
     ActiveProcess,
     Agent,
@@ -151,6 +165,9 @@ __all__ = [
     "FutureMechanismType",
     "FutureEvaluation",
     "FutureScoreBreakdown",
+    "Fabula",
+    "FabulaEvent",
+    "Focalization",
     "InformationItem",
     "InformationVisibility",
     "InformationAsymmetryAssessment",
@@ -168,6 +185,11 @@ __all__ = [
     "MotivationType",
     "MultiStepSimulationResult",
     "NarrativeEvent",
+    "NarrativeImportanceAssessment",
+    "NarrativeImportanceBreakdown",
+    "NARRATIVE_IMPORTANCE_WEIGHTS",
+    "NarrativePlan",
+    "NarrativePlanItem",
     "ObjectiveWorldState",
     "Observation",
     "ObservationVisibility",
@@ -196,12 +218,14 @@ __all__ = [
     "StateProvenance",
     "StressBand",
     "StressState",
+    "StoryOutput",
     "SocialActionEvaluation",
     "SocialContext",
     "SubjectiveWorldModel",
     "HumanNatureModel",
     "KnowledgeItem",
     "TheoryOfChange",
+    "Syuzhet",
     "TimeScale",
     "Uncertainty",
     "Value",
