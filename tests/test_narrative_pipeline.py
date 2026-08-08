@@ -102,12 +102,17 @@ class NarrativePipelineTest(unittest.TestCase):
         narrative_ids = {
             item["narrative_event_id"] for item in self.output["narrative_events"]
         }
+        beat_ids = {
+            item["narrative_beat_id"] for item in self.output["narrative_beats"]
+        }
 
         self.assertEqual(story["fabula_id"], fabula["fabula_id"])
         self.assertEqual(story["narrative_plan_id"], plan["narrative_plan_id"])
         self.assertEqual(story["syuzhet_id"], syuzhet["syuzhet_id"])
         self.assertEqual(set(story["focalization_ids"]), focalization_ids)
         self.assertEqual(set(story["narrative_event_ids"]), narrative_ids)
+        self.assertEqual(set(story["narrative_beat_ids"]), beat_ids)
+        self.assertTrue(story["rendered_text"])
         self.assertEqual(story["source_state_ids"], fabula["state_ids"])
         for event in self.output["narrative_events"]:
             self.assertTrue(event["source_fabula_event_id"])
@@ -123,6 +128,7 @@ class NarrativePipelineTest(unittest.TestCase):
             "narrative_plans",
             "syuzhets",
             "focalizations",
+            "narrative_beats",
             "story_outputs",
         )
         for field in fields:

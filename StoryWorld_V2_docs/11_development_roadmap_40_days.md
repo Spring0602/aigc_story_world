@@ -343,6 +343,8 @@ Scene Card
 
 Day 32 已完成结构化 Narrative Importance，并按修订链路接入 `World Simulation → Fabula → Narrative Planner → Syuzhet + Focalization → Story Output`。Importance 对真实 World Event 评估七个维度；Fabula 保留时间与因果事实，Planner 负责选材，Syuzhet 独立排序，Focalization 依据角色 Observation 控制观众信息。第一版采用 chronological syuzhet 和 third-person limited，Day33 继续增强 Narrative Engine 的表达策略。
 
+Day 33 已完成可追溯 Narrative Engine：NarrativeEvent 进一步渲染为强类型 NarrativeBeat，正文由世界动作、可见感知、角色情绪、信息差提示和叙事功能组成。InformationEffect 显式区分 shared、audience-only、character-only 与 withheld 信息，并据此计算 alignment、suspense、mystery 或 dramatic irony；StoryOutput 按 Syuzhet 顺序汇总正文。未观察隐藏事实不会进入 rendered text，表达过程不修改 Objective World。
+
 ------------------------------------------------------------------------
 
 # Phase 5：实验验证（Day 36-40）

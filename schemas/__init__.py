@@ -47,6 +47,11 @@ from schemas.hypothesis_relation import (
     ResolutionStatus,
 )
 from schemas.narrative_event import NarrativeEvent
+from schemas.narrative_expression import (
+    InformationEffect,
+    NarrativeBeat,
+    NarrativeEffect,
+)
 from schemas.narrative_importance import (
     NARRATIVE_IMPORTANCE_WEIGHTS,
     NarrativeImportanceAssessment,
@@ -172,6 +177,7 @@ __all__ = [
     "InformationVisibility",
     "InformationAsymmetryAssessment",
     "InformationBoundary",
+    "InformationEffect",
     "IncentiveAssessment",
     "Institution",
     "InstitutionPowerAssessment",
@@ -185,6 +191,8 @@ __all__ = [
     "MotivationType",
     "MultiStepSimulationResult",
     "NarrativeEvent",
+    "NarrativeBeat",
+    "NarrativeEffect",
     "NarrativeImportanceAssessment",
     "NarrativeImportanceBreakdown",
     "NARRATIVE_IMPORTANCE_WEIGHTS",

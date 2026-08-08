@@ -121,6 +121,7 @@ def run_pipeline(
     all_actions = []
     all_world_events = []
     narrative_events = []
+    narrative_beats = []
     narrative_importance_assessments = []
     subjective_model_snapshots = []
     fabulas = []
@@ -389,7 +390,7 @@ def run_pipeline(
         item.source_fabula_event_id: item
         for item in narrative_importance_assessments
     }
-    for focalization in focalizations:
+    for sequence, focalization in enumerate(focalizations, start=1):
         fabula_event = fabula_events_by_id[focalization.fabula_event_id]
         narrative_event = narrative_engine.express_planned(
             objective_states[fabula_event.step],
@@ -401,6 +402,15 @@ def run_pipeline(
             subjective_model_snapshots[fabula_event.step - 1],
         )
         narrative_events.append(narrative_event)
+        narrative_beats.append(
+            narrative_engine.render_beat(
+                sequence,
+                objective_states[fabula_event.step],
+                narrative_event,
+                narrative_plan,
+                focalization,
+            )
+        )
         scene_card = scene_generator.generate(
             objective_states[fabula_event.step],
             narrative_event,
@@ -414,6 +424,7 @@ def run_pipeline(
             syuzhet,
             focalizations,
             narrative_events,
+            narrative_beats,
         )
     )
 
@@ -473,6 +484,7 @@ def run_pipeline(
             focalizations=focalizations,
             story_outputs=story_outputs,
             narrative_events=narrative_events,
+            narrative_beats=narrative_beats,
             scene_cards=scene_cards,
             image_prompts=image_prompts,
         )
@@ -542,6 +554,7 @@ def run_pipeline(
             narrative_importance_assessments
         ),
         "narrative_events": to_dict(narrative_events),
+        "narrative_beats": to_dict(narrative_beats),
         "narrative_plans": to_dict(narrative_plans),
         "syuzhets": to_dict(syuzhets),
         "focalizations": to_dict(focalizations),

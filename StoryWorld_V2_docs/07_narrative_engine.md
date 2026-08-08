@@ -108,7 +108,30 @@ C → A → D → B
 
 第一版按时间顺序表达，后续再支持非线性。
 
-当前实现中，`FabulaBuilder` 由 Objective State 快照、World Event 与 StateProvenance 构建 Fabula。`NarrativePlanner` 按 Importance threshold 选择事件并标注 revelation、decision、confrontation、relationship shift、turning point、thematic reinforcement 或 visual emphasis 功能。`Syuzhet` 第一版保持 chronology；`Focalization` 固定 third-person limited，并显式保存 character known、audience known 与 withheld information IDs。`StoryOutput` 闭合 Fabula、Plan、Syuzhet、Focalization 和 NarrativeEvent IDs。
+当前实现中，`FabulaBuilder` 由 Objective State 快照、World Event 与 StateProvenance 构建 Fabula。`NarrativePlanner` 按 Importance threshold 选择事件并标注 revelation、decision、confrontation、relationship shift、turning point、thematic reinforcement 或 visual emphasis 功能。`Syuzhet` 第一版保持 chronology；`Focalization` 固定 third-person limited，并显式保存 character known、audience known 与 withheld information IDs。`StoryOutput` 闭合 Fabula、Plan、Syuzhet、Focalization、NarrativeEvent 和 NarrativeBeat IDs。
+
+## Day 33 Narrative Expression
+
+`NarrativeEngine.render_beat()` 将一个已经选中的 NarrativeEvent 渲染为强类型 `NarrativeBeat`。每个节拍由以下可审计部分组成：
+
+```text
+World-grounded action
+→ Visible perception
+→ Subjective emotional response
+→ Information-gap cue
+→ Narrative-function transition
+```
+
+`InformationEffect` 将信息划分为 shared、audience-only、character-only 与 withheld 四个互斥集合，并确定 dominant effect：
+
+```text
+no gap          → alignment
+withheld        → suspense
+character-only  → mystery
+audience-only   → dramatic irony
+```
+
+当前 third-person limited 策略通常令 audience known 与 character known 对齐，因此未观察信息形成 suspense。Schema 校验集合互斥、effect 标签和 tension score 一致。正文只能使用 audience information 对应内容；withheld 信息只生成“仍有信息处在视野之外”一类抽象提示，不能写出隐藏事实。最终 `StoryOutput.rendered_text` 按 Syuzhet 顺序组合所有节拍。
 
 ## NarrativeEvent
 

@@ -875,6 +875,15 @@ Narrative Importance。
 
 Narrative Engine。
 
+完成情况：
+
+- 新增 `schemas/narrative_expression.py`，定义强类型 `InformationEffect` 与 `NarrativeBeat`。
+- 将角色与观众知识拆分为 shared、audience-only、character-only 与 withheld 互斥集合，并由 Schema 校验 alignment、suspense、mystery、dramatic irony 及 tension score。
+- `NarrativeEngine.render_beat()` 将 World-grounded action、可见 perception、subjective emotion、information-gap cue 与 narrative-function transition 组合为确定性正文。
+- `StoryOutput` 新增 NarrativeBeat 引用和 `rendered_text`，严格按 Syuzhet 顺序组合；OutputExporter 新增 `narrative_beats.json`。
+- withheld 信息只产生抽象悬念提示，不泄漏事实内容；Narrative Engine 保持只读，不修改 Objective World。
+- 新增事实忠实性、四种信息效果、信息边界、引用闭合、Schema 一致性、确定性和端到端测试；完整测试集 134 项通过。
+
 ------------------------------------------------------------------------
 
 ## Day 34

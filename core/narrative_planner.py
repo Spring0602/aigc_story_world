@@ -2,6 +2,7 @@ from schemas import (
     Fabula,
     Focalization,
     NarrativeEvent,
+    NarrativeBeat,
     NarrativeImportanceAssessment,
     NarrativeImportanceBreakdown,
     NarrativePlan,
@@ -135,6 +136,7 @@ class NarrativePlanner:
         syuzhet: Syuzhet,
         focalizations: list[Focalization],
         narrative_events: list[NarrativeEvent],
+        narrative_beats: list[NarrativeBeat],
     ) -> StoryOutput:
         events_by_fabula = {
             item.source_fabula_event_id: item for item in narrative_events
@@ -142,6 +144,13 @@ class NarrativePlanner:
         ordered_events = [
             events_by_fabula[item]
             for item in syuzhet.ordered_fabula_event_ids
+        ]
+        beats_by_event = {
+            item.narrative_event_id: item for item in narrative_beats
+        }
+        ordered_beats = [
+            beats_by_event[item.narrative_event_id]
+            for item in ordered_events
         ]
         return StoryOutput(
             story_output_id=f"story_output_{fabula.fabula_id}",
@@ -152,8 +161,14 @@ class NarrativePlanner:
             narrative_event_ids=[
                 item.narrative_event_id for item in ordered_events
             ],
+            narrative_beat_ids=[
+                item.narrative_beat_id for item in ordered_beats
+            ],
             ordered_summaries=[item.summary for item in ordered_events],
             source_state_ids=list(fabula.state_ids),
+            rendered_text="\n\n".join(
+                item.rendered_text for item in ordered_beats
+            ),
         )
 
     def _plan_item(

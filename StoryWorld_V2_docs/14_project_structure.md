@@ -57,6 +57,7 @@ storyworld_v2/
 │   ├── future_evaluation.py
 │   ├── narrative_importance.py
 │   ├── narrative_structure.py
+│   ├── narrative_expression.py
 │   ├── state_provenance.py
 │   ├── narrative_event.py
 │   └── scene_card.py
@@ -88,6 +89,7 @@ storyworld_v2/
 │   ├── test_provenance.py
 │   ├── test_narrative_importance.py
 │   ├── test_narrative_pipeline.py
+│   ├── test_narrative_engine.py
 │   ├── test_multi_step_simulation.py
 │   ├── test_world_model_ablation.py
 │   ├── test_hypothesis.py
@@ -144,6 +146,7 @@ outputs/run_001/
 ├── selected_futures.json
 ├── state_provenance.json
 ├── narrative_events.json
+├── narrative_beats.json
 ├── scene_cards.json
 ├── image_prompts.json
 └── report.md

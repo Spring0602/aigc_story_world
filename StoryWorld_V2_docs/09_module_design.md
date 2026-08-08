@@ -245,7 +245,9 @@ contradiction_penalty
 
 ## NarrativeEngine
 
-World Simulation 循环完成后，`FabulaBuilder` 从 Objective State snapshots、World Events 与 StateProvenance 构建时间和因果均闭合的 Fabula。`NarrativePlanner.plan()` 按 Importance 选材，`arrange()` 生成独立 Syuzhet，`focalize()` 依据焦点角色真实 Observation 建立第三人称限知的信息边界，`story_output()` 汇总表达链引用。`NarrativeEngine.express_planned()` 只把计划结果渲染为 NarrativeEvent，不参与世界演化。
+World Simulation 循环完成后，`FabulaBuilder` 从 Objective State snapshots、World Events 与 StateProvenance 构建时间和因果均闭合的 Fabula。`NarrativePlanner.plan()` 按 Importance 选材，`arrange()` 生成独立 Syuzhet，`focalize()` 依据焦点角色真实 Observation 建立第三人称限知的信息边界，`story_output()` 汇总表达链引用。
+
+`NarrativeEngine.express_planned()` 将计划结果转换为 NarrativeEvent；`analyze_information_effect()` 根据 Focalization 的 character/audience/withheld 信息集合确定 alignment、suspense、mystery 或 dramatic irony；`render_beat()` 再组合世界动作、可见线索、角色情绪、信息差提示和叙事功能，输出可追溯 NarrativeBeat。这些步骤均只读 Objective World，不参与世界演化，也不允许把 withheld 内容写入正文。
 
 ## LensAblationExperiment
 
@@ -295,7 +297,8 @@ syuzhets.json
 focalizations.json
 story_outputs.json
 narrative_events.json
+narrative_beats.json
 scene_cards.json
 ```
 
-当前 OutputExporter 已生成上述核心链路文件；一次完整运行共输出 51 个 JSON 和一份 Markdown 汇总报告。
+当前 OutputExporter 已生成上述核心链路文件；一次完整运行共输出 52 个 JSON 和一份 Markdown 汇总报告。

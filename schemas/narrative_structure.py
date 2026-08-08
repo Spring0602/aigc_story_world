@@ -97,6 +97,8 @@ class StoryOutput(BaseModel):
     syuzhet_id: str
     focalization_ids: list[str] = Field(min_length=1)
     narrative_event_ids: list[str] = Field(min_length=1)
+    narrative_beat_ids: list[str] = Field(min_length=1)
     ordered_summaries: list[str] = Field(min_length=1)
     source_state_ids: list[str] = Field(min_length=2)
-    rendering_mode: str = "structured_story_output"
+    rendered_text: str = Field(min_length=1)
+    rendering_mode: str = "grounded_structured_narrative"

@@ -60,6 +60,7 @@ class OutputExporter:
         focalizations,
         story_outputs,
         narrative_events,
+        narrative_beats,
         scene_cards,
         image_prompts,
     ) -> Path:
@@ -163,6 +164,7 @@ class OutputExporter:
         self._write_json(run_dir / "focalizations.json", focalizations)
         self._write_json(run_dir / "story_outputs.json", story_outputs)
         self._write_json(run_dir / "narrative_events.json", narrative_events)
+        self._write_json(run_dir / "narrative_beats.json", narrative_beats)
         self._write_json(run_dir / "scene_cards.json", scene_cards)
         self._write_json(run_dir / "image_prompts.json", image_prompts)
         (run_dir / "report.md").write_text(self._build_report(selected_futures, narrative_events), encoding="utf-8")

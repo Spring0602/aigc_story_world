@@ -319,7 +319,9 @@ Assessment 只读取 World Transition 已产生的事实、机制和 provenance�
 - `NarrativePlanItem` 将 FabulaEvent 与 Importance Assessment 绑定，记录重要性和叙事功能；`NarrativePlan` 保存选中与省略事件。
 - `Syuzhet` 只保存呈现顺序和排列策略，不复制或篡改 Fabula 事实。
 - `Focalization` 保存焦点角色、模式、Observation、character/audience known information 和 withheld information。
-- `StoryOutput` 闭合 Fabula、NarrativePlan、Syuzhet、Focalization、NarrativeEvent 与 source state IDs。
+- `InformationEffect` 保存 shared、audience-only、character-only 与 withheld 四个互斥信息集合，由 Schema 校验 dominant effect 和 tension score。
+- `NarrativeBeat` 闭合 NarrativeEvent、World Event、FabulaEvent、Plan、Syuzhet 与 Focalization，正文必须严格由 action、perception、internal response、information cue 和 transition 五部分组合。
+- `StoryOutput` 闭合 Fabula、NarrativePlan、Syuzhet、Focalization、NarrativeEvent、NarrativeBeat 与 source state IDs，并按 Syuzhet 顺序保存 `rendered_text`。
 
 ## StateChange
 

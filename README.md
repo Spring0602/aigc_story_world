@@ -51,6 +51,7 @@ StoryWorld V2 研究的不是“如何直接生成一个故事”，而是一个
 | Day 29 | 3-5 步连续 World Simulation | 完成 |
 | Day 30 | 有/无 Subjective Model 受控实验 | 完成 |
 | Day 32 | 结构化 Narrative Importance | 完成 |
+| Day 33 | 可追溯 Narrative Engine 与信息张力表达 | 完成 |
 
 当前基线包含 1 个共享客观世界、2 个角色、3 种认知 Lens，以及每个时间步 4 条候选未来。测试集还覆盖 Dataist、Institutionalist 和 Skeptic 三类认知配置，用于验证同一事实如何产生差异化判断。
 
@@ -208,6 +209,12 @@ Action score 进入 `CandidateFuture.bounded_rationality_score` 和 Future Evalu
 
 评分只读取结构化机制与状态差异，不根据摘要是否包含“秘密”等戏剧性关键词加分。完整表达链在全部 World Simulation 完成后运行：`FabulaBuilder` 按时间与因果组织世界事件；`NarrativePlanner` 依据 Importance 选材；独立 `Syuzhet` 决定呈现顺序；`Focalization` 按主体 Observation 控制角色与观众知识；最终 `StoryOutput` 闭合所有表达引用。第一版 Syuzhet 保持时间顺序，但不与 Fabula 共用数据结构。
 
+### Narrative Engine
+
+Day 33 将表达层落实为强类型 `NarrativeBeat`。每个节拍闭合 NarrativeEvent、World Event、FabulaEvent、NarrativePlan、Syuzhet 与 Focalization 引用，并由动作事实、可见线索、角色情绪、信息提示和叙事功能五部分确定性组成。`InformationEffect` 将角色与观众的信息划分为 shared、audience-only、character-only 和 withheld 四个互斥集合，据此标注 alignment、suspense、mystery 或 dramatic irony，并计算可复核的张力分数。
+
+`StoryOutput.rendered_text` 按 Syuzhet 顺序组合节拍。正文只可写入焦点角色及观众当时可见的信息；withheld 信息仅保留 ID 和抽象提示，不直接泄漏事实内容。Narrative Engine 全程只读 Objective World，不参与决策或状态更新。
+
 ### Multi-step Simulation 与世界模型实验
 
 `MultiStepSimulation` 对 3-5 步 rollout 逐步验证状态连续性、历史快照不可变、StateChange 的 old/new value、no-op 和完整 provenance。当前正式结果形成 `state_000 → state_001 → state_002 → state_003`，三步均通过。
@@ -307,7 +314,7 @@ print(result["run_dir"])
 
 ## 输出说明
 
-每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 51 个 JSON 文件和 1 份 Markdown 报告。叙事链单独导出 `fabulas.json`、`narrative_importance_assessments.json`、`narrative_plans.json`、`syuzhets.json`、`focalizations.json` 与 `story_outputs.json`。
+每次导出会创建独立目录 `outputs/run_XXX/`，避免覆盖之前的实验。当前一次完整运行会产生 52 个 JSON 文件和 1 份 Markdown 报告。叙事链单独导出 `fabulas.json`、`narrative_importance_assessments.json`、`narrative_plans.json`、`syuzhets.json`、`focalizations.json`、`narrative_events.json`、`narrative_beats.json` 与 `story_outputs.json`。
 
 | 分组 | 文件 | 用途 |
 | --- | --- | --- |
@@ -323,7 +330,7 @@ print(result["run_dir"])
 | 未来推演 | `hypotheses.json`、`hypothesis_relations.json`、`candidate_futures.json`、`selected_futures.json` | 保存机制假设、跨 Lens 关系和候选世界走向 |
 | 决策与行动 | `agent_action_decisions.json`、`value_assessments.json`、`decisions.json`、`actions.json` | 展示有限理性行动考虑、最终选择及执行结果 |
 | 世界变化 | `world_events.json`、`narrative_importance_assessments.json` | 记录行动产生的客观事件及其七维叙事重要性评估 |
-| 叙事表达 | `fabulas.json`、`narrative_plans.json`、`syuzhets.json`、`focalizations.json`、`story_outputs.json`、`narrative_events.json` | 将完整世界演化组织为选材、顺序、视角与故事输出 |
+| 叙事表达 | `fabulas.json`、`narrative_plans.json`、`syuzhets.json`、`focalizations.json`、`narrative_events.json`、`narrative_beats.json`、`story_outputs.json` | 将完整世界演化组织为选材、顺序、视角、信息张力与可读正文 |
 | 汇总报告 | `report.md` | 提供适合人工阅读的本次运行摘要 |
 
 `outputs/` 默认不纳入 Git。它用于保存本地实验产物，建议在比较不同认知配置或模型版本时保留对应的 `run_XXX` 目录。
@@ -351,7 +358,7 @@ print(result["run_dir"])
 python -m unittest discover -v
 ```
 
-当前共有 127 项自动化测试，覆盖：
+当前共有 134 项自动化测试，覆盖：
 
 - Pydantic Schema 校验与跨对象引用。
 - Observation、Evidence、Belief Update 和 Interpretation 链路。
